@@ -7,7 +7,6 @@ prepare:
 up:
 	docker-compose up -d;
 	cd node-app && npm run dev;
-	cd react-app && npm start;
 
 build:
 	cd react-app && npm run build;
