@@ -11,7 +11,7 @@
     "start": "node build/src/index.js",
     "build": "tsc -p tsconfig.build.json && npm run copyfiles",
     "copyfiles": "copyfiles -u 1 \"src/**/*.yaml\" build",
-    "lint": "eslint src",
+    "lint": "eslint src/**/*",
     "ci:test": "echo \"Error: no test specified\" "
   },
   "author": "",
