@@ -1,0 +1,55 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=14.0"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development DEBUG=telemed,@aidbox* nodemon",
+    "start": "node build/src/index.js",
+    "build": "tsc -p tsconfig.build.json && npm run copyfiles",
+    "copyfiles": "copyfiles -u 1 \"src/**/*.yaml\" build",
+    "lint": "eslint src",
+    "ci:test": "echo \"Error: no test specified\" "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aidbox/node-server-sdk": "^2.0.16",
+    "axios": "^0.20.0",
+    "date-fns": "^2.16.1",
+    "formdata-node": "^2.4.0",
+    "js-yaml": "3.14.0",
+    "luxon": "^1.25.0",
+    "twilio": "^3.50.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.7",
+    "@types/js-yaml": "^4.0.2",
+    "@types/luxon": "^2.0.0",
+    "@types/node": "^16.4.13",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
+    "chai": "^4.2.0",
+    "copyfiles": "^2.4.1",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.3.2",
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts,yaml",
+    "exec": "ts-node --pretty src/index.ts"
+  }
+}
