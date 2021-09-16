@@ -1,9 +1,9 @@
-import { createDomain, guard } from "effector";
+import { createDomain, guard } from 'effector';
 
-import { box } from "../../lib/box";
-import { env } from "../../env";
+import { box } from '../../lib/box';
+import { env } from '../../env';
 
-export const authDomain = createDomain("auth");
+export const authDomain = createDomain('auth');
 
 export const authorize = authDomain.createEffect({
   async handler() {
