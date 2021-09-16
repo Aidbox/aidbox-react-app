@@ -1,9 +1,7 @@
-import { createDomain, sample } from 'effector';
-import { attachLogger } from 'effector-logger/attach';
+import { sample } from 'effector';
+import { createDomain } from 'effector';
 
 const domain = createDomain('home-page');
-
-attachLogger(domain, { reduxDevtools: 'disabled', console: 'disabled' });
 
 const downloadDataFx = domain.createEffect({
   name: 'downloadDataFx',
