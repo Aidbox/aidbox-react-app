@@ -1,28 +1,34 @@
-import { sample } from 'effector';
-import { createDomain } from 'effector';
+import { sample, createDomain } from 'effector';
+import { createGate } from 'effector-react';
+import { box } from './../../../lib/box';
 
 const domain = createDomain('home-page');
 
 const downloadDataFx = domain.createEffect({
   name: 'downloadDataFx',
   handler: async () => {
-    const res = await fetch('http://localhost:8888/testApi', {
+    // await box.authorize({ username: 'admin', password: 'secret' });
+    const res = await box.request('/testApi');
+    /* const res = await fetch('http://localhost:8888/testApi', {
       headers: {
         Authorization: 'Basic cm9vdDpzZWNyZXQ=',
       },
-    });
-    return res.json();
+    }); */
+
+    return res;
   },
 });
 
-const $patient = domain.createStore({});
+export const $patients = domain.createStore([]);
 
-$patient.on(downloadDataFx.doneData, (store, payload) => payload);
+$patients.on(downloadDataFx.doneData, (store, { data: { patients } }) => patients);
 
 export const downloadData = domain.createEvent('downloadData');
 
+export const Gate = createGate();
+
 sample({
-  clock: downloadData,
-  source: $patient,
+  clock: Gate.open,
+  source: $patients,
   target: downloadDataFx,
 });

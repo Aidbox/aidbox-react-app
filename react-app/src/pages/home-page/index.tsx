@@ -1,9 +1,13 @@
-import { reflect } from '@effector/reflect';
-import { Home } from './ui/home';
-import { downloadData } from './model';
+import { useGate } from 'effector-react';
 
-export const HomePage = reflect({
-  view: Home,
-  bind: { text: 'Hello World' },
-  hooks: { mounted: downloadData },
-});
+import { Patients } from './ui/patients';
+import { Gate } from './model';
+
+export const HomePage = () => {
+  useGate(Gate);
+  return (
+    <div>
+      <Patients />
+    </div>
+  );
+};

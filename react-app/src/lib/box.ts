@@ -1,5 +1,5 @@
-import Client, { Types } from "@aidbox/client-sdk-js";
-import { env } from "../env";
+import Client, { Types } from '@aidbox/client-sdk-js';
+import { env } from '../env';
 
 const credentials = {
   URL: env.URL,
@@ -8,7 +8,7 @@ const credentials = {
   AUTH_MODE: 0,
   FHIR_STRICT: false,
 };
-
+console.log(credentials);
 const storage = {
   insertIntoStorage(key: string, value: string) {
     return localStorage.setItem(key, value);
@@ -21,7 +21,4 @@ const storage = {
   },
 };
 
-export const box = Client.initializeInstance(
-  credentials,
-  storage
-) as Types.TPublicAPI;
+export const box = Client.initializeInstance(credentials, storage) as Types.TPublicAPI;

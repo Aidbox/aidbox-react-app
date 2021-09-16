@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@effector/reflect": "^0.6.0",
+    "@aidbox/client-sdk-js": "^1.2.11",
     "effector": "^22.1.1",
     "effector-inspector": "^0.7.1",
     "effector-logger": "^0.12.0",
