@@ -1,12 +1,12 @@
+import React from 'react';
 import { useStore } from 'effector-react';
 
 import { Patient } from './patient';
 import { $patients } from '../model';
-import React from 'react';
 
 export const Patients = () => {
   const patients = useStore($patients);
-  console.log(patients);
+
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
