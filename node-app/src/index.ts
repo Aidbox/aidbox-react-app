@@ -1,5 +1,7 @@
 import { createApp, createCtx, startApp } from '@aidbox/node-server-sdk';
-import * as operations from './operations';
+import * as patient_portal from './patient-portal/index';
+import * as scheduling from './scheduling/index';
+import { mergeDeep } from './helpers';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -9,10 +11,10 @@ const main = async () => {
     path: isDev ? path.resolve(__dirname, '..', '..', '.env') : undefined,
   });
 
+
   // Init app
-  const ctx = createCtx({
-    manifest: { resources: { Patient: { 'pt-100': { gender: 'male' } } }, operations, apiVersion: 2 },
-  });
+  const manifest = mergeDeep(patient_portal, scheduling, { apiVersion: 2 });
+  const ctx = createCtx(manifest);
   const app = createApp({ ctx, helpers: {} });
 
   // Start app
@@ -20,7 +22,7 @@ const main = async () => {
   try {
     await startApp(app, port);
   } catch (e) {
-    console.dir(e);
+    console.dir(e.response);
   }
 };
 
