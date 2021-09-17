@@ -1,6 +1,6 @@
 install:
-	cd node-app && npm install;
-	cd react-app && npm install;
+	cd node-app && npm ci;
+	cd react-app && npm ci;
 prepare:
 	cp -n .env.tmpl react-app/.env;
 	cp -n .env.tmpl .env;
