@@ -1,4 +1,4 @@
-import { createDomain, guard } from 'effector';
+import { createDomain, sample, guard } from 'effector';
 
 import { box } from '../../lib/box';
 import { env } from '../../env';
@@ -6,6 +6,7 @@ import { env } from '../../env';
 export const authDomain = createDomain('auth');
 
 export const authorize = authDomain.createEffect({
+  name: 'authorize',
   async handler() {
     const result = await box.authorize({
       username: env.ADMIN_ID,
@@ -14,8 +15,3 @@ export const authorize = authDomain.createEffect({
     return result;
   },
 });
-
-/* guard({ */
-/*   source: $patient, */
-/*   target: downloadDataFx, */
-/* }); */

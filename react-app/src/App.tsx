@@ -1,6 +1,7 @@
-import { HomePage } from './pages/home-page';
+import LoginPage from './pages/login/index';
 import { useRoutes, BrowserRouter } from 'react-router-dom';
 import Layout from './layouts/apps';
+import { box } from './lib/box';
 
 const Profile = () => <div>Profile</div>;
 const Settings = () => <div>Settings</div>;
@@ -28,10 +29,19 @@ const routesByRole = {
   ],
 };
 
+const loginRoutes = [
+  {
+    element: <LoginPage />,
+    path: 'login',
+  },
+];
+
 // Outlet as yeild
 
 const App = () => {
-  const routes = routesByRole['patient'];
+  // const token = (async () => await box.getToken())();
+  const token = true;
+  const routes = token ? routesByRole['patient'] : loginRoutes;
   const main = useRoutes(routes);
 
   return main;
