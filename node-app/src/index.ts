@@ -22,7 +22,7 @@ const main = async () => {
   try {
     await startApp(app, port);
   } catch (e) {
-    console.dir(e.response);
+    console.dir(e);
   }
 };
 

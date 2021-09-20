@@ -1,16 +1,21 @@
 version: '3.3'
 services:
-  # app:
-  #   build:
-  #     context: ./node-app
-  #     dockerfile: Dockerfile.dev
-  #   ports:
-  #     - 8090:8090
-  #   env_file:
-  #     - .env
-  #   command: npm run dev
-  #   volumes:
-  #     - ./node-app:/usr
+  app:
+    build: 
+      context: ./node-app
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - "devbox"
+    ports:
+      - 8090:8090
+    links:
+      - "devbox"
+    env_file:
+      - .env
+    volumes:
+      - ./node-app:/app
+    # Colored logs
+    tty: true
   devbox:
     image: "${AIDBOX_IMAGE}"
     depends_on:

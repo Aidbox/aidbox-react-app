@@ -1,5 +1,5 @@
 FROM node:14-alpine as builder
-WORKDIR /usr
+WORKDIR /app
 COPY package.json ./
 COPY tsconfig.build.json ./
 COPY src ./src
@@ -9,7 +9,7 @@ RUN npm run build
 
 
 FROM node:14-alpine
-WORKDIR /usr
+WORKDIR /app
 COPY package.json ./
 RUN npm install --only=production
 COPY --from=builder /usr/build .
