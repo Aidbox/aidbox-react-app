@@ -1,4 +1,4 @@
-import { Role, RoleLinks, User } from '../aidbox';
+import { Role, RoleLinks, User } from '../contrib/aidbox';
 
 export enum UserRole {
   Practitioner = 'practitioner',

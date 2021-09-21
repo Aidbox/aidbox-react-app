@@ -1,6 +1,6 @@
 import { isRolePatient, isRolePractitioner, RolePatient, RolePractitioner, UserRole } from '../services/role';
 import React from 'react';
-import { User } from '../aidbox';
+import { User } from '../contrib/aidbox';
 import { Session } from '../services/shared';
 
 interface Props {

@@ -12,5 +12,3 @@ export const $storage = storageDomain
       .filter((k) => k !== key)
       .reduce((acc, k) => ({ ...acc, [k]: state[k] }), {});
   });
-
-persist({ store: $storage });
