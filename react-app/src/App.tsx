@@ -1,17 +1,22 @@
 import LoginPage from './pages/login/index';
-import { useRoutes, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useRoutes } from 'react-router-dom';
 import Layout from './layouts/apps';
-import { box } from './lib/box';
+import { RoleSwitch } from './components/RoleSwitch';
+import { UserRole } from './services/role';
 
-const Profile = () => <div>Profile</div>;
+const Profile = () => {
+  return <RoleSwitch>{{
+    [UserRole.Patient]: () => <div>Patient Profile</div>,
+    [UserRole.Practitioner]: () => <div>Practitioner profile</div>,
+  }}</RoleSwitch>;
+};
 const Settings = () => <div>Settings</div>;
-const PracProfile = () => <div>Prac Profile</div>;
 const PracSettings = () => <div>Prac Settings</div>;
 
 const routesByRole = {
   patient: [
     {
-      element: <Layout role="patient" />,
+      element: <Layout role='patient' />,
       children: [
         { path: 'profile', element: <Profile /> },
         { path: 'settings', element: <Settings /> },
@@ -20,9 +25,9 @@ const routesByRole = {
   ],
   practitioner: [
     {
-      element: <Layout role="practitioner" />,
+      element: <Layout role='practitioner' />,
       children: [
-        { path: 'practitioner-profile', element: <PracProfile /> },
+        { path: 'practitioner-profile', element: <Profile /> },
         { path: 'practitioner-settings', element: <PracSettings /> },
       ],
     },
