@@ -7,6 +7,14 @@ import path from 'path';
 
 const common = {
   manifest: {
+    resources: {
+      AccessPolicy: {
+        'public-operations': {
+          engine: 'allow',
+          link: [{ resourceType: 'Operation', id: 'app-healthcheck' }],
+        },
+      },
+    },
     operations: {
       'app-healthcheck': {
         method: 'GET',
