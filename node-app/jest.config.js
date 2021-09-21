@@ -15,14 +15,7 @@ module.exports = {
 
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
 
-  globals: {
-    'ts-jest': {
-      tsconfig: {
-        importHelpers: true,
-      },
-    },
-  },
-     transformIgnorePatterns: [
-        'node_modules/(?!axios|tslib)$',
-    ],
+  transformIgnorePatterns: ['node_modules/(?!(axios))'],
+
+  setupFilesAfterEnv: ['./tests/setup.ts'],
 };

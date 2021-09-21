@@ -3,19 +3,21 @@ import { saveFHIRResource } from 'aidbox-react/lib/services/fhir';
 import { ensure } from 'aidbox-react/lib/utils/tests';
 import { service } from 'aidbox-react/lib/services/service';
 
-interface Patient {}
+interface Patient {
+  readonly resourceType: 'Patient';
+}
 
 test('Test something', async () => {
-  withRootAccess(async () => {
+  await withRootAccess(async () => {
     ensure(
       await saveFHIRResource<Patient>({
         resourceType: 'Patient',
-        id: 'test',
       }),
     );
   });
-  withRootAccess(async () => {
+
+  await withRootAccess(async () => {
     const result = ensure(await service({ url: '/testApi', method: 'get' }));
-    expect(result).toBe(1)
+    expect(result).toBe(1);
   });
 });
