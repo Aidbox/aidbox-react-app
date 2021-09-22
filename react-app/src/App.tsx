@@ -1,9 +1,10 @@
-import { BrowserRouter, useRoutes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { AppRouter } from './router';
 
-// Outlet as yeild
-export default () => (
+const App = () => (
   <BrowserRouter>
     <AppRouter />
   </BrowserRouter>
 );
+
+export default App;

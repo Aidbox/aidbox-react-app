@@ -54,6 +54,7 @@ export const AppRouter = () => {
   const user = useStore($user);
   const routes = token ? routesByRole['patient'] : loginRoutes;
   const main = useRoutes(routes);
+  console.log(user);
 
   return main;
 };

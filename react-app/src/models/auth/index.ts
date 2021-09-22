@@ -1,9 +1,7 @@
-import { createDomain, forward, guard } from 'effector';
+import { createDomain, guard } from 'effector';
 import { service } from 'aidbox-react/lib/services/service';
 import { setInstanceBaseURL, setInstanceToken } from 'aidbox-react/lib/services/instance';
-import { box } from '../../lib/box';
-import { env } from '../../env';
-import { persist } from 'effector-storage/local';
+/* import { persist } from 'effector-storage/local'; */
 import { isSuccess } from 'aidbox-react/lib/libs/remoteData';
 
 setInstanceBaseURL('http://localhost:8888');

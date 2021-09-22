@@ -1,4 +1,4 @@
-import { createDomain, sample, forward } from 'effector';
+import { createDomain, sample } from 'effector';
 import { createForm } from 'effector-forms';
 import { createGate } from 'effector-react';
 import { signInFx } from '../../../models/auth';

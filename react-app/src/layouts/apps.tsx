@@ -13,17 +13,6 @@ const Link = ({ path, text }: { path: string; text: string }) => {
   );
 };
 
-const links = [
-  {
-    text: 'profile',
-    path: 'profile',
-  },
-  {
-    text: 'settings',
-    path: 'settings',
-  },
-];
-
 const linksByRole = {
   patient: [
     {
