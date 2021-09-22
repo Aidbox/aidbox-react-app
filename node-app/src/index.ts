@@ -11,9 +11,8 @@ const main = async () => {
     path: isDev ? path.resolve(__dirname, '..', '..', '.env') : undefined,
   });
 
-
   // Init app
-  const manifest = mergeDeep(patient_portal, scheduling, { apiVersion: 2 });
+  const manifest = mergeDeep(patient_portal, scheduling, { manifest: { apiVersion: 3 } });
   const ctx = createCtx(manifest);
   const app = createApp({ ctx, helpers: {} });
 
