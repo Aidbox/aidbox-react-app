@@ -1,3 +1,3 @@
 {
-  "plugins": ["effector-logger/babel-plugin"]
+  "plugins": ["effector-logger/babel-plugin" ]
 }

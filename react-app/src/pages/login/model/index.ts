@@ -6,7 +6,7 @@ import { signInFx } from '../../../models/auth';
 export const FormGate = createGate();
 export const loginDomain = createDomain('login');
 
-export const submitForm = loginDomain.createEvent('submitForm');
+export const submitForm = loginDomain.createEvent();
 
 export const form = createForm({
   fields: {

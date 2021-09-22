@@ -21,30 +21,26 @@ export const signInFx = authDomain.createEffect<any, any, Error>({
     const result = await service({
       url: '/auth/token',
       method: 'POST',
-      data: { ...params, grant_type: 'password', client_id: 'root', clientSecret: 'secret' },
+      data: { ...params, grant_type: 'password', client_id: 'portal', clientSecret: 'secret' },
     });
     return result;
   },
 });
 
 export const getUserDataFx = authDomain.createEffect({
-  handler: async (token: any) => {
+  handler: async () => {
     const result = await service({
       method: 'GET',
       url: '/auth/userinfo',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     return result;
   },
 });
 
 export const setTokenFx = authDomain.createEffect({
-  name: 'setTokenFx',
-  handler: ({ data: { access_token } }: any) => {
-    setInstanceToken(access_token);
-    return access_token;
+  handler: ({ data }: any) => {
+    setInstanceToken(data);
+    return data.access_token;
   },
 });
 

@@ -9,6 +9,9 @@ const supportMjs = () => (webpackConfig) => {
     type: 'javascript/auto',
   });
   return webpackConfig;
+  // {
+  // "plugins": [["effector/babel-plugin", { "addLoc": true }]]
+  // }
 };
 
 module.exports = override(supportMjs(), useBabelRc());

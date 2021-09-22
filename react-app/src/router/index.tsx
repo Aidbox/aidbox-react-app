@@ -1,9 +1,10 @@
-import LoginPage from '../pages/login/index';
 import { Navigate, useRoutes } from 'react-router-dom';
+import { useStore } from 'effector-react';
+import LoginPage from '../pages/login/index';
 import Layout from '../layouts/apps';
+import SmartApps from '../pages/smart-apps';
 import { RoleSwitch } from '../components/RoleSwitch';
 import { UserRole } from '../services/role';
-import { useStore } from 'effector-react';
 import { $token, $user } from '../models/auth';
 
 const Profile = () => {
@@ -16,6 +17,7 @@ const Profile = () => {
     </RoleSwitch>
   );
 };
+
 const Settings = () => <div>Settings</div>;
 const PracSettings = () => <div>Prac Settings</div>;
 
@@ -26,6 +28,7 @@ const routesByRole = {
       children: [
         { path: 'profile', element: <Profile /> },
         { path: 'settings', element: <Settings /> },
+        { path: 'smart-apps', element: <SmartApps /> },
       ],
     },
     { path: '*', element: <Navigate to="/profile" /> },

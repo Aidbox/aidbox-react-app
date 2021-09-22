@@ -23,6 +23,10 @@ const linksByRole = {
       text: 'settings',
       path: 'settings',
     },
+    {
+      text: 'Smart Apps',
+      path: 'smart-apps',
+    },
   ],
   practitioner: [
     {
