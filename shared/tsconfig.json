@@ -1,0 +1,10 @@
+{    
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "rootDir": "src",
+        "jsx": "react",
+        "target": "es5",
+        "module": "commonjs"
+    }
+}

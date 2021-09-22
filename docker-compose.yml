@@ -1,19 +1,31 @@
 version: '3.3'
 services:
+  dockerize-devbox:
+    image: jwilder/dockerize
+    command: dockerize -wait ${AIDBOX_URL}/__healthcheck -timeout 300s
+    depends_on:
+      - devbox
+    links:
+      - devbox
+  dockerize-app:
+    image: jwilder/dockerize
+    command: dockerize -wait ${AIDBOX_URL}/app-healthcheck -timeout 300s
+    depends_on:
+      - devbox
+    links:
+      - devbox
   app:
-    build: 
-      context: ./node-app
-      dockerfile: Dockerfile.dev
+    build:
+      context: .
+      dockerfile: Dockerfile.node-app.dev
     depends_on:
       - "devbox"
-    ports:
-      - 8090:8090
     links:
       - "devbox"
     env_file:
       - .env
     volumes:
-      - ./node-app:/app
+      - .:/app
     # Colored logs
     tty: true
   devbox:
@@ -28,8 +40,8 @@ services:
       - .env
     environment:
       PGHOST: database
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
 
   devbox-db:
     image: "${PGIMAGE}"
