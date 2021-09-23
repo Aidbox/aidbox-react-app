@@ -9,6 +9,9 @@ module.exports = {
     plugins: ['@typescript-eslint', 'jest', 'import'],
     globals: {
         JSX: true,
+        node: true,
+        es6: true,
+        jest: true,
     },
     rules: {
         'react-native/no-inline-styles': 0,
