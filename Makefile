@@ -27,7 +27,7 @@ generate-aidbox-ts:
 	yarn run prettier --write shared/src/contrib/aidbox/index.ts;
 
 unlock-pg:
-	sudo chmod a+rwx pgdata && sudo chown -R root:${USER} pgdata;
+	sudo chmod a+rwx pgdata && sudo chown -R ${USER}:${USER} pgdata;
 
 ci:
 	make up;

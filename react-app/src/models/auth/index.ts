@@ -40,7 +40,7 @@ export const getUserDataFx = authDomain.createEffect({
 export const setTokenFx = authDomain.createEffect({
   handler: ({ data }: any) => {
     setInstanceToken(data);
-    return data.access_token;
+    return data;
   },
 });
 

@@ -5,7 +5,17 @@ export const manifest = {
     Client: {
       'ui-portal': { secret: 'secret', grant_types: ['password'] },
     },
+    Role: {
+      admin: {
+        name: 'admin',
+        user: {
+          id: 'portal-admin',
+          resourceType: 'User',
+        },
+      },
+    },
     User: {
+      'portal-admin': { password: 'password' },
       portal: { password: 'password' },
     },
     Patient: { 'pt-100': { gender: 'male' } },
