@@ -1,17 +1,25 @@
-import { TCtx, TPatientResource } from '@aidbox/node-server-sdk';
+import { TCtx } from '@aidbox/node-server-sdk';
 
 import { TOperation } from '../helpers';
 
-export const testApi: TOperation<{ params: { type: string } }> = {
-  method: 'GET',
-  path: ['testApi'],
-  handlerFn: async (_: any, { ctx }: { ctx: TCtx }) => {
-    const { resources: patients } = await ctx.api.findResources<TPatientResource>('Patient');
+export const enrollPatient: TOperation<{ params: { type: string } }> = {
+  method: 'POST',
+  path: ['enrollPatient'],
+  handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
+    const { email } = resource;
+    console.log(resource);
+    const patient = await ctx.api.createResource('Patient', {
+      telecom: [{ system: 'email', value: email }],
+    });
+    const user: any = await ctx.api.createResource('User', resource);
+    const role = await ctx.api.createResource('Role', {
+      name: 'patient',
+      user: {
+        id: user.id,
+        resourceType: 'User',
+      },
+    });
 
-    const patient = !patients.length
-      ? null
-      : await ctx.api.getResource<TPatientResource>('Patient', patients[0].id);
-
-    return { resource: { patients, patient } };
+    return { resource: { patient, user, role } };
   },
 };

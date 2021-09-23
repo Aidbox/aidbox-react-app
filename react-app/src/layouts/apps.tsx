@@ -15,30 +15,8 @@ const Link = ({ path, text }: { path: string; text: string }) => {
 
 const linksByRole = {
   admin: [],
-  patient: [
-    {
-      text: 'profile',
-      path: 'profile',
-    },
-    {
-      text: 'settings',
-      path: 'settings',
-    },
-    {
-      text: 'Smart Apps',
-      path: 'smart-apps',
-    },
-  ],
-  practitioner: [
-    {
-      text: 'Practitioner profile',
-      path: 'practitioner-profile',
-    },
-    {
-      text: 'Practitioner settings',
-      path: 'practitioner-settings',
-    },
-  ],
+  patient: [],
+  practitioner: [],
 };
 
 const Layout = ({ role }: { role: 'practitioner' | 'patient' | 'admin' }) => {

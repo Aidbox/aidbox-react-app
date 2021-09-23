@@ -24,9 +24,9 @@ export const $patient = newPatientDomain.createStore<any>(null);
 export const createPatientFx = newPatientDomain.createEffect<any, any, Error>({
   handler: async (params) => {
     const result = await authorizedRequest({
-      url: '/Patient',
-      method: 'PUT',
-      data: { telecom: [{ system: 'email', value: params.email }] },
+      url: '/enrollPatient',
+      method: 'POST',
+      data: params,
     });
     return result;
   },

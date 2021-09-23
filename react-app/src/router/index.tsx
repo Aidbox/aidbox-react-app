@@ -7,6 +7,7 @@ import SmartApps from '../pages/smart-apps';
 import { RoleSwitch } from '../components/RoleSwitch';
 import { UserRole } from '../services/role';
 import { $token, $user } from '../models/auth';
+import { getIn } from '../lib/tools';
 
 const Profile = () => {
   return (
@@ -26,14 +27,9 @@ const routesByRole = {
   patient: [
     {
       element: <Layout role="patient" />,
-      children: [
-        { path: 'profile', element: <Profile /> },
-        { path: 'settings', element: <Settings /> },
-        { path: 'smart-apps', element: <SmartApps /> },
-        { path: 'new-patient', element: <NewPatientPage /> },
-      ],
+      children: [{ path: 'smart-apps', element: <SmartApps /> }],
     },
-    { path: '*', element: <Navigate to="/profile" /> },
+    { path: '*', element: <Navigate to="/smart-apps" /> },
   ],
   admin: [
     {
@@ -53,7 +49,7 @@ const routesByRole = {
   ],
 };
 
-// type RoutesByRole = 'patient' | 'admin' | 'practitioner';
+type RoutesByRole = 'patient' | 'admin' | 'practitioner';
 
 const loginRoutes = [
   {
@@ -63,13 +59,24 @@ const loginRoutes = [
   { path: '*', element: <Navigate to="/login" /> },
 ];
 
+const Router = ({ role, token }: { role: RoutesByRole; token?: any }) => {
+  console.log(role);
+  const routes = token ? routesByRole[role] : loginRoutes;
+  const main = useRoutes(routes);
+  return main;
+};
+
 export const AppRouter = () => {
   const token = useStore($token);
   const user = useStore($user);
-  // const role: RoutesByRole = getIn(user, ['role', 0, 'name']);
-  const routes = token ? routesByRole['admin'] : loginRoutes;
-  const main = useRoutes(routes);
-  console.log(user);
+  if (user.status === 'loading') {
+    return <div>Loading...</div>;
+  }
 
-  return main;
+  // TEMP
+  if (!user.data.id && token) {
+    return <Router role="admin" />;
+  }
+  const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
+  return <Router token={token} role={role} />;
 };

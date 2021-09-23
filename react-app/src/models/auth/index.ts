@@ -11,7 +11,7 @@ export const startAuth = authDomain.createEvent();
 export const startLoading = authDomain.createEvent();
 export const resetToken = authDomain.createEvent();
 
-export const $user = authDomain.createStore<any>({ status: 'loading', data: { id: '' } });
+export const $user = authDomain.createStore<any>({ status: 'idle', data: { id: '' } });
 export const $token = authDomain.createStore<any>(null);
 
 setInstanceBaseURL('http://localhost:8888');
