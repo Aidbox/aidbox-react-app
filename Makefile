@@ -2,8 +2,8 @@ install:
 	npm install;
 
 prepare:
-	cp -n .env.tmpl react-app/.env;
 	cp -n .env.tmpl .env;
+	make generate-aidbox-ts;
 
 up:
 	docker-compose -f docker-compose.yml up -d devbox;
@@ -17,13 +17,13 @@ build:
 test:
 	npm run test;
 
-update-aidbox-ts:
+generate-aidbox-ts:
 	make up;
 	docker-compose -f docker-compose.yml -f docker-compose.aidbox-ts.yml run --rm aidbox-ts-generator;
 	yarn run prettier --write shared/src/contrib/aidbox/index.ts;
 
 ci:
 	make up;
-	make update-aidbox-ts;
+	make generate-aidbox-ts;
 	make typecheck;
 	make test;
