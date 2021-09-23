@@ -3,7 +3,7 @@ install:
 
 prepare:
 	cp -n .env.tmpl .env;
-	make generate-aidbox-ts;
+	cp -n .env ./react-app/.env;
 
 up:
 	docker-compose -f docker-compose.yml up -d devbox;

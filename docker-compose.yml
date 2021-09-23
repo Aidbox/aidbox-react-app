@@ -40,8 +40,6 @@ services:
       - .env
     environment:
       PGHOST: database
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
 
   devbox-db:
     image: "${PGIMAGE}"
