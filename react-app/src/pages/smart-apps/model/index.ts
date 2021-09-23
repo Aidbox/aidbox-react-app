@@ -23,7 +23,9 @@ export const $apps = smartAppsDomain.createStore<any>(null);
 
 export const downloadApps = smartAppsDomain.createEvent();
 
-$apps.on(downloadAppsFx.doneData, (_, payload) => getIn(payload, ['data', 'result', 'smart-apps'], []));
+$apps.on(downloadAppsFx.doneData, (_, payload) =>
+  getIn(payload, ['data', 'result', 'smart-apps'], []),
+);
 
 forward({
   from: Gate.open,

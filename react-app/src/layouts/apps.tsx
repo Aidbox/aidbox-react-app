@@ -63,8 +63,12 @@ const Layout = ({ role }: { role: 'practitioner' | 'patient' }) => {
                   className="h-10 w-10 bg-gray-200 border rounded-full"
                 />
                 <span className="flex flex-col ml-2">
-                  <span className="truncate w-20 font-semibold tracking-wide leading-none">John Doe</span>
-                  <span className="truncate w-20 text-gray-500 text-xs leading-none mt-1">Manager</span>
+                  <span className="truncate w-20 font-semibold tracking-wide leading-none">
+                    John Doe
+                  </span>
+                  <span className="truncate w-20 text-gray-500 text-xs leading-none mt-1">
+                    Manager
+                  </span>
                 </span>
               </a>
             </div>

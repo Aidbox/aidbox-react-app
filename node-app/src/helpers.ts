@@ -8,28 +8,24 @@ interface IObject {
   [key: string]: any;
 }
 
-type TUnionToIntersection<U> = (
-  U extends any ? (k: U) => void : never
-) extends (k: infer I) => void
+type TUnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
   ? I
   : never;
 
 const isObject = (obj: any) => {
-  if (typeof obj === "object" && obj !== null) {
-    if (typeof Object.getPrototypeOf === "function") {
+  if (typeof obj === 'object' && obj !== null) {
+    if (typeof Object.getPrototypeOf === 'function') {
       const prototype = Object.getPrototypeOf(obj);
       return prototype === Object.prototype || prototype === null;
     }
 
-    return Object.prototype.toString.call(obj) === "[object Object]";
+    return Object.prototype.toString.call(obj) === '[object Object]';
   }
 
   return false;
 };
 
-export const mergeDeep = <T extends IObject[]>(
-  ...objects: T
-): TUnionToIntersection<T[number]> =>
+export const mergeDeep = <T extends IObject[]>(...objects: T): TUnionToIntersection<T[number]> =>
   objects.reduce((result, current) => {
     Object.keys(current).forEach((key) => {
       if (Array.isArray(result[key]) && Array.isArray(current[key])) {
@@ -52,5 +48,3 @@ export const mergeDeep = <T extends IObject[]>(
 // console.log('merge result:', m)
 
 //============================================
-
-

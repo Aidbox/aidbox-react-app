@@ -1,5 +1,5 @@
 import { UserWithRoles } from './role';
-import { Role } from '../contrib/aidbox';
+import { Role } from 'shared/src/contrib/aidbox';
 
 // TODO: Remove this right after effector
 export interface Session {
