@@ -1,7 +1,7 @@
 import { createDomain, guard } from 'effector';
 import { service } from 'aidbox-react/lib/services/service';
 import { setInstanceBaseURL, setInstanceToken } from 'aidbox-react/lib/services/instance';
-/* import { persist } from 'effector-storage/local'; */
+import { persist } from 'effector-storage/local';
 import { isSuccess } from 'aidbox-react/lib/libs/remoteData';
 
 setInstanceBaseURL('http://localhost:8888');
@@ -21,7 +21,7 @@ export const signInFx = authDomain.createEffect<any, any, Error>({
     const result = await service({
       url: '/auth/token',
       method: 'POST',
-      data: { ...params, grant_type: 'password', client_id: 'portal', clientSecret: 'secret' },
+      data: { ...params, grant_type: 'password', client_id: 'ui-portal', clientSecret: 'secret' },
     });
     return result;
   },
@@ -40,12 +40,12 @@ export const getUserDataFx = authDomain.createEffect({
 export const setTokenFx = authDomain.createEffect({
   handler: ({ data }: any) => {
     setInstanceToken(data);
-    return data.access_token;
+    return data;
   },
 });
 
 $token.on(setTokenFx.doneData, (_, token) => token);
-// persist({ store: $token });
+persist({ store: $token });
 
 $user.on(getUserDataFx.doneData, (_, result) => {
   if (isSuccess(result)) {

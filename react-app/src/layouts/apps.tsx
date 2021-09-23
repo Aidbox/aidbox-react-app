@@ -14,6 +14,7 @@ const Link = ({ path, text }: { path: string; text: string }) => {
 };
 
 const linksByRole = {
+  admin: [],
   patient: [
     {
       text: 'profile',
@@ -40,7 +41,7 @@ const linksByRole = {
   ],
 };
 
-const Layout = ({ role }: { role: 'practitioner' | 'patient' }) => {
+const Layout = ({ role }: { role: 'practitioner' | 'patient' | 'admin' }) => {
   return (
     <div className="flex flex-row min-h-screen bg-gray-100 text-gray-800">
       <aside className="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-indigo-500">

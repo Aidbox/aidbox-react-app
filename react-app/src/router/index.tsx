@@ -1,11 +1,14 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 import { useStore } from 'effector-react';
 import LoginPage from '../pages/login/index';
+import NewPatientPage from '../pages/new-patient/index';
 import Layout from '../layouts/apps';
 import SmartApps from '../pages/smart-apps';
 import { RoleSwitch } from '../components/RoleSwitch';
 import { UserRole } from '../services/role';
 import { $token, $user } from '../models/auth';
+import { useEffect } from 'react';
+import { setInstanceToken } from 'aidbox-react/lib/services/instance';
 
 const Profile = () => {
   return (
@@ -29,9 +32,17 @@ const routesByRole = {
         { path: 'profile', element: <Profile /> },
         { path: 'settings', element: <Settings /> },
         { path: 'smart-apps', element: <SmartApps /> },
+        { path: 'new-patient', element: <NewPatientPage /> },
       ],
     },
     { path: '*', element: <Navigate to="/profile" /> },
+  ],
+  admin: [
+    {
+      element: <Layout role="admin" />,
+      children: [{ path: 'new-patient', element: <NewPatientPage /> }],
+    },
+    { path: '*', element: <Navigate to="/new-patient" /> },
   ],
   practitioner: [
     {
@@ -44,6 +55,8 @@ const routesByRole = {
   ],
 };
 
+// type RoutesByRole = 'patient' | 'admin' | 'practitioner';
+
 const loginRoutes = [
   {
     element: <LoginPage />,
@@ -54,8 +67,17 @@ const loginRoutes = [
 
 export const AppRouter = () => {
   const token = useStore($token);
+  useEffect(() => {
+    const setToken = () => {
+      if (token) {
+        const resp = setInstanceToken(token);
+      }
+    };
+    setToken();
+  }, []);
   const user = useStore($user);
-  const routes = token ? routesByRole['patient'] : loginRoutes;
+  // const role: RoutesByRole = getIn(user, ['role', 0, 'name']);
+  const routes = token ? routesByRole['admin'] : loginRoutes;
   const main = useRoutes(routes);
   console.log(user);
 
