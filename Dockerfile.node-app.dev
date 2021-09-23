@@ -1,0 +1,19 @@
+FROM node:14-alpine
+WORKDIR /app
+
+RUN mkdir -p /app/react-app
+RUN mkdir -p /app/node-app
+RUN mkdir -p /app/shared
+
+ADD lerna.json lerna.json
+ADD package.json package.json
+ADD node-app/package.json node-app/package.json
+ADD react-app/package.json react-app/package.json
+ADD shared/package.json shared/package.json
+
+RUN npm install
+
+ADD . /app
+EXPOSE 8090
+
+CMD ["npm", "run", "start:node-app"]
