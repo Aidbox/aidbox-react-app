@@ -7,8 +7,6 @@ import SmartApps from '../pages/smart-apps';
 import { RoleSwitch } from '../components/RoleSwitch';
 import { UserRole } from '../services/role';
 import { $token, $user } from '../models/auth';
-import { useEffect } from 'react';
-import { setInstanceToken } from 'aidbox-react/lib/services/instance';
 
 const Profile = () => {
   return (
@@ -67,14 +65,6 @@ const loginRoutes = [
 
 export const AppRouter = () => {
   const token = useStore($token);
-  useEffect(() => {
-    const setToken = () => {
-      if (token) {
-        const resp = setInstanceToken(token);
-      }
-    };
-    setToken();
-  }, []);
   const user = useStore($user);
   // const role: RoutesByRole = getIn(user, ['role', 0, 'name']);
   const routes = token ? routesByRole['admin'] : loginRoutes;
