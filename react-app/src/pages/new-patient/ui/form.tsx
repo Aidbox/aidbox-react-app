@@ -1,14 +1,19 @@
-import { useGate } from 'effector-react';
+import { StoreValue } from 'effector';
+
+import { useGate, useStore } from 'effector-react';
 import { useForm } from 'effector-forms';
-import { FormGate, form, submitForm } from '../model';
+import * as newPatient from '../model';
 
 const Form = () => {
-  useGate(FormGate);
-  const { fields } = useForm(form);
+  useGate(newPatient.FormGate);
+  const status = useStore(newPatient.$submitStatus);
+  console.log(status.success);
+
+  const { fields } = useForm(newPatient.form);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    submitForm();
+    newPatient.submitForm();
   };
 
   return (
@@ -19,6 +24,8 @@ const Form = () => {
             New Patient
           </h1>
         </div>
+        <div className="text-red-500">{status.fail && status.message}</div>
+        <div className="text-green-500">{status.success && status.message}</div>
         <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={onSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">

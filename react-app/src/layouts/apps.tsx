@@ -1,4 +1,5 @@
 import { Outlet, Link as RouterLink } from 'react-router-dom';
+import { signOut } from '../models/auth';
 
 const Link = ({ path, text }: { path: string; text: string }) => {
   return (
@@ -15,8 +16,22 @@ const Link = ({ path, text }: { path: string; text: string }) => {
 
 const linksByRole = {
   admin: [],
-  patient: [],
-  practitioner: [],
+  patient: [
+    {
+      text: 'Profile',
+      path: 'profile',
+    },
+    {
+      text: 'Smart Apps',
+      path: 'smart-apps',
+    },
+  ],
+  practitioner: [
+    {
+      text: 'Profile',
+      path: 'profile',
+    },
+  ],
 };
 
 const Layout = ({ role }: { role: 'practitioner' | 'patient' | 'admin' }) => {
@@ -35,21 +50,13 @@ const Layout = ({ role }: { role: 'practitioner' | 'patient' | 'admin' }) => {
         <header className="header bg-white shadow py-4 px-4">
           <div className="header-content flex items-center flex-row">
             <div className="flex ml-auto">
-              <a href="#" className="flex flex-row items-center">
-                <img
-                  src="https://pbs.twimg.com/profile_images/378800000298815220/b567757616f720812125bfbac395ff54_normal.png"
-                  alt=""
-                  className="h-10 w-10 bg-gray-200 border rounded-full"
-                />
-                <span className="flex flex-col ml-2">
-                  <span className="truncate w-20 font-semibold tracking-wide leading-none">
-                    John Doe
-                  </span>
-                  <span className="truncate w-20 text-gray-500 text-xs leading-none mt-1">
-                    Manager
-                  </span>
-                </span>
-              </a>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Sign Out
+              </button>
             </div>
           </div>
         </header>

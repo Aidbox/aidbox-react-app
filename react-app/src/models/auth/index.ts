@@ -1,18 +1,15 @@
-import { createDomain, guard, attach, createEffect, combine, sample } from 'effector';
+import { createDomain, guard, attach, createEffect, combine } from 'effector';
 import { service } from 'aidbox-react/lib/services/service';
+import { isFailure } from 'aidbox-react/lib/libs/remoteData';
 import { persist } from 'effector-storage/local';
 import { setInstanceBaseURL } from 'aidbox-react/lib/services/instance';
 
 export const authDomain = createDomain('auth');
 
-authDomain.onCreateStore((store) => store.reset(resetSession));
-export const resetSession = authDomain.createEvent();
-export const startAuth = authDomain.createEvent();
-export const startLoading = authDomain.createEvent();
-export const resetToken = authDomain.createEvent();
-
 export const $user = authDomain.createStore<any>({ status: 'idle', data: { id: '' } });
 export const $token = authDomain.createStore<any>(null);
+
+export const signOut = authDomain.createEvent();
 
 setInstanceBaseURL('http://localhost:8888');
 type EffectParams = { token: string; params: { headers: Object } };
@@ -23,6 +20,9 @@ const backendRequest = createEffect(async ({ token, params = { headers: {} } }: 
     ...params.headers,
   };
   const result = await service({ ...params, headers });
+  if (isFailure(result)) {
+    throw new Error(result.error);
+  }
   return result;
 });
 
@@ -64,10 +64,12 @@ const $canLoadUser = combine($token, $user, (token, user) => {
 
 $canLoadUser.watch((shouldLoad) => shouldLoad && getUserDataFx());
 
-$token.on(setTokenFx.doneData, (_, token) => token);
+$token.on(setTokenFx.doneData, (_, token) => token).reset(signOut);
 persist({ store: $token });
 
-$user.on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }));
+$user
+  .on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }))
+  .reset(signOut);
 
 /* guard({ */
 /*   source: $canLoadUser, */

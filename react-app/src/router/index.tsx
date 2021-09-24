@@ -59,19 +59,27 @@ const loginRoutes = [
   { path: '*', element: <Navigate to="/login" /> },
 ];
 
-const Router = ({ role, token }: { role: RoutesByRole; token?: any }) => {
-  const routes = token ? routesByRole[role] : loginRoutes;
+const Router = ({ routes }: any) => {
   const main = useRoutes(routes);
   return main;
 };
 
 export const AppRouter = () => {
-  const token = useStore($token);
   const user = useStore($user);
-  if (token && !user.data.id) {
-    return <div>Loading...</div>;
+  const token = useStore($token);
+  if (!token) {
+    return <Router routes={loginRoutes} />;
   }
+  const status: 'loading' | 'done' | 'idle' = user.status;
+  const main = {
+    idle: () => (token ? <div>Idle loading...</div> : <Router routes={loginRoutes} />),
+    done: () => {
+      const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
+      const routes = role ? routesByRole[role] : loginRoutes;
+      return <Router routes={routes} />;
+    },
+    loading: () => <div>Loading...</div>,
+  }[status];
 
-  const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
-  return <Router token={token} role={role} />;
+  return main();
 };
