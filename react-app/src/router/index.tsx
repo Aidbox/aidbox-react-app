@@ -60,7 +60,6 @@ const loginRoutes = [
 ];
 
 const Router = ({ role, token }: { role: RoutesByRole; token?: any }) => {
-  console.log(role);
   const routes = token ? routesByRole[role] : loginRoutes;
   const main = useRoutes(routes);
   return main;
@@ -69,14 +68,10 @@ const Router = ({ role, token }: { role: RoutesByRole; token?: any }) => {
 export const AppRouter = () => {
   const token = useStore($token);
   const user = useStore($user);
-  if (user.status === 'loading') {
+  if (token && !user.data.id) {
     return <div>Loading...</div>;
   }
 
-  // TEMP
-  if (!user.data.id && token) {
-    return <Router role="admin" />;
-  }
   const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
   return <Router token={token} role={role} />;
 };

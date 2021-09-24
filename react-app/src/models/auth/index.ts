@@ -1,4 +1,4 @@
-import { createDomain, guard, attach, createEffect } from 'effector';
+import { createDomain, guard, attach, createEffect, combine, sample } from 'effector';
 import { service } from 'aidbox-react/lib/services/service';
 import { persist } from 'effector-storage/local';
 import { setInstanceBaseURL } from 'aidbox-react/lib/services/instance';
@@ -16,6 +16,7 @@ export const $token = authDomain.createStore<any>(null);
 
 setInstanceBaseURL('http://localhost:8888');
 type EffectParams = { token: string; params: { headers: Object } };
+
 const backendRequest = createEffect(async ({ token, params = { headers: {} } }: EffectParams) => {
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -56,16 +57,26 @@ export const setTokenFx = authDomain.createEffect({
   handler: ({ data: { access_token } }: any) => access_token,
 });
 
+// ASK Alex Streltsov
+const $canLoadUser = combine($token, $user, (token, user) => {
+  return token && !user.data.id;
+});
+
+$canLoadUser.watch((shouldLoad) => shouldLoad && getUserDataFx());
+
 $token.on(setTokenFx.doneData, (_, token) => token);
 persist({ store: $token });
 
 $user.on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }));
 
-guard({
-  source: $token,
-  filter: (source) => !!source,
-  target: getUserDataFx,
-});
+/* guard({ */
+/*   source: $canLoadUser, */
+/*   filter: (source) => { */
+/*     console.log(source, 'ASDFASDFSADFSADFASDF'); */
+/*     return source; */
+/*   }, */
+/*   target: getUserDataFx, */
+/* }); */
 
 guard({
   source: signInFx.doneData,
