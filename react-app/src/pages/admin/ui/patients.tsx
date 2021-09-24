@@ -5,8 +5,8 @@ import { getIn, formatName } from '../../../lib/tools';
 import * as admin from '../model';
 
 export const Patients = () => {
-  const patients = useStore(admin.$patients);
   useGate(admin.PatientsGate);
+  const patients = useStore(admin.$patients);
 
   return (
     <section className="text-gray-600 body-font">
@@ -26,7 +26,6 @@ export const Patients = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-2 text-xs text-gray-500">Name</th>
-                    <th className="px-6 py-2 text-xs text-gray-500">Email</th>
                     <th className="px-6 py-2 text-xs text-gray-500">Birthdate</th>
                   </tr>
                 </thead>
@@ -35,10 +34,9 @@ export const Patients = () => {
                     const { resource } = p;
                     const name = getIn(resource, ['name', 0]);
                     return (
-                      <tr className="whitespace-nowrap">
+                      <tr className="whitespace-nowrap" key={resource.id}>
                         <td className="px-6 py-4 text-sm text-gray-500">{formatName(name)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">{resource.email}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">{resource.birthdate}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">{resource.birthDate}</td>
                       </tr>
                     );
                   })}

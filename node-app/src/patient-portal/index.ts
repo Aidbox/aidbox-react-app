@@ -13,6 +13,13 @@ export const manifest = {
           resourceType: 'User',
         },
       },
+      patient: {
+        name: 'patient',
+        user: {
+          id: 'portal',
+          resourceType: 'User',
+        },
+      },
     },
     User: {
       'portal-admin': { password: 'password' },

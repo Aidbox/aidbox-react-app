@@ -62,10 +62,11 @@ sample({
   target: createPatientFx,
 });
 
-forward({
-  from: PatientsGate.open,
-  to: downloadPatientsFx,
-});
+// Big nested level, stack overflow
+/* sample({ */
+/*   clock: PatientsGate.open, */
+/*   target: downloadPatientsFx, */
+/* }); */
 
 forward({
   from: createPatientFx.doneData,
