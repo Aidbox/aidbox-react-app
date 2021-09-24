@@ -15,7 +15,12 @@ const Link = ({ path, text }: { path: string; text: string }) => {
 };
 
 const linksByRole = {
-  admin: [],
+  admin: [
+    {
+      text: 'Patients',
+      path: 'patients',
+    },
+  ],
   patient: [
     {
       text: 'Profile',

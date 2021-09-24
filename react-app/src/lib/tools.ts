@@ -94,3 +94,9 @@ export function deepMerge(...objects: any[]) {
 
   return target;
 }
+
+export const formatName = (name: any) => {
+  const firstName = getIn(name, ['given', 0]);
+  const lastName = getIn(name, ['family']);
+  return `${firstName} ${lastName}`;
+};

@@ -1,7 +1,7 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 import { useStore } from 'effector-react';
 import LoginPage from '../pages/login/index';
-import NewPatientPage from '../pages/new-patient/index';
+import AdminPage from '../pages/admin/index';
 import Layout from '../layouts/apps';
 import SmartApps from '../pages/smart-apps';
 import { RoleSwitch } from '../components/RoleSwitch';
@@ -34,9 +34,9 @@ const routesByRole = {
   admin: [
     {
       element: <Layout role="admin" />,
-      children: [{ path: 'new-patient', element: <NewPatientPage /> }],
+      children: [{ path: 'patients', element: <AdminPage /> }],
     },
-    { path: '*', element: <Navigate to="/new-patient" /> },
+    { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
     {
