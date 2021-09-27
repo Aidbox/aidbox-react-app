@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStore, useGate } from 'effector-react';
+import { Link } from 'react-router-dom';
 
 import { getIn, formatName } from '../../../lib/tools';
 import * as admin from '../model';
@@ -22,26 +23,35 @@ export const Patients = () => {
         <div className="flex flex-col">
           <div className="w-full">
             <div className="border-b border-gray-200 shadow w-full">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-2 text-xs text-gray-500">Name</th>
-                    <th className="px-6 py-2 text-xs text-gray-500">Birthdate</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
+              <div className="w-full">
+                <div className="bg-gray-50">
+                  <div className="grid grid-rows-1 grid-cols-2">
+                    <div className="px-6 py-2 text-xs text-gray-500">Name</div>
+                    <div className="px-6 py-2 text-xs text-gray-500">Birthdate</div>
+                  </div>
+                </div>
+                <div className="bg-white">
                   {patients.map((p: any) => {
                     const { resource } = p;
+                    const { id } = resource;
                     const name = getIn(resource, ['name', 0]);
+
                     return (
-                      <tr className="whitespace-nowrap" key={resource.id}>
-                        <td className="px-6 py-4 text-sm text-gray-500">{formatName(name)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">{resource.birthDate}</td>
-                      </tr>
+                      <Link to={`/patients/${id}`}>
+                        <div
+                          className="grid grid-rows-1 grid-cols-2 whitespace-nowrap hover:bg-gray-100 cursor-pointer border-b-2 border-gray-100"
+                          key={id}
+                        >
+                          <div className="px-6 py-4 text-sm text-gray-500">{formatName(name)}</div>
+                          <div className="px-6 py-4 text-sm text-gray-500">
+                            {resource.birthDate}
+                          </div>
+                        </div>
+                      </Link>
                     );
                   })}
-                </tbody>
-              </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>

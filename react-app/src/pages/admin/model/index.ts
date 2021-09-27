@@ -59,6 +59,7 @@ $submitStatus
 sample({
   source: form.$values,
   clock: submitForm,
+  fn: (formData, patientId) => ({ ...formData, patientId }),
   target: createPatientFx,
 });
 

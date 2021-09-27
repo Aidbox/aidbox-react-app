@@ -5,7 +5,7 @@ import { SmartApp } from './app';
 import * as smartAppModel from '../model';
 
 export const SmartApps = () => {
-  useGate(smartAppModel.Gate);
+  useGate(smartAppModel.SmartAppGate);
   const smartApps = useStore(smartAppModel.$apps);
 
   return (

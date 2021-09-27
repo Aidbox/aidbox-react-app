@@ -3,17 +3,18 @@ import { StoreValue } from 'effector';
 import { useGate, useStore } from 'effector-react';
 import { useForm } from 'effector-forms';
 import * as newPatient from '../model';
+import { useParams } from 'react-router-dom';
 
 const Form = () => {
   useGate(newPatient.FormGate);
   const status = useStore(newPatient.$submitStatus);
-  console.log(status.success);
+  const { id }: { id: any } = useParams();
 
   const { fields } = useForm(newPatient.form);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    newPatient.submitForm();
+    newPatient.submitForm(id);
   };
 
   return (
@@ -21,7 +22,7 @@ const Form = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="border-b-4 border-indigo-500 rounded">
           <h1 className="sm:text-4xl text-5xl font-medium title-font mb-2 text-gray-900">
-            New Patient
+            Enroll Patient
           </h1>
         </div>
         <div className="text-red-500">{status.fail && status.message}</div>
@@ -59,7 +60,7 @@ const Form = () => {
               type="submit"
               className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Create
+              Enroll
             </button>
           </div>
         </form>

@@ -7,11 +7,9 @@ export const enrollPatient: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['enrollPatient'],
   handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
-    const { email, password } = resource;
-    const patient = await ctx.api.createResource('Patient', {
-      telecom: [{ system: 'email', value: email }],
-    });
-    const user: any = await ctx.api.createResource('User', resource);
+    const { email, password, patientId } = resource;
+    const patient = await ctx.api.getResource('Patient', patientId);
+    const user: any = await ctx.api.createResource('User', { email, password });
     const role = await ctx.api.createResource('Role', {
       name: 'patient',
       user: {
@@ -28,5 +26,20 @@ export const enrollPatient: TOperation<{ params: { type: string } }> = {
     });
 
     return { resource: { patient, user, role } };
+  },
+};
+
+export const patientInfo: TOperation<{ params: { type: string } }> = {
+  method: 'GET',
+  path: ['patientInfo'],
+  handlerFn: async ({ params: { patientId } }: any, { ctx }: { ctx: TCtx }) => {
+    const params = { patient: patientId };
+
+    const { resources: observation } = await ctx.api.findResources(`Observation`, params);
+    const { resources: appointments } = await ctx.api.findResources(`Appointment`, params);
+    const { resources: encouters } = await ctx.api.findResources(`Encounter`, params);
+    const { resources: diagnoses } = await ctx.api.findResources(`Condition`, params);
+
+    return { resource: { observation, appointments, encouters, diagnoses } };
   },
 };

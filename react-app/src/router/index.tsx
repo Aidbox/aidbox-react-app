@@ -3,13 +3,15 @@ import { useStore } from 'effector-react';
 import LoginPage from '../pages/login/index';
 import AdminPage from '../pages/admin/index';
 import Layout from '../layouts/apps';
-import SmartApps from '../pages/smart-apps';
+import SmartApps from '../pages/patient-page';
 import { RoleSwitch } from '../components/RoleSwitch';
 import { UserRole } from '../services/role';
 import { $token, $user } from '../models/auth';
 import { getIn } from '../lib/tools';
+import Profile from '../pages/patient-page/ui/profile';
+import PatientProfilePage from '../pages/admin/ui/patientProfile';
 
-const Profile = () => {
+/* const Profile = () => {
   return (
     <RoleSwitch>
       {{
@@ -18,7 +20,7 @@ const Profile = () => {
       }}
     </RoleSwitch>
   );
-};
+}; */
 
 const Settings = () => <div>Settings</div>;
 const PracSettings = () => <div>Prac Settings</div>;
@@ -27,14 +29,20 @@ const routesByRole = {
   patient: [
     {
       element: <Layout role="patient" />,
-      children: [{ path: 'smart-apps', element: <SmartApps /> }],
+      children: [
+        { path: 'smart-apps', element: <SmartApps /> },
+        { path: 'profile', element: <Profile /> },
+      ],
     },
     { path: '*', element: <Navigate to="/smart-apps" /> },
   ],
   admin: [
     {
       element: <Layout role="admin" />,
-      children: [{ path: 'patients', element: <AdminPage /> }],
+      children: [
+        { path: 'patients', element: <AdminPage /> },
+        { path: 'patients/:id', element: <PatientProfilePage /> },
+      ],
     },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
@@ -42,7 +50,7 @@ const routesByRole = {
     {
       element: <Layout role="practitioner" />,
       children: [
-        { path: 'practitioner-profile', element: <Profile /> },
+        // { path: 'practitioner-profile', element: <Profile /> },
         { path: 'practitioner-settings', element: <PracSettings /> },
       ],
     },
