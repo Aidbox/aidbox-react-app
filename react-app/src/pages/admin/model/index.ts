@@ -63,10 +63,10 @@ sample({
 });
 
 // Big nested level, stack overflow
-/* sample({ */
-/*   clock: PatientsGate.open, */
-/*   target: downloadPatientsFx, */
-/* }); */
+forward({
+  from: PatientsGate.open,
+  to: downloadPatientsFx,
+});
 
 forward({
   from: createPatientFx.doneData,

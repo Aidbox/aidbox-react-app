@@ -65,7 +65,7 @@ const $canLoadUser = combine($token, $user, (token, user) => {
 $canLoadUser.watch((shouldLoad) => shouldLoad && getUserDataFx());
 
 $token.on(setTokenFx.doneData, (_, token) => token).reset(signOut);
-persist({ store: $token });
+persist({ store: $token, key: 'token' });
 
 $user
   .on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }))
