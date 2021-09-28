@@ -10,6 +10,7 @@ import { $token, $user } from '../models/auth';
 import { getIn } from '../lib/tools';
 import Profile from '../pages/patient-page/ui/profile';
 import PatientProfilePage from '../pages/admin/ui/patientProfile';
+import ConsentForm from '../pages/consent-form';
 
 /* const Profile = () => {
   return (
@@ -27,6 +28,7 @@ const PracSettings = () => <div>Prac Settings</div>;
 
 const routesByRole = {
   patient: [
+    { path: 'auth/authotize', element: <ConsentForm /> },
     {
       element: <Layout role="patient" />,
       children: [

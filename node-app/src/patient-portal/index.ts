@@ -34,4 +34,13 @@ export const manifest = {
     },
   },
   operations,
+  entities: {
+    Patient: {
+      attrs: {
+        isEnrolled: {
+          type: 'boolean',
+        },
+      },
+    },
+  },
 };

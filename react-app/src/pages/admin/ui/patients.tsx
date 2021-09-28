@@ -25,9 +25,10 @@ export const Patients = () => {
             <div className="border-b border-gray-200 shadow w-full">
               <div className="w-full">
                 <div className="bg-gray-50">
-                  <div className="grid grid-rows-1 grid-cols-2">
+                  <div className="grid grid-rows-1 grid-cols-3">
                     <div className="px-6 py-2 text-xs text-gray-500">Name</div>
                     <div className="px-6 py-2 text-xs text-gray-500">Birthdate</div>
+                    <div className="px-6 py-2 text-xs text-gray-500">Enrolled?</div>
                   </div>
                 </div>
                 <div className="bg-white">
@@ -39,12 +40,15 @@ export const Patients = () => {
                     return (
                       <Link to={`/patients/${id}`}>
                         <div
-                          className="grid grid-rows-1 grid-cols-2 whitespace-nowrap hover:bg-gray-100 cursor-pointer border-b-2 border-gray-100"
+                          className="grid grid-rows-1 grid-cols-3 whitespace-nowrap hover:bg-gray-100 cursor-pointer border-b-2 border-gray-100"
                           key={id}
                         >
                           <div className="px-6 py-4 text-sm text-gray-500">{formatName(name)}</div>
                           <div className="px-6 py-4 text-sm text-gray-500">
                             {resource.birthDate}
+                          </div>
+                          <div className="px-6 py-4 text-sm text-gray-500">
+                            {resource.isEnrolled ? 'Yes' : 'No'}
                           </div>
                         </div>
                       </Link>

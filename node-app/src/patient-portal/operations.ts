@@ -9,14 +9,30 @@ export const enrollPatient: TOperation<{ params: { type: string } }> = {
   handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
     const { email, password, patientId } = resource;
     const patient = await ctx.api.getResource('Patient', patientId);
-    const user: any = await ctx.api.createResource('User', { email, password });
+    const user: any = await ctx.api.createResource('User', {
+      email,
+      password,
+      fhirUser: {
+        id: patientId,
+        resourceType: 'Patient',
+      },
+    });
+
     const role = await ctx.api.createResource('Role', {
       name: 'patient',
       user: {
         id: user.id,
         resourceType: 'User',
       },
+      links: {
+        patient: {
+          resourceType: 'Patient',
+          id: patientId,
+        },
+      },
     });
+
+    await ctx.api.patchResource('Patient', patientId, { isEnrolled: true });
 
     sendMail({
       from: 'PlanAPI Team <mailgun@planapi.aidbox.io>',
@@ -35,11 +51,31 @@ export const patientInfo: TOperation<{ params: { type: string } }> = {
   handlerFn: async ({ params: { patientId } }: any, { ctx }: { ctx: TCtx }) => {
     const params = { patient: patientId };
 
-    const { resources: observation } = await ctx.api.findResources(`Observation`, params);
+    const { resources: observations } = await ctx.api.findResources(`Observation`, params);
     const { resources: appointments } = await ctx.api.findResources(`Appointment`, params);
     const { resources: encouters } = await ctx.api.findResources(`Encounter`, params);
     const { resources: diagnoses } = await ctx.api.findResources(`Condition`, params);
 
-    return { resource: { observation, appointments, encouters, diagnoses } };
+    return { resource: { observations, appointments, encouters, diagnoses } };
+  },
+};
+
+export const authGrant: TOperation<{ params: { type: string } }> = {
+  method: 'POST',
+  path: ['authGrant'],
+  handlerFn: async ({ resource: { clientId, userId, scope } }: any, { ctx }: { ctx: TCtx }) => {
+    const grant = await ctx.api.createResource(`Grant`, {
+      user: {
+        id: userId,
+        resourceType: 'User',
+      },
+      scope,
+      client: {
+        id: clientId,
+        resourceType: 'Client',
+      },
+    });
+
+    return { resource: grant };
   },
 };

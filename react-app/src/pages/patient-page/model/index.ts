@@ -19,20 +19,28 @@ const downloadAppsFx = patientDomain.createEffect<any, any, Error>({
   },
 });
 
-const downloadPatientInfoFx = patientDomain.createEffect<any, any, Error>(({ data: { id } }) =>
-  authorizedRequest({
-    url: '/patientInfo',
-    method: 'GET',
-    params: {
-      patientId: id,
+const downloadPatientInfoFx = patientDomain.createEffect<any, any, Error>(
+  ({
+    data: {
+      fhirUser: { id },
     },
-  }),
+  }) =>
+    authorizedRequest({
+      url: '/patientInfo',
+      method: 'GET',
+      params: {
+        patientId: id,
+      },
+    }),
 );
 
 export const SmartAppGate = createGate();
 export const PatientProfileGate = createGate();
 export const $apps = patientDomain.createStore<any>(null);
-export const $patientInfo = patientDomain.createStore<any>(null);
+export const $patientInfo = patientDomain.createStore<any>({});
+export const $encounters = $patientInfo.map(({ encouters }) => encouters);
+export const $observations = $patientInfo.map(({ observations }) => observations);
+export const $diagnoses = $patientInfo.map(({ diagnoses }) => diagnoses);
 
 export const downloadApps = patientDomain.createEvent();
 
@@ -40,7 +48,7 @@ $apps.on(downloadAppsFx.doneData, (_, payload) =>
   getIn(payload, ['data', 'result', 'smart-apps'], []),
 );
 
-$patientInfo.on(downloadPatientInfoFx.doneData, (_, { resource }) => resource);
+$patientInfo.on(downloadPatientInfoFx.doneData, (_, { data }) => data);
 $patientInfo.watch(console.log);
 
 forward({

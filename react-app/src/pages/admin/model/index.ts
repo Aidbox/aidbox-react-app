@@ -27,7 +27,7 @@ export const $submitStatus = admin.createStore<any>({});
 
 export const downloadPatientsFx = admin.createEffect<any, any, Error>(async () => {
   const result = await authorizedRequest({
-    url: '/Patient',
+    url: '/Patient?_sort=.name.0.family',
     method: 'GET',
   });
   return result;

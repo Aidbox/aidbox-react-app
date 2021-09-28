@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { PatientProfileGate } from '../model';
 import { useGate } from 'effector-react';
+import Encounters from './encounters';
+import Observations from './observations';
+import Diagnoses from './diagnoses';
 
 const tabs = ['Appointments', 'Encounters', 'Observations', 'Diagnoses'];
 
@@ -23,6 +26,9 @@ const Profile = () => {
           </button>
         ))}
       </nav>
+      {currentTab === 'Encounters' && <Encounters />}
+      {currentTab === 'Observations' && <Observations />}
+      {currentTab === 'Diagnoses' && <Diagnoses />}
     </div>
   );
 };
