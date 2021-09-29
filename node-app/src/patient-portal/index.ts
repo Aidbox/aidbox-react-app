@@ -31,6 +31,12 @@ export const manifest = {
         engine: 'allow',
         link: [{ id: 'ui-portal', resourceType: 'Client' }],
       },
+      'allow-single-patient-smart-on-fhir': {
+        engine: 'matcho',
+        matcho: {
+          uri: '#/smart/.*',
+        },
+      },
     },
   },
   operations,
@@ -39,6 +45,17 @@ export const manifest = {
       attrs: {
         isEnrolled: {
           type: 'boolean',
+        },
+      },
+    },
+    AidboxConfig: {
+      attrs: {
+        auth: {
+          attrs: {
+            'grant-page-url': {
+              type: 'string',
+            },
+          },
         },
       },
     },

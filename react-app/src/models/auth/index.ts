@@ -1,13 +1,15 @@
-import { createDomain, guard, attach, createEffect, combine } from 'effector';
+import { createDomain, guard, attach, createEffect, combine, forward, sample } from 'effector';
 import { service } from 'aidbox-react/lib/services/service';
 import { isFailure } from 'aidbox-react/lib/libs/remoteData';
 import { persist } from 'effector-storage/local';
 import { setInstanceBaseURL } from 'aidbox-react/lib/services/instance';
+import { navigateTo } from '../router';
 
 export const authDomain = createDomain('auth');
 
 export const $user = authDomain.createStore<any>({ status: 'idle', data: { id: '' } });
 export const $token = authDomain.createStore<any>(null);
+export const $startUrl = authDomain.createStore<any>(null);
 
 export const signOut = authDomain.createEvent();
 
@@ -57,6 +59,10 @@ export const setTokenFx = authDomain.createEffect({
   handler: ({ data: { access_token } }: any) => access_token,
 });
 
+export const setStartUrlFx = authDomain.createEffect({
+  handler: (data: any) => data,
+});
+
 // ASK Alex Streltsov
 const $canLoadUser = combine($token, $user, (token, user) => {
   return token && !user.data.id;
@@ -71,6 +77,8 @@ $user
   .on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }))
   .reset(signOut);
 
+$startUrl.on(setStartUrlFx.doneData, (_, data) => data);
+$startUrl.watch(console.log);
 /* guard({ */
 /*   source: $canLoadUser, */
 /*   filter: (source) => { */
@@ -84,4 +92,11 @@ guard({
   source: signInFx.doneData,
   filter: (source) => source.data?.access_token,
   target: setTokenFx,
+});
+
+sample({
+  clock: setTokenFx.doneData,
+  source: $startUrl,
+  fn: ({ pathname, params }) => (params ? `/${pathname}?${params}` : `/${pathname}`),
+  target: navigateTo,
 });

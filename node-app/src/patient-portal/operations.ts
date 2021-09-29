@@ -63,17 +63,20 @@ export const patientInfo: TOperation<{ params: { type: string } }> = {
 export const authGrant: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['authGrant'],
-  handlerFn: async ({ resource: { clientId, userId, scope } }: any, { ctx }: { ctx: TCtx }) => {
+  handlerFn: async (requst: any, { ctx }: { ctx: TCtx }) => {
+    console.log(ctx);
     const grant = await ctx.api.createResource(`Grant`, {
       user: {
-        id: userId,
+        id: requst['oauth/user'].id,
         resourceType: 'User',
       },
-      scope,
       client: {
-        id: clientId,
+        id: requst.resource.clientId,
         resourceType: 'Client',
       },
+      'requested-scope': requst.resource.scope.split(' '),
+      'provided-scope': requst.resource.scope.split(' '),
+      patient: requst['oauth/user'].fhirUser,
     });
 
     return { resource: grant };

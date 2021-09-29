@@ -1,0 +1,349 @@
+{ns single-patient-portal
+ import #{zenbox}
+
+ root-api
+ {:zen/tags #{zenbox/api}
+  "smart" {:apis #{smart-api}}}
+
+  grant-lookup-method
+  {:zen/tags #{aidbox.auth/grant-lookup}
+    :method aidbox.auth/single-patient-grant-lookup
+    :config {:grant-page-url "http://localhost:3000/auth/authorize"}
+    }
+
+ smart-api
+ {:zen/tags #{zenbox/api}
+
+  :middlewares [:smart.fhir/single-patient-auth-middleware]
+
+  ".well-known" {"smart-configuration" {:GET {:action :smart.fhir/smart-configuration
+                                              :public true}}}
+  "metadata" {:GET {:action :smart.fhir/capability
+                    :public true}}
+  "style-v1.json" {:GET {:action :smart.fhir/style
+                         :public true}}
+
+  "Patient" {:GET {:action :smart.fhir/search
+                   :resource/type "Patient"
+                   :params {:name {}
+                            :_revinclude {:type :fhir/include
+                                          :values #{"Provenance:target"}}
+                            :_id {}
+                            :identifier {}
+                            :_limit {:max 1000}}}
+             "_search" {:POST {:action :smart.fhir/search
+                               :resource/type "Patient"
+                               :params {:name {}
+                                        :_id {}
+                                        :_limit {}}}}
+             [:id] {:GET {:action :smart.fhir/read
+                          :resource/type "Patient"}}}
+
+  "AllergyIntolerance" {:GET {:action :smart.fhir/search
+                              :resource/type "AllergyIntolerance"
+                              :params {:name {}
+                                       :_id {}
+                                       :_revinclude {:type :fhir/include
+                                                     :values #{"Provenance:target"}}
+                                       :patient {}
+                                       :_limit {:max 1000}}}
+                        "_search" {:POST {:action :smart.fhir/search
+                                          :resource/type "AllergyIntolerance"
+                                          :params {:name {}
+                                                   :_id {}
+                                                   :_limit {}}}}
+                        [:id] {:GET {:action :smart.fhir/read
+                                     :resource/type "AllergyIntolerance"}}}
+
+  "CarePlan" {:GET {:action :smart.fhir/search
+                    :resource/type "CarePlan"
+                    :params {:name {}
+                             :_id {}
+                             :patient {}
+                             :_revinclude {:type :fhir/include
+                                           :values #{"Provenance:target"}}
+                             :category {}
+                             :_limit {:max 1000}}}
+              "_search" {:POST {:action :smart.fhir/search
+                                :resource/type "CarePlan"
+                                :params {:name {}
+                                         :_id {}
+                                         :_limit {}}}}
+              [:id] {:GET {:action :smart.fhir/read
+                           :resource/type "CarePlan"}}}
+
+  "CareTeam" {:GET {:action :smart.fhir/search
+                    :resource/type "CareTeam"
+                    :params {:name {}
+                             :_id {}
+                             :_revinclude {:type :fhir/include
+                                           :values #{"Provenance:target"}}
+                             :patient {}
+                             :status {}
+                             :_limit {:max 1000}}}
+              "_search" {:POST {:action :smart.fhir/search
+                                :resource/type "CareTeam"
+                                :params {:name {}
+                                         :_id {}
+                                         :_limit {}}}}
+              [:id] {:GET {:action :smart.fhir/read
+                           :resource/type "CareTeam"}}}
+
+  "Condition" {:GET {:action :smart.fhir/search
+                     :resource/type "Condition"
+                     :params {:name {}
+                              :_id {}
+                              :_revinclude {:type :fhir/include
+                                            :values #{"Provenance:target"}}
+                              :patient {}
+                              :_limit {:max 1000}}}
+               "_search" {:POST {:action :smart.fhir/search
+                                 :resource/type "Condition"
+                                 :params {:name {}
+                                          :_id {}
+                                          :_limit {}}}}
+               [:id] {:GET {:action :smart.fhir/read
+                            :resource/type "Condition"}}}
+
+  "Device" {:GET {:action :smart.fhir/search
+                  :resource/type "Device"
+                  :params {:name {}
+                           :_id {}
+                           :_revinclude {:type :fhir/include
+                                         :values #{"Provenance:target"}}
+                           :patient {}
+                           :_limit {:max 1000}}}
+            "_search" {:POST {:action :smart.fhir/search
+                              :resource/type "Device"
+                              :params {:name {}
+                                       :_id {}
+                                       :_limit {}}}}
+            [:id] {:GET {:action :smart.fhir/read
+                         :resource/type "Device"}}}
+
+  "DiagnosticReport" {:GET {:action :smart.fhir/search
+                            :resource/type "DiagnosticReport"
+                            :params {:_id {}
+                                     :_limit {:max 1000}
+                                     :category {}
+                                     :_revinclude {:type :fhir/include
+                                                   :values #{"Provenance:target"}}
+                                     :code {}
+                                     :date {}
+                                     :name {}
+                                     :patient {}}}
+                      "_search" {:POST {:action :smart.fhir/search
+                                        :resource/type "DiagnosticReport"
+                                        :params {:name {}
+                                                 :_id {}
+                                                 :date {}
+                                                 :_limit {}}}}
+                      [:id] {:GET {:action :smart.fhir/read
+                                   :resource/type "DiagnosticReport"}}}
+
+  "DocumentReference" {:GET {:action :smart.fhir/search
+                             :resource/type "DocumentReference"
+                             :params {:_id {}
+                                      :_limit {:max 1000}
+                                      :category {}
+                                      :date {}
+                                      :name {}
+                                      :_revinclude {:type :fhir/include
+                                                    :values #{"Provenance:target"}}
+                                      :patient {}
+                                      :type {}}}
+                       "_search" {:POST {:action :smart.fhir/search
+                                         :resource/type "DocumentReference"
+                                         :params {:name {}
+                                                  :_id {}
+                                                  :_limit {}}}}
+                       [:id] {:GET {:action :smart.fhir/read
+                                    :resource/type "DocumentReference"}}}
+
+  "Encounter" {:GET {:action :smart.fhir/search
+                     :resource/type "Encounter"
+                     :params {:name {}
+                              :_id {}
+                              :patient {}
+                              :_limit {:max 1000}}}
+               "_search" {:POST {:action :smart.fhir/search
+                                 :resource/type "Encounter"
+                                 :params {:name {}
+                                          :_id {}
+                                          :_limit {}}}}
+               [:id] {:GET {:action :smart.fhir/read
+                            :resource/type "Encounter"}}}
+
+  "Goal" {:GET {:action :smart.fhir/search
+                :resource/type "Goal"
+                :params {:name {}
+                         :_id {}
+                         :patient {}
+                         :_revinclude {:type :fhir/include
+                                       :values #{"Provenance:target"}}
+                         :_limit {:max 1000}}}
+          "_search" {:POST {:action :smart.fhir/search
+                            :resource/type "Goal"
+                            :params {:name {}
+                                     :_id {}
+                                     :_limit {}}}}
+          [:id] {:GET {:action :smart.fhir/read
+                       :resource/type "Goal"}}}
+
+  "Immunization" {:GET {:action :smart.fhir/search
+                        :resource/type "Immunization"
+                        :params {:name {}
+                                 :_id {}
+                                 :patient {}
+                                 :_revinclude {:type :fhir/include
+                                               :values #{"Provenance:target"}}
+                                 :_limit {:max 1000}}}
+                  "_search" {:POST {:action :smart.fhir/search
+                                    :resource/type "Immunization"
+                                    :params {:name {}
+                                             :_id {}
+                                             :_limit {}}}}
+                  [:id] {:GET {:action :smart.fhir/read
+                               :resource/type "Immunization"}}}
+
+  "Location" {:GET {:action :smart.fhir/search
+                    :resource/type "Location"
+                    :params {:name {}
+                             :_id {}
+                             :patient {}
+                             :_limit {:max 1000}}}
+              "_search" {:POST {:action :smart.fhir/search
+                                :resource/type "Location"
+                                :params {:name {}
+                                         :_id {}
+                                         :_limit {}}}}
+              [:id] {:GET {:action :smart.fhir/read
+                           :resource/type "Location"}}}
+
+  "Medication" {:GET {:action :smart.fhir/search
+                      :resource/type "Medication"
+                      :params {:name {}
+                               :_id {}
+                               :patient {}
+                               :_limit {:max 1000}}}
+                "_search" {:POST {:action :smart.fhir/search
+                                  :resource/type "Medication"
+                                  :params {:name {}
+                                           :_id {}
+                                           :_limit {}}}}
+                [:id] {:GET {:action :smart.fhir/read
+                             :resource/type "Medication"}}}
+
+  "MedicationRequest" {:GET {:action :smart.fhir/search
+                             :resource/type "MedicationRequest"
+                             :params {:_id {}
+                                      :_limit {:max 1000}
+                                      :intent {}
+                                      :_revinclude {:type :fhir/include
+                                                    :values #{"Provenance:target"}}
+                                      :name {}
+                                      :patient {}
+                                      :status {}}}
+                       "_search" {:POST {:action :smart.fhir/search
+                                         :resource/type "MedicationRequest"
+                                         :params {:name {}
+                                                  :_id {}
+                                                  :_limit {}}}}
+                       [:id] {:GET {:action :smart.fhir/read
+                                    :resource/type "MedicationRequest"}}}
+
+  "Observation" {:GET {:action :smart.fhir/search
+                       :resource/type "Observation"
+                       :params {:_id {}
+                                :_limit {:max 1000}
+                                :category {}
+                                :code {}
+                                :_revinclude {:type :fhir/include
+                                              :values #{"Provenance:target"}}
+                                :date {}
+                                :name {}
+                                :patient {}}}
+                 "_search" {:POST {:action :smart.fhir/search
+                                   :resource/type "Observation"
+                                   :params {:name {}
+                                            :_id {}
+                                            :_limit {}}}}
+                 [:id] {:GET {:action :smart.fhir/read
+                              :resource/type "Observation"}}}
+
+  "Organization" {:GET {:action :smart.fhir/search
+                        :resource/type "Organization"
+                        :params {:name {}
+                                 :_id {}
+                                 :patient {}
+                                 :_limit {:max 1000}}}
+                  "_search" {:POST {:action :smart.fhir/search
+                                    :resource/type "Organization"
+                                    :params {:name {}
+                                             :_id {}
+                                             :_limit {}}}}
+                  [:id] {:GET {:action :smart.fhir/read
+                               :resource/type "Organization"}}}
+
+  "Practitioner" {:GET {:action :smart.fhir/search
+                        :resource/type "Practitioner"
+                        :params {:name {}
+                                 :_id {}
+                                 :patient {}
+                                 :_limit {:max 1000}}}
+                  "_search" {:POST {:action :smart.fhir/search
+                                    :resource/type "Practitioner"
+                                    :params {:name {}
+                                             :_id {}
+                                             :_limit {}}}}
+                  [:id] {:GET {:action :smart.fhir/read
+                               :resource/type "Practitioner"}}}
+
+  "PractitionerRole" {:GET {:action :smart.fhir/search
+                        :resource/type "PractitionerRole"
+                        :params {:name {}
+                                 :_id {}
+                                 :patient {}
+                                 :_limit {:max 1000}}}
+                  "_search" {:POST {:action :smart.fhir/search
+                                    :resource/type "PractitionerRole"
+                                    :params {:name {}
+                                             :_id {}
+                                             :_limit {}}}}
+                  [:id] {:GET {:action :smart.fhir/read
+                               :resource/type "PractitionerRole"}}}
+
+  "Procedure" {:GET {:action :smart.fhir/search
+                     :resource/type "Procedure"
+                     :params {:_id {}
+                              :_limit {:max 1000}
+                              :date {}
+                              :_revinclude {:type :fhir/include
+                                            :values #{"Provenance:target"}}
+                              :name {}
+                              :patient {}}}
+               "_search" {:POST {:action :smart.fhir/search
+                                 :resource/type "Procedure"
+                                 :params {:name {}
+                                          :_id {}
+                                          :_limit {}}}}
+               [:id] {:GET {:action :smart.fhir/read
+                            :resource/type "Procedure"}}}
+
+  "Provenance" {:GET {:action :smart.fhir/search
+                      :resource/type "Provenance"
+                      :params {:name {}
+                               :_id {}
+                               :patient {}
+                               :_limit {:max 1000}}}
+                "_search" {:POST {:action :smart.fhir/search
+                                  :resource/type "Provenance"
+                                  :params {:name {}
+                                           :_id {}
+                                           :_limit {}}}}
+                [:id] {:GET {:action :smart.fhir/read
+                             :resource/type "Provenance"}}}}
+
+
+
+ }
