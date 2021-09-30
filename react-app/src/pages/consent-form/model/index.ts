@@ -16,7 +16,7 @@ export const accessGrantFx = grantDomain.createEffect<any, any, Error>(async (da
 
 sample({
   source: $user,
-  fn: (data: any) => data,
   clock: accessGrant,
+  fn: (_: any, formParams: any) => formParams,
   target: accessGrantFx,
 });

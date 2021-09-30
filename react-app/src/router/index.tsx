@@ -1,17 +1,14 @@
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import { useGate, useStore } from 'effector-react';
-import LoginPage from '../pages/login/index';
 import AdminPage from '../pages/admin/index';
 import Layout from '../layouts/apps';
 import SmartApps from '../pages/patient-page';
-import { RoleSwitch } from '../components/RoleSwitch';
-import { UserRole } from '../services/role';
-import { $startUrl, $token, $user, setStartUrlFx, setTokenFx } from '../models/auth';
+import { $token, $user } from '../models/auth';
 import { getIn } from '../lib/tools';
 import Profile from '../pages/patient-page/ui/profile';
 import PatientProfilePage from '../pages/admin/ui/patientProfile';
 import ConsentForm from '../pages/consent-form';
-import { HistoryGate, navigateTo } from '../models/router';
+import { HistoryGate } from '../models/router';
 import { useEffect } from 'react';
 
 /* const Profile = () => {
@@ -25,7 +22,6 @@ import { useEffect } from 'react';
   );
 }; */
 
-const Settings = () => <div>Settings</div>;
 const PracSettings = () => <div>Prac Settings</div>;
 
 const routesByRole = {
@@ -38,6 +34,7 @@ const routesByRole = {
         { path: 'profile', element: <Profile /> },
       ],
     },
+    { path: '/', element: <Navigate to="/smart-apps" /> },
     { path: '*', element: <Navigate to="/smart-apps" /> },
   ],
   admin: [
@@ -83,7 +80,6 @@ export function RouterSpy() {
 export const AppRouter = () => {
   const user = useStore($user);
   const token = useStore($token);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const serach = window.location.search;
@@ -97,26 +93,6 @@ export const AppRouter = () => {
       window.location.href =
         'http://localhost:8888/auth/authorize?redirect_uri=http://localhost:3000/&response_type=code&client_id=ui-portal&state=' +
         state;
-    } else if (!token) {
-      fetch('http://localhost:8888/auth/token', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          grant_type: 'authorization_code',
-          client_id: 'ui-portal',
-          code: code,
-        }),
-      })
-        .then((resp) => resp.json())
-        .then((data) => data.access_token)
-        .then((access_token) => {
-          setTokenFx(access_token);
-
-          const state: any = params.get('state');
-          const url = atob(state);
-
-          navigate(url);
-        });
     }
   }, [token]);
 

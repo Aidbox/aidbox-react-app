@@ -3,15 +3,16 @@ import { service } from 'aidbox-react/lib/services/service';
 import { isFailure } from 'aidbox-react/lib/libs/remoteData';
 import { persist } from 'effector-storage/local';
 import { setInstanceBaseURL } from 'aidbox-react/lib/services/instance';
-import { navigateTo } from '../router';
+import { navigateTo, HistoryGate } from '../router';
 
 export const authDomain = createDomain('auth');
 
 export const $user = authDomain.createStore<any>({ status: 'idle', data: { id: '' } });
 export const $token = authDomain.createStore<any>(null);
-export const $startUrl = authDomain.createStore<any>(null);
+persist({ store: $token, key: 'token' });
 
 export const signOut = authDomain.createEvent();
+export const revokeGrant = authDomain.createEvent();
 
 setInstanceBaseURL('http://localhost:8888');
 type EffectParams = { token: string; params: { headers: Object } };
@@ -55,8 +56,6 @@ export const getUserDataFx = authDomain.createEffect({
   },
 });
 
-$token.watch(console.log);
-
 export const signOutFx = authDomain.createEffect({
   handler: async () => {
     const result = await authorizedRequest({
@@ -67,38 +66,40 @@ export const signOutFx = authDomain.createEffect({
   },
 });
 
-export const setTokenFx = authDomain.createEffect({
-  handler: (x: any) => x,
-});
+export const getTokenFx = authDomain.createEffect(async (code: any) =>
+  service({
+    url: '/auth/token',
+    method: 'POST',
+    data: {
+      grant_type: 'authorization_code',
+      client_id: 'ui-portal',
+      code: code,
+    },
+  }),
+);
+export const revokeGrantFx = authDomain.createEffect(async () =>
+  authorizedRequest({
+    method: 'DELETE',
+    url: '/revokeGrant',
+    params: {
+      clientId: '45113f61-563f-47d9-8d21-30dd98d6492c',
+    },
+  }),
+);
 
-export const setStartUrlFx = authDomain.createEffect({
-  handler: (data: any) => data,
-});
+export const setTokenFx = authDomain.createEffect((token: any) => token);
 
-// ASK Alex Streltsov
 const $canLoadUser = combine($token, $user, (token, user) => {
-  console.log(token, user, 'token, user');
   return token && !user.data.id;
 });
 
 $canLoadUser.watch((shouldLoad) => shouldLoad && getUserDataFx());
 
-$token.on(setTokenFx.doneData, (_, token) => token).reset(signOut);
+$token.on(setTokenFx.doneData, (_, token) => token).reset(signOutFx.doneData);
 
 $user
   .on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }))
-  .reset(signOut);
-
-$startUrl.on(setStartUrlFx.doneData, (_, data) => data);
-$startUrl.watch(console.log);
-/* guard({ */
-/*   source: $canLoadUser, */
-/*   filter: (source) => { */
-/*     console.log(source, 'ASDFASDFSADFSADFASDF'); */
-/*     return source; */
-/*   }, */
-/*   target: getUserDataFx, */
-/* }); */
+  .reset(signOutFx.doneData);
 
 guard({
   source: signInFx.doneData,
@@ -111,11 +112,39 @@ forward({
   to: signOutFx,
 });
 
-// sample({
-//   clock: setTokenFx.doneData,
-//   source: $startUrl,
-//   fn: ({ pathname, params }) => (params ? `/${pathname}?${params}` : `/${pathname}`),
-//   target: navigateTo,
-// });
+forward({
+  from: revokeGrant,
+  to: revokeGrantFx,
+});
 
-persist({ store: $token, key: 'token' });
+sample({
+  source: guard({
+    source: HistoryGate.state,
+    filter: (routeParams) => {
+      const params = new URLSearchParams(routeParams?.location?.search);
+      return !!params.get('code');
+    },
+  }),
+  fn: (routeParams) => {
+    const params = new URLSearchParams(routeParams?.location?.search);
+    return params.get('code');
+  },
+  target: getTokenFx,
+});
+
+sample({
+  clock: getTokenFx.doneData,
+  fn: ({ data: { access_token } }: any) => access_token,
+  target: setTokenFx,
+});
+
+sample({
+  source: HistoryGate.state,
+  clock: setTokenFx.doneData,
+  fn: (routeParams): any => {
+    const params = new URLSearchParams(routeParams?.location?.search);
+    const state: any = params.get('state');
+    return atob(state);
+  },
+  target: navigateTo,
+});
