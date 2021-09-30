@@ -71,7 +71,6 @@ const $canLoadUser = combine($token, $user, (token, user) => {
 $canLoadUser.watch((shouldLoad) => shouldLoad && getUserDataFx());
 
 $token.on(setTokenFx.doneData, (_, token) => token).reset(signOut);
-persist({ store: $token, key: 'token' });
 
 $user
   .on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }))
@@ -89,6 +88,15 @@ $startUrl.watch(console.log);
 /* }); */
 
 guard({
+  source: $token,
+  filter: (token) => {
+    console.log('gueard');
+    return !token;
+  },
+  target: navigateTo.prepend(() => '/profile'),
+});
+
+guard({
   source: signInFx.doneData,
   filter: (source) => source.data?.access_token,
   target: setTokenFx,
@@ -100,3 +108,5 @@ sample({
   fn: ({ pathname, params }) => (params ? `/${pathname}?${params}` : `/${pathname}`),
   target: navigateTo,
 });
+
+persist({ store: $token, key: 'token' });

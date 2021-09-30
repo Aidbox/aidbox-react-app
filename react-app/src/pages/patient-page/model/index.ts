@@ -49,7 +49,6 @@ $apps.on(downloadAppsFx.doneData, (_, payload) =>
 );
 
 $patientInfo.on(downloadPatientInfoFx.doneData, (_, { data }) => data);
-$patientInfo.watch(console.log);
 
 forward({
   from: SmartAppGate.open,

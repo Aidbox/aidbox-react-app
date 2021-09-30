@@ -6,12 +6,13 @@ import Layout from '../layouts/apps';
 import SmartApps from '../pages/patient-page';
 import { RoleSwitch } from '../components/RoleSwitch';
 import { UserRole } from '../services/role';
-import { $startUrl, $token, $user, setStartUrlFx } from '../models/auth';
+import { $startUrl, $token, $user, setStartUrlFx, setTokenFx } from '../models/auth';
 import { getIn } from '../lib/tools';
 import Profile from '../pages/patient-page/ui/profile';
 import PatientProfilePage from '../pages/admin/ui/patientProfile';
 import ConsentForm from '../pages/consent-form';
-import { HistoryGate } from '../models/router';
+import { HistoryGate, navigateTo } from '../models/router';
+import { useEffect } from 'react';
 
 /* const Profile = () => {
   return (
@@ -62,14 +63,6 @@ const routesByRole = {
 
 type RoutesByRole = 'patient' | 'admin' | 'practitioner';
 
-const loginRoutes = [
-  {
-    element: <LoginPage />,
-    path: 'login',
-  },
-  { path: '*', element: <Navigate to="/login" /> },
-];
-
 const Router = ({ routes }: any) => {
   const main = useRoutes(routes);
   return (
@@ -90,10 +83,16 @@ export function RouterSpy() {
 export const AppRouter = () => {
   const user = useStore($user);
   const token = useStore($token);
-  if (!token) {
-    return <Router routes={loginRoutes} />;
-  }
-  const status: 'loading' | 'done' | 'idle' = user.status;
+  useEffect(() => {
+    const serach = window.location.search;
+    const params = new URLSearchParams(serach);
+    console.log(params, 'tut');
+    // if (!token) {
+    //   window.location.href =
+    //     'http://localhost:8888/auth/authorize?redirect_uri=http://localhost:3000/&response_type=code&client_id=ui-portal';
+    // }
+  }, [token]);
+  /*const status: 'loading' | 'done' | 'idle' = user.status;
   const main = {
     idle: () => (token ? <div>Idle loading...</div> : <Router routes={loginRoutes} />),
     done: () => {
@@ -104,5 +103,6 @@ export const AppRouter = () => {
     loading: () => <div>Loading...</div>,
   }[status];
 
-  return main();
+  return main(); */
+  return <RouterSpy />;
 };
