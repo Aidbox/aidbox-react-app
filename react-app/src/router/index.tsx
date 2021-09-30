@@ -83,15 +83,46 @@ export function RouterSpy() {
 export const AppRouter = () => {
   const user = useStore($user);
   const token = useStore($token);
+  const navigate = useNavigate();
+
+  console.log('token====', token);
+
   useEffect(() => {
     const serach = window.location.search;
     const params = new URLSearchParams(serach);
-    console.log(params, 'tut');
-    // if (!token) {
-    //   window.location.href =
-    //     'http://localhost:8888/auth/authorize?redirect_uri=http://localhost:3000/&response_type=code&client_id=ui-portal';
-    // }
+
+    const code = params.get('code');
+
+    if (!token && !code) {
+      const state = btoa(window.location.pathname + window.location.search);
+
+      window.location.href =
+        'http://localhost:8888/auth/authorize?redirect_uri=http://localhost:3000/&response_type=code&client_id=ui-portal&state=' +
+        state;
+    } else if (!token) {
+      fetch('http://localhost:8888/auth/token', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          grant_type: 'authorization_code',
+          client_id: 'ui-portal',
+          code: code,
+        }),
+      })
+        .then((resp) => resp.json())
+        .then((data) => data.access_token)
+        .then((access_token) => {
+          setTokenFx(access_token);
+
+          const state: any = params.get('state');
+          const url = atob(state);
+
+          console.log('push to ', url);
+          navigate(url);
+        });
+    }
   }, [token]);
+
   /*const status: 'loading' | 'done' | 'idle' = user.status;
   const main = {
     idle: () => (token ? <div>Idle loading...</div> : <Router routes={loginRoutes} />),
@@ -104,5 +135,6 @@ export const AppRouter = () => {
   }[status];
 
   return main(); */
+
   return <RouterSpy />;
 };

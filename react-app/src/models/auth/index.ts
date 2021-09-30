@@ -56,7 +56,7 @@ export const getUserDataFx = authDomain.createEffect({
 });
 
 export const setTokenFx = authDomain.createEffect({
-  handler: ({ data: { access_token } }: any) => access_token,
+  handler: (x: any) => x,
 });
 
 export const setStartUrlFx = authDomain.createEffect({
@@ -88,25 +88,16 @@ $startUrl.watch(console.log);
 /* }); */
 
 guard({
-  source: $token,
-  filter: (token) => {
-    console.log('gueard');
-    return !token;
-  },
-  target: navigateTo.prepend(() => '/profile'),
-});
-
-guard({
   source: signInFx.doneData,
   filter: (source) => source.data?.access_token,
   target: setTokenFx,
 });
 
-sample({
-  clock: setTokenFx.doneData,
-  source: $startUrl,
-  fn: ({ pathname, params }) => (params ? `/${pathname}?${params}` : `/${pathname}`),
-  target: navigateTo,
-});
+// sample({
+//   clock: setTokenFx.doneData,
+//   source: $startUrl,
+//   fn: ({ pathname, params }) => (params ? `/${pathname}?${params}` : `/${pathname}`),
+//   target: navigateTo,
+// });
 
 persist({ store: $token, key: 'token' });

@@ -6,12 +6,13 @@ export const manifest = {
       'ui-portal': {
         secret: 'secret',
         grant_types: ['code'],
-        // auth: {
-        //   authorization_code: {
-        //     redirect_uri: 'http://localhost:3000/',
-        //     access_token_expiration: '360',
-        //   },
-        // },
+        first_party: true,
+        auth: {
+          authorization_code: {
+            redirect_uri: 'http://localhost:3000/',
+            access_token_expiration: 360,
+          },
+        },
       },
     },
     Role: {
