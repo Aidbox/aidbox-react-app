@@ -55,6 +55,18 @@ export const getUserDataFx = authDomain.createEffect({
   },
 });
 
+$token.watch(console.log);
+
+export const signOutFx = authDomain.createEffect({
+  handler: async () => {
+    const result = await authorizedRequest({
+      method: 'DELETE',
+      url: '/Session',
+    });
+    return result;
+  },
+});
+
 export const setTokenFx = authDomain.createEffect({
   handler: (x: any) => x,
 });
@@ -65,6 +77,7 @@ export const setStartUrlFx = authDomain.createEffect({
 
 // ASK Alex Streltsov
 const $canLoadUser = combine($token, $user, (token, user) => {
+  console.log(token, user, 'token, user');
   return token && !user.data.id;
 });
 
@@ -91,6 +104,11 @@ guard({
   source: signInFx.doneData,
   filter: (source) => source.data?.access_token,
   target: setTokenFx,
+});
+
+forward({
+  from: signOut,
+  to: signOutFx,
 });
 
 // sample({

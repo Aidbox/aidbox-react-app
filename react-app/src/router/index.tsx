@@ -85,8 +85,6 @@ export const AppRouter = () => {
   const token = useStore($token);
   const navigate = useNavigate();
 
-  console.log('token====', token);
-
   useEffect(() => {
     const serach = window.location.search;
     const params = new URLSearchParams(serach);
@@ -117,24 +115,13 @@ export const AppRouter = () => {
           const state: any = params.get('state');
           const url = atob(state);
 
-          console.log('push to ', url);
           navigate(url);
         });
     }
   }, [token]);
 
-  /*const status: 'loading' | 'done' | 'idle' = user.status;
-  const main = {
-    idle: () => (token ? <div>Idle loading...</div> : <Router routes={loginRoutes} />),
-    done: () => {
-      const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
-      const routes = role ? routesByRole[role] : loginRoutes;
-      return <Router routes={routes} />;
-    },
-    loading: () => <div>Loading...</div>,
-  }[status];
+  const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
+  const routes = role && routesByRole[role];
 
-  return main(); */
-
-  return <RouterSpy />;
+  return routes ? <Router routes={routes} /> : <RouterSpy />;
 };
