@@ -8,7 +8,7 @@
   grant-lookup-method
   {:zen/tags #{aidbox.auth/grant-lookup}
     :method aidbox.auth/single-patient-grant-lookup
-    :config {:grant-page-url "http://localhost:3000/auth/authorize"}
+    :config {:grant-page-url "http://localhost:3000/auth/consent"}
     }
 
  smart-api

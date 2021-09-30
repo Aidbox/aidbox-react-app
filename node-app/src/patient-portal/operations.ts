@@ -31,9 +31,7 @@ export const enrollPatient: TOperation<{ params: { type: string } }> = {
         },
       },
     });
-
     await ctx.api.patchResource('Patient', patientId, { isEnrolled: true });
-
     sendMail({
       from: 'PlanAPI Team <mailgun@planapi.aidbox.io>',
       to: email,
@@ -80,5 +78,26 @@ export const authGrant: TOperation<{ params: { type: string } }> = {
     });
 
     return { resource: grant };
+  },
+};
+
+export const revokeGrant: TOperation<{ params: { type: string } }> = {
+  method: 'DELETE',
+  path: ['revokeGrant'],
+  handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
+    const { data: resource, request: rq } = await ctx.client.request({
+      url: `/Grant`,
+      method: 'DELETE',
+      params: {
+        client: {
+          id: request.params.clientId,
+        },
+        user: {
+          id: request['oauth/user'].id,
+        },
+      },
+    });
+    console.log(rq);
+    return { resource };
   },
 };
