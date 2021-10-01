@@ -57,7 +57,7 @@ export const signOutFx = authDomain.createEffect(() =>
   }),
 );
 
-export const getTokenFx = authDomain.createEffect(async (code: any) =>
+export const getTokenFx = authDomain.createEffect((code: any) =>
   service({
     url: '/auth/token',
     method: 'POST',
@@ -69,12 +69,12 @@ export const getTokenFx = authDomain.createEffect(async (code: any) =>
   }),
 );
 
-export const revokeGrantFx = authDomain.createEffect(async () =>
+export const revokeGrantFx = authDomain.createEffect((id: any) =>
   authorizedRequest({
     method: 'DELETE',
     url: '/revokeGrant',
     params: {
-      clientId: '45113f61-563f-47d9-8d21-30dd98d6492c',
+      clientId: id,
     },
   }),
 );
