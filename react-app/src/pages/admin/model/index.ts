@@ -25,22 +25,20 @@ export const $patients = admin.createStore<any>([]);
 export const $patient = admin.createStore<any>(null);
 export const $submitStatus = admin.createStore<any>({});
 
-export const downloadPatientsFx = admin.createEffect<any, any, Error>(async () => {
-  const result = await authorizedRequest({
+export const downloadPatientsFx = admin.createEffect<any, any, Error>(() =>
+  authorizedRequest({
     url: '/Patient?_sort=.name.0.family',
     method: 'GET',
-  });
-  return result;
-});
+  }),
+);
 
-export const createPatientFx = admin.createEffect<any, any, Error>(async (params) => {
-  const result = await authorizedRequest({
+export const createPatientFx = admin.createEffect<any, any, Error>((params) =>
+  authorizedRequest({
     url: '/enrollPatient',
     method: 'POST',
     data: params,
-  });
-  return result;
-});
+  }),
+);
 
 $patients.on(downloadPatientsFx.doneData, (_, { data: { entry } }) => {
   return entry;

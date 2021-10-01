@@ -1,23 +1,20 @@
-import { createDomain, forward, sample } from 'effector';
-import { service } from 'aidbox-react/lib/services/service';
+import { forward, sample } from 'effector';
 import { createGate } from 'effector-react';
 import { getIn } from '../../../lib/tools';
 import { $user, authorizedRequest } from '../../../models/auth';
+import { app } from '../../../models/domain';
 
-const patientDomain = createDomain('patient');
+const patientDomain = app.createDomain('patient');
 
-const downloadAppsFx = patientDomain.createEffect<any, any, Error>({
-  handler: async () => {
-    const result = await service({
-      url: '/rpc',
-      method: 'POST',
-      data: {
-        method: 'aidbox.smart/get-smart-apps',
-      },
-    });
-    return result;
-  },
-});
+export const downloadAppsFx = patientDomain.createEffect<any, any, Error>(() =>
+  authorizedRequest({
+    url: '/rpc',
+    method: 'POST',
+    data: {
+      method: 'aidbox.smart/get-smart-apps',
+    },
+  }),
+);
 
 const downloadPatientInfoFx = patientDomain.createEffect<any, any, Error>(
   ({

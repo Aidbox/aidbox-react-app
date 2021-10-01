@@ -1,6 +1,6 @@
 import { revokeGrant } from '../../../models/auth/index';
 export const SmartApp = (app: any) => {
-  const { description, launch_url, logo_url, name } = app;
+  const { description, launch_uri, logo_url, name } = app;
   return (
     <div className="p-4  w-full">
       <div className="flex items-center p-10 w-full h-full bg-white">
@@ -16,7 +16,7 @@ export const SmartApp = (app: any) => {
           </div>
           <div className="flex flex-col col-span-2">
             <a
-              href={`${launch_url}?iss=http://localhost:8888/smart`}
+              href={`${launch_uri}?iss=http://localhost:8888/smart`}
               target="_blank"
               className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300"
               rel="noreferrer"

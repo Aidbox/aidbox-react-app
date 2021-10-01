@@ -18,8 +18,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aidbox/node-server-sdk": "^2.0.16",
+    "@aidbox/node-server-sdk": "^2.0.19",
     "axios": "^0.20.0",
+    "aidbox-react": "^1.3.1",
     "date-fns": "^2.16.1",
     "formdata-node": "^2.4.0",
     "js-yaml": "3.14.0",

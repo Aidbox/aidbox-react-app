@@ -35,36 +35,27 @@ export const authorizedRequest = attach({
   mapParams: (params: any, token) => ({ params, token }),
 });
 
-export const signInFx = authDomain.createEffect<any, any, Error>({
-  handler: async (params) => {
-    const result = await service({
-      url: '/auth/token',
-      method: 'POST',
-      data: { ...params, grant_type: 'password', client_id: 'ui-portal', clientSecret: 'secret' },
-    });
-    return result;
-  },
-});
+export const signInFx = authDomain.createEffect<any, any, Error>((params) =>
+  service({
+    url: '/auth/token',
+    method: 'POST',
+    data: { ...params, grant_type: 'password', client_id: 'ui-portal', clientSecret: 'secret' },
+  }),
+);
 
-export const getUserDataFx = authDomain.createEffect({
-  handler: async () => {
-    const result = await authorizedRequest({
-      method: 'GET',
-      url: '/auth/userinfo',
-    });
-    return result;
-  },
-});
+export const getUserDataFx = authDomain.createEffect(() =>
+  authorizedRequest({
+    method: 'GET',
+    url: '/auth/userinfo',
+  }),
+);
 
-export const signOutFx = authDomain.createEffect({
-  handler: async () => {
-    const result = await authorizedRequest({
-      method: 'DELETE',
-      url: '/Session',
-    });
-    return result;
-  },
-});
+export const signOutFx = authDomain.createEffect(() =>
+  authorizedRequest({
+    method: 'DELETE',
+    url: '/Session',
+  }),
+);
 
 export const getTokenFx = authDomain.createEffect(async (code: any) =>
   service({
@@ -77,6 +68,7 @@ export const getTokenFx = authDomain.createEffect(async (code: any) =>
     },
   }),
 );
+
 export const revokeGrantFx = authDomain.createEffect(async () =>
   authorizedRequest({
     method: 'DELETE',

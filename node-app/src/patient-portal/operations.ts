@@ -46,35 +46,36 @@ export const enrollPatient: TOperation<{ params: { type: string } }> = {
 export const patientInfo: TOperation<{ params: { type: string } }> = {
   method: 'GET',
   path: ['patientInfo'],
-  handlerFn: async ({ params: { patientId } }: any, { ctx }: { ctx: TCtx }) => {
-    const params = { patient: patientId };
+  handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
+    const params = {
+      patient: request['oauth/user'].fhirUser.id,
+    };
 
     const { resources: observations } = await ctx.api.findResources(`Observation`, params);
     const { resources: appointments } = await ctx.api.findResources(`Appointment`, params);
     const { resources: encouters } = await ctx.api.findResources(`Encounter`, params);
     const { resources: diagnoses } = await ctx.api.findResources(`Condition`, params);
 
-    return { resource: { observations, appointments, encouters, diagnoses } };
+    return { resource: { observations, encouters, diagnoses, appointments } };
   },
 };
 
 export const authGrant: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['authGrant'],
-  handlerFn: async (requst: any, { ctx }: { ctx: TCtx }) => {
-    console.log(ctx);
+  handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
     const grant = await ctx.api.createResource(`Grant`, {
       user: {
-        id: requst['oauth/user'].id,
+        id: request['oauth/user'].id,
         resourceType: 'User',
       },
       client: {
-        id: requst.resource.clientId,
+        id: request.resource.clientId,
         resourceType: 'Client',
       },
-      'requested-scope': requst.resource.scope.split(' '),
-      'provided-scope': requst.resource.scope.split(' '),
-      patient: requst['oauth/user'].fhirUser,
+      'requested-scope': request.resource.scope.split(' '),
+      'provided-scope': request.resource.scope.split(' '),
+      patient: request['oauth/user'].fhirUser,
     });
 
     return { resource: grant };

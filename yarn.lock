@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@aidbox/node-server-sdk@^2.0.16":
-  version "2.0.17"
-  resolved "https://registry.yarnpkg.com/@aidbox/node-server-sdk/-/node-server-sdk-2.0.17.tgz#285b85e961f9fee4db8b59a01c42038af7c1d7bb"
-  integrity sha512-LuIHKZaL0ww232tsq7TsXs44rNcuSuljFKj+jMsOw8026c4/DyMugnFDrF9UBXsdb7OivFk9w3yjEc0n/M1r3Q==
+"@aidbox/node-server-sdk@^2.0.19":
+  version "2.0.19"
+  resolved "https://registry.yarnpkg.com/@aidbox/node-server-sdk/-/node-server-sdk-2.0.19.tgz#0dab318fa1672f024a143af299a74860c3539fa5"
+  integrity sha512-+EQXUARfOoHHTEwGG4E5glJm720/3ZaiZTA0SuIcPsSUkiFZpdZLkZgzVqYOzUbWmpfmQyImuMVAhWfussQBOw==
   dependencies:
     axios "^0.21.1"
     debug "^4.3.2"

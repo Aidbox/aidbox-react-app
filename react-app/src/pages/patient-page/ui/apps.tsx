@@ -3,10 +3,13 @@ import { useStore, useGate } from 'effector-react';
 
 import { SmartApp } from './app';
 import * as smartAppModel from '../model';
+import { getStatus } from '../../../models/domain';
+import Spinner from '../../../components/Spinner';
 
 export const SmartApps = () => {
   useGate(smartAppModel.SmartAppGate);
   const smartApps = useStore(smartAppModel.$apps);
+  const smartAppsStatus = getStatus(smartAppModel.downloadAppsFx);
 
   return (
     <section className="text-gray-600 body-font">
@@ -20,7 +23,13 @@ export const SmartApps = () => {
           </div>
         </div>
         <div className="flex flex-wrap -m-4">
-          {smartApps &&
+          {smartAppsStatus.fail && (
+            <div className="text-red-500 pl-4 font-medium">{smartAppsStatus.error}</div>
+          )}
+        </div>
+        <div className="flex flex-wrap -m-4">{smartAppsStatus.pending && <Spinner />}</div>
+        <div className="flex flex-wrap -m-4">
+          {smartAppsStatus.success &&
             smartApps.map((smartApp: any) => (
               <React.Fragment key={smartApp.id}>
                 <SmartApp {...smartApp} />
