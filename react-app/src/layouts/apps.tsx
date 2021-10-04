@@ -20,6 +20,10 @@ const linksByRole = {
       text: 'Patients',
       path: 'patients',
     },
+    {
+      text: 'Practitioners',
+      path: 'practitioners',
+    },
   ],
   patient: [
     {
@@ -33,8 +37,8 @@ const linksByRole = {
   ],
   practitioner: [
     {
-      text: 'Profile',
-      path: 'profile',
+      text: 'Patients',
+      path: 'patients',
     },
   ],
 };

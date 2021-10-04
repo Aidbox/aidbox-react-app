@@ -1,15 +1,18 @@
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import { useGate, useStore } from 'effector-react';
-import AdminPage from '../pages/admin/index';
+import { AdminPatients, AdminPractitioners } from '../pages/admin/index';
 import Layout from '../layouts/apps';
 import SmartApps from '../pages/patient-page';
 import { $token, $user } from '../models/auth';
 import { getIn } from '../lib/tools';
 import Profile from '../pages/patient-page/ui/profile';
-import PatientProfilePage from '../pages/admin/ui/patientProfile';
+import PatientPage from '../pages/admin/ui/patientPage';
+import PractitionerPage from '../pages/admin/ui/practitionerPage';
 import ConsentForm from '../pages/consent-form';
 import { HistoryGate } from '../models/router';
 import { useEffect } from 'react';
+import { PatientsList } from '../pages/practitioner-page';
+import PatientProfile from '../pages/practitioner-page/ui/patientProfile';
 
 /* const Profile = () => {
   return (
@@ -21,8 +24,6 @@ import { useEffect } from 'react';
     </RoleSwitch>
   );
 }; */
-
-const PracSettings = () => <div>Prac Settings</div>;
 
 const routesByRole = {
   patient: [
@@ -41,8 +42,10 @@ const routesByRole = {
     {
       element: <Layout role="admin" />,
       children: [
-        { path: 'patients', element: <AdminPage /> },
-        { path: 'patients/:id', element: <PatientProfilePage /> },
+        { path: 'patients', element: <AdminPatients /> },
+        { path: 'patients/:id', element: <PatientPage /> },
+        { path: 'practitioners', element: <AdminPractitioners /> },
+        { path: 'practitioners/:id', element: <PractitionerPage /> },
       ],
     },
     { path: '*', element: <Navigate to="/patients" /> },
@@ -51,10 +54,11 @@ const routesByRole = {
     {
       element: <Layout role="practitioner" />,
       children: [
-        // { path: 'practitioner-profile', element: <Profile /> },
-        { path: 'practitioner-settings', element: <PracSettings /> },
+        { path: 'patients', element: <PatientsList /> },
+        { path: 'patients/:id', element: <PatientProfile /> },
       ],
     },
+    { path: '*', element: <Navigate to="/patients" /> },
   ],
 };
 

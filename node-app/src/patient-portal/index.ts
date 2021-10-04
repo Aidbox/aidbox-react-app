@@ -23,13 +23,6 @@ export const manifest = {
           resourceType: 'User',
         },
       },
-      patient: {
-        name: 'patient',
-        user: {
-          id: 'portal',
-          resourceType: 'User',
-        },
-      },
     },
     User: {
       'portal-admin': { password: 'password' },
@@ -52,6 +45,13 @@ export const manifest = {
   operations,
   entities: {
     Patient: {
+      attrs: {
+        isEnrolled: {
+          type: 'boolean',
+        },
+      },
+    },
+    Practitioner: {
       attrs: {
         isEnrolled: {
           type: 'boolean',

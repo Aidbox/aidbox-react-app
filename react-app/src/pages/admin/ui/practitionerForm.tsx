@@ -1,20 +1,17 @@
-import { StoreValue } from 'effector';
-
-import { useGate, useStore } from 'effector-react';
+import { useGate } from 'effector-react';
 import { useForm } from 'effector-forms';
-import * as newPatient from '../model';
+import * as admin from '../model';
 import { useParams } from 'react-router-dom';
 
 const Form = () => {
-  useGate(newPatient.FormGate);
-  const status = useStore(newPatient.$submitStatus);
+  useGate(admin.FormGate);
   const { id }: { id: any } = useParams();
 
-  const { fields } = useForm(newPatient.form);
+  const { fields } = useForm(admin.form);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    newPatient.submitForm(id);
+    admin.submitPractitionerForm(id);
   };
 
   return (
@@ -22,11 +19,9 @@ const Form = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="border-b-4 border-indigo-500 rounded">
           <h1 className="sm:text-4xl text-5xl font-medium title-font mb-2 text-gray-900">
-            Enroll Patient
+            Enroll Practitioners
           </h1>
         </div>
-        <div className="text-red-500">{status.fail && status.message}</div>
-        <div className="text-green-500">{status.success && status.message}</div>
         <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={onSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">

@@ -1,6 +1,4 @@
-import Form from './ui/form';
-import { Patients } from './ui/patients';
+import AdminPatients from './ui/patients';
+import AdminPractitioners from './ui/practitioners';
 
-const AdminPage = () => <Patients />;
-
-export default AdminPage;
+export { AdminPatients, AdminPractitioners };

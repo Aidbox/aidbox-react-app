@@ -3,11 +3,12 @@ import { useStore, useGate } from 'effector-react';
 import { Link } from 'react-router-dom';
 
 import { getIn, formatName } from '../../../lib/tools';
-import * as admin from '../model';
+import * as practitionerModel from '../model';
+import { Patient } from 'shared/src/contrib/aidbox';
 
 const Patients = () => {
-  useGate(admin.PatientsGate);
-  const patients = useStore(admin.$patients);
+  useGate(practitionerModel.PatientsGate);
+  const patients = useStore(practitionerModel.$patients);
 
   return (
     <section className="text-gray-600 body-font">
@@ -25,31 +26,27 @@ const Patients = () => {
             <div className="border-b border-gray-200 shadow w-full">
               <div className="w-full">
                 <div className="bg-gray-50">
-                  <div className="grid grid-rows-1 grid-cols-3">
+                  <div className="grid grid-rows-1 grid-cols-2">
                     <div className="px-6 py-2 text-xs text-gray-500">Name</div>
                     <div className="px-6 py-2 text-xs text-gray-500">Birthdate</div>
-                    <div className="px-6 py-2 text-xs text-gray-500">Enrolled?</div>
                   </div>
                 </div>
                 <div className="bg-white">
-                  {patients.map((p: any) => {
-                    const { resource } = p;
-                    const { id } = resource;
-                    const name = getIn(resource, ['name', 0]);
+                  {patients.map((patient: Patient) => {
+                    const { id } = patient;
+                    const name = getIn(patient, ['name', 0]);
 
                     return (
-                      <Link to={`/patients/${id}`}>
+                      <Link
+                        to={`/patients/${id}`}
+                        onClick={() => practitionerModel.setCurrentPatientFx(patient)}
+                      >
                         <div
-                          className="grid grid-rows-1 grid-cols-3 whitespace-nowrap hover:bg-gray-100 cursor-pointer border-b-2 border-gray-100"
+                          className="grid grid-rows-1 grid-cols-2 whitespace-nowrap hover:bg-gray-100 cursor-pointer border-b-2 border-gray-100"
                           key={id}
                         >
                           <div className="px-6 py-4 text-sm text-gray-500">{formatName(name)}</div>
-                          <div className="px-6 py-4 text-sm text-gray-500">
-                            {resource.birthDate}
-                          </div>
-                          <div className="px-6 py-4 text-sm text-gray-500">
-                            {resource.isEnrolled ? 'Yes' : 'No'}
-                          </div>
+                          <div className="px-6 py-4 text-sm text-gray-500">{patient.birthDate}</div>
                         </div>
                       </Link>
                     );

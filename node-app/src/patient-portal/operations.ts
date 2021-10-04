@@ -43,6 +43,46 @@ export const enrollPatient: TOperation<{ params: { type: string } }> = {
   },
 };
 
+export const enrollPractitioner: TOperation<{ params: { type: string } }> = {
+  method: 'POST',
+  path: ['enrollPractitioner'],
+  handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
+    const { email, password, practitionerId } = resource;
+    const practitioner = await ctx.api.getResource('Practitioner', practitionerId);
+    const user: any = await ctx.api.createResource('User', {
+      email,
+      password,
+      fhirUser: {
+        id: practitionerId,
+        resourceType: 'Practitioner',
+      },
+    });
+
+    const role = await ctx.api.createResource('Role', {
+      name: 'practitioner',
+      user: {
+        id: user.id,
+        resourceType: 'User',
+      },
+      links: {
+        practitioner: {
+          resourceType: 'Practitioner',
+          id: practitionerId,
+        },
+      },
+    });
+    await ctx.api.patchResource('Practitioner', practitionerId, { isEnrolled: true });
+    sendMail({
+      from: 'PlanAPI Team <mailgun@planapi.aidbox.io>',
+      to: email,
+      subject: 'Portal Enrollment',
+      html: `<html><p>Hello.</p> <p>You now can login to Patient Portal with the following creds: email: <b>${email}</b>, password: <b>${password}</b></p></html>`,
+    });
+
+    return { resource: { practitioner, user, role } };
+  },
+};
+
 export const patientInfo: TOperation<{ params: { type: string } }> = {
   method: 'GET',
   path: ['patientInfo'],

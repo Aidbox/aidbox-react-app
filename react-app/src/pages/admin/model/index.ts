@@ -1,14 +1,18 @@
-import { createDomain, sample, forward } from 'effector';
+import { sample, forward } from 'effector';
 import { createForm } from 'effector-forms';
 import { createGate } from 'effector-react';
+import { Practitioner } from 'shared/src/contrib/aidbox';
 import { authorizedRequest } from '../../../models/auth';
+import { app } from '../../../models/domain';
 
-export const admin = createDomain('admin');
+export const admin = app.createDomain('admin');
 
 export const FormGate = createGate();
 export const PatientsGate = createGate();
+export const PractitionersGate = createGate();
 
-export const submitForm = admin.createEvent();
+export const submitPatientForm = admin.createEvent();
+export const submitPractitionerForm = admin.createEvent();
 
 export const form = createForm({
   fields: {
@@ -22,12 +26,18 @@ export const form = createForm({
 });
 
 export const $patients = admin.createStore<any>([]);
-export const $patient = admin.createStore<any>(null);
-export const $submitStatus = admin.createStore<any>({});
+export const $practitioners = admin.createStore<Array<Practitioner> | []>([]);
 
-export const downloadPatientsFx = admin.createEffect<any, any, Error>(() =>
+export const downloadPatientsFx = admin.createEffect<void, any, Error>(() =>
   authorizedRequest({
     url: '/Patient?_sort=.name.0.family',
+    method: 'GET',
+  }),
+);
+
+export const downloadPractitionersFx = admin.createEffect<void, any, Error>(() =>
+  authorizedRequest({
+    url: '/Practitioner?_sort=.name.0.family',
     method: 'GET',
   }),
 );
@@ -40,25 +50,34 @@ export const createPatientFx = admin.createEffect<any, any, Error>((params) =>
   }),
 );
 
+export const createPractitionerFx = admin.createEffect<any, any, Error>((params) =>
+  authorizedRequest({
+    url: '/enrollPractitioner',
+    method: 'POST',
+    data: params,
+  }),
+);
+
 $patients.on(downloadPatientsFx.doneData, (_, { data: { entry } }) => {
   return entry;
 });
-$patient.on(createPatientFx.doneData, (_, data) => data);
-$submitStatus
-  .on(createPatientFx.failData, () => {
-    return { fail: true, message: 'Something went wrong' };
-  })
-  .on(createPatientFx.doneData, () => ({
-    success: true,
-    message: 'You have successfully created new Patient',
-  }))
-  .reset(FormGate.close);
+
+$practitioners.on(downloadPractitionersFx.doneData, (_, { data: { entry } }) => {
+  return entry.map(({ resource }: { resource: Practitioner }) => resource);
+});
 
 sample({
   source: form.$values,
-  clock: submitForm,
+  clock: submitPatientForm,
   fn: (formData, patientId) => ({ ...formData, patientId }),
   target: createPatientFx,
+});
+
+sample({
+  source: form.$values,
+  clock: submitPractitionerForm,
+  fn: (formData, practitionerId) => ({ ...formData, practitionerId }),
+  target: createPractitionerFx,
 });
 
 // Big nested level, stack overflow
@@ -68,6 +87,11 @@ forward({
 });
 
 forward({
-  from: createPatientFx.doneData,
+  from: PractitionersGate.open,
+  to: downloadPractitionersFx,
+});
+
+forward({
+  from: [createPatientFx.doneData, FormGate.close],
   to: form.reset,
 });

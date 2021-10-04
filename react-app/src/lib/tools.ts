@@ -100,3 +100,10 @@ export const formatName = (name: any) => {
   const lastName = getIn(name, ['family']);
   return `${firstName} ${lastName}`;
 };
+
+export const formatAddress = (address: any) => {
+  const line = getIn(address, ['line', 0]);
+  const city = getIn(address, ['city']);
+
+  return `${city} ${line}`;
+};

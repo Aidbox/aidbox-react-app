@@ -1,13 +1,12 @@
-import React from 'react';
-import { useStore, useGate } from 'effector-react';
+import { useGate, useStore } from 'effector-react';
 import { Link } from 'react-router-dom';
-
-import { getIn, formatName } from '../../../lib/tools';
+import { Practitioner } from 'shared/src/contrib/aidbox';
+import { formatName, getIn } from '../../../lib/tools';
 import * as admin from '../model';
 
-const Patients = () => {
-  useGate(admin.PatientsGate);
-  const patients = useStore(admin.$patients);
+const Practitioners = () => {
+  useGate(admin.PractitionersGate);
+  const practitioners = useStore(admin.$practitioners);
 
   return (
     <section className="text-gray-600 body-font">
@@ -15,7 +14,7 @@ const Patients = () => {
         <div className="flex flex-wrap w-full mb-8">
           <div className="w-full mb-6 lg:mb-0">
             <h1 className="sm:text-4xl text-5xl font-medium title-font mb-2 text-gray-900">
-              Patients
+              Practitioners
             </h1>
             <div className="h-1 w-20 bg-indigo-500 rounded"></div>
           </div>
@@ -32,23 +31,22 @@ const Patients = () => {
                   </div>
                 </div>
                 <div className="bg-white">
-                  {patients.map((p: any) => {
-                    const { resource } = p;
-                    const { id } = resource;
-                    const name = getIn(resource, ['name', 0]);
+                  {practitioners.map((practitioner: any) => {
+                    const { id } = practitioner;
+                    const name = getIn(practitioner, ['name', 0]);
 
                     return (
-                      <Link to={`/patients/${id}`}>
+                      <Link to={`/practitioners/${id}`}>
                         <div
                           className="grid grid-rows-1 grid-cols-3 whitespace-nowrap hover:bg-gray-100 cursor-pointer border-b-2 border-gray-100"
                           key={id}
                         >
                           <div className="px-6 py-4 text-sm text-gray-500">{formatName(name)}</div>
                           <div className="px-6 py-4 text-sm text-gray-500">
-                            {resource.birthDate}
+                            {practitioner.birthDate}
                           </div>
                           <div className="px-6 py-4 text-sm text-gray-500">
-                            {resource.isEnrolled ? 'Yes' : 'No'}
+                            {practitioner.isEnrolled ? 'Yes' : 'No'}
                           </div>
                         </div>
                       </Link>
@@ -64,4 +62,4 @@ const Patients = () => {
   );
 };
 
-export default Patients;
+export default Practitioners;
