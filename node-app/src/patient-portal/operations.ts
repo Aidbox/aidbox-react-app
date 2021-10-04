@@ -53,10 +53,10 @@ export const patientInfo: TOperation<{ params: { type: string } }> = {
 
     const { resources: observations } = await ctx.api.findResources(`Observation`, params);
     const { resources: appointments } = await ctx.api.findResources(`Appointment`, params);
-    const { resources: encouters } = await ctx.api.findResources(`Encounter`, params);
+    const { resources: encounters } = await ctx.api.findResources(`Encounter`, params);
     const { resources: diagnoses } = await ctx.api.findResources(`Condition`, params);
 
-    return { resource: { observations, encouters, diagnoses, appointments } };
+    return { resource: { observations, encounters, diagnoses, appointments } };
   },
 };
 
