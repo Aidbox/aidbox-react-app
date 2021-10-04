@@ -15,7 +15,7 @@ const Profile = () => {
   return (
     <div className="bg-white">
       <nav className="flex flex-col sm:flex-row">
-        {tabs.map((tab: any) => (
+        {tabs.map((tab: string) => (
           <button
             className={cn('text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none', {
               'text-blue-500 border-b-2 border-blue-500': currentTab === tab,

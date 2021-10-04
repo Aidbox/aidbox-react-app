@@ -1,5 +1,6 @@
 import { revokeGrant } from '../../../models/auth/index';
-export const SmartApp = (app: any) => {
+import { App } from '../model';
+export const SmartApp = (app: App) => {
   const { description, launch_uri, logo_url, name, id } = app;
   return (
     <div className="p-4  w-full">

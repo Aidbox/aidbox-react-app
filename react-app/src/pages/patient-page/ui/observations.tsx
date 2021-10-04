@@ -2,6 +2,8 @@ import React from 'react';
 import { $observations } from '../model';
 import { useStore } from 'effector-react';
 import Table from '../../../components/Table';
+import { Observation } from 'shared/src/contrib/aidbox';
+import { getIn } from '../../../lib/tools';
 
 const labels = ['Status', 'Type', 'Date'];
 
@@ -11,12 +13,12 @@ const Observations = () => {
     return null;
   }
 
-  const dataToDisplay = observations.map((encouter: any) => {
+  const dataToDisplay = observations.map((observation: Observation) => {
+    const dateTime = getIn(observation, ['effective', 'dateTime']);
     const {
       status,
       code: { text },
-      effective: { dateTime },
-    } = encouter;
+    } = observation;
     return [status, text, dateTime];
   });
 

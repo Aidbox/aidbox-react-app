@@ -1,12 +1,13 @@
 import { forward, sample } from 'effector';
 import { createGate } from 'effector-react';
+import { Appointment, Condition, Encounter, Observation } from 'shared/src/contrib/aidbox';
 import { getIn } from '../../../lib/tools';
 import { $user, authorizedRequest } from '../../../models/auth';
 import { app } from '../../../models/domain';
 
 const patientDomain = app.createDomain('patient');
 
-export const downloadAppsFx = patientDomain.createEffect<any, any, Error>(() =>
+export const downloadAppsFx = patientDomain.createEffect<void, any, Error>(() =>
   authorizedRequest({
     url: '/rpc',
     method: 'POST',
@@ -16,7 +17,11 @@ export const downloadAppsFx = patientDomain.createEffect<any, any, Error>(() =>
   }),
 );
 
-const downloadPatientInfoFx = patientDomain.createEffect<any, any, Error>(
+interface DownloadPatientParams {
+  data: { fhirUser: { id: string } };
+}
+
+const downloadPatientInfoFx = patientDomain.createEffect<DownloadPatientParams, any, Error>(
   ({
     data: {
       fhirUser: { id },
@@ -31,11 +36,33 @@ const downloadPatientInfoFx = patientDomain.createEffect<any, any, Error>(
     }),
 );
 
+export interface App {
+  description: string;
+  launch_uri: string;
+  logo_url: string;
+  name: string;
+  id: string;
+}
+
+type Apps = Array<App>;
+
+interface PatientInfo {
+  encounters: Array<Encounter> | [];
+  observations: Array<Observation> | [];
+  diagnoses: Array<Condition> | [];
+  appointments: Array<Appointment> | [];
+}
+
 export const SmartAppGate = createGate();
 export const PatientProfileGate = createGate();
-export const $apps = patientDomain.createStore<any>(null);
-export const $patientInfo = patientDomain.createStore<any>({});
-export const $encounters = $patientInfo.map(({ encouters }) => encouters);
+export const $apps = patientDomain.createStore<Apps | []>([]);
+export const $patientInfo = patientDomain.createStore<PatientInfo>({
+  encounters: [],
+  observations: [],
+  diagnoses: [],
+  appointments: [],
+});
+export const $encounters = $patientInfo.map(({ encounters }) => encounters);
 export const $observations = $patientInfo.map(({ observations }) => observations);
 export const $diagnoses = $patientInfo.map(({ diagnoses }) => diagnoses);
 

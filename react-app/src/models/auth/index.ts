@@ -12,7 +12,7 @@ export const $token = authDomain.createStore<any>(null);
 persist({ store: $token, key: 'token' });
 
 export const signOut = authDomain.createEvent();
-export const revokeGrant = authDomain.createEvent();
+export const revokeGrant = authDomain.createEvent<string>();
 
 setInstanceBaseURL('http://localhost:8888');
 type EffectParams = { token: string; params: { headers: Object } };

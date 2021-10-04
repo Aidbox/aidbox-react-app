@@ -2,6 +2,8 @@ import React from 'react';
 import { $encounters } from '../model';
 import { useStore } from 'effector-react';
 import Table from '../../../components/Table';
+import { Encounter } from 'shared/src/contrib/aidbox';
+import { getIn } from '../../../lib/tools';
 
 const labels = ['Status', 'Period'];
 
@@ -11,11 +13,10 @@ const Encounters = () => {
     return null;
   }
 
-  const dataToDisplay = encouters.map((encouter: any) => {
-    const {
-      status,
-      period: { start, end },
-    } = encouter;
+  const dataToDisplay = encouters.map((encouter: Encounter) => {
+    const start = getIn(encouter, ['period', 'start']);
+    const end = getIn(encouter, ['period', 'end']);
+    const { status } = encouter;
     return [status, `${start} - ${end}`];
   });
 

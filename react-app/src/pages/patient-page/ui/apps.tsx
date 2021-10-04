@@ -30,7 +30,7 @@ export const SmartApps = () => {
         <div className="flex flex-wrap -m-4">{smartAppsStatus.pending && <Spinner />}</div>
         <div className="flex flex-wrap -m-4">
           {smartAppsStatus.success &&
-            smartApps.map((smartApp: any) => (
+            smartApps.map((smartApp: smartAppModel.App) => (
               <React.Fragment key={smartApp.id}>
                 <SmartApp {...smartApp} />
               </React.Fragment>
