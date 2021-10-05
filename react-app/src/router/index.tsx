@@ -1,4 +1,4 @@
-import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate, useParams, useRoutes } from 'react-router-dom';
 import { useGate, useStore } from 'effector-react';
 import { AdminPatients, AdminPractitioners } from '../pages/admin/index';
 import Layout from '../layouts/apps';
@@ -29,10 +29,15 @@ const routesByRole = {
   patient: [
     { path: 'auth/consent', element: <ConsentForm /> },
     {
-      element: <Layout role="patient" />,
+      element: <RouterSpy />,
       children: [
-        { path: 'smart-apps', element: <SmartApps /> },
-        { path: 'profile', element: <Profile /> },
+        {
+          element: <Layout role="patient" />,
+          children: [
+            { path: 'smart-apps', element: <SmartApps /> },
+            { path: 'profile', element: <Profile /> },
+          ],
+        },
       ],
     },
     { path: '/', element: <Navigate to="/smart-apps" /> },
@@ -40,22 +45,32 @@ const routesByRole = {
   ],
   admin: [
     {
-      element: <Layout role="admin" />,
+      element: <RouterSpy />,
       children: [
-        { path: 'patients', element: <AdminPatients /> },
-        { path: 'patients/:id', element: <PatientPage /> },
-        { path: 'practitioners', element: <AdminPractitioners /> },
-        { path: 'practitioners/:id', element: <PractitionerPage /> },
+        {
+          element: <Layout role="admin" />,
+          children: [
+            { path: 'patients', element: <AdminPatients /> },
+            { path: 'patients/:id', element: <PatientPage /> },
+            { path: 'practitioners', element: <AdminPractitioners /> },
+            { path: 'practitioners/:id', element: <PractitionerPage /> },
+          ],
+        },
       ],
     },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
     {
-      element: <Layout role="practitioner" />,
+      element: <RouterSpy />,
       children: [
-        { path: 'patients', element: <PatientsList /> },
-        { path: 'patients/:id', element: <PatientProfile /> },
+        {
+          element: <Layout role="practitioner" />,
+          children: [
+            { path: 'patients', element: <PatientsList /> },
+            { path: 'patients/:id', element: <PatientProfile /> },
+          ],
+        },
       ],
     },
     { path: '*', element: <Navigate to="/patients" /> },
@@ -66,19 +81,16 @@ type RoutesByRole = 'patient' | 'admin' | 'practitioner';
 
 const Router = ({ routes }: any) => {
   const main = useRoutes(routes);
-  return (
-    <>
-      <RouterSpy />
-      {main}
-    </>
-  );
+  return main;
 };
 
 export function RouterSpy() {
   const navigate = useNavigate();
   const location = useLocation();
-  useGate(HistoryGate, { navigate, location });
-  return null;
+  const params = useParams();
+
+  useGate(HistoryGate, { navigate, location, params });
+  return <Outlet />;
 }
 
 export const AppRouter = () => {

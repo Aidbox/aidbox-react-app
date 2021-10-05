@@ -1,11 +1,10 @@
-import { sample, forward } from 'effector';
+import { sample, forward, createDomain } from 'effector';
 import { createForm } from 'effector-forms';
 import { createGate } from 'effector-react';
 import { Practitioner } from 'shared/src/contrib/aidbox';
 import { authorizedRequest } from '../../../models/auth';
-import { app } from '../../../models/domain';
 
-export const admin = app.createDomain('admin');
+export const admin = createDomain('admin');
 
 export const FormGate = createGate();
 export const PatientsGate = createGate();

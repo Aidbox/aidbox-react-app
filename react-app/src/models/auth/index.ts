@@ -24,7 +24,7 @@ const backendRequest = createEffect(async ({ token, params = { headers: {} } }: 
   };
   const result = await service({ ...params, headers });
   if (isFailure(result)) {
-    throw new Error(result.error);
+    throw result;
   }
   return result;
 });

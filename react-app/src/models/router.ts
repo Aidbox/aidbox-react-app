@@ -9,6 +9,7 @@ export const navigateTo = routerDomain.createEvent<string>();
 
 export const $navigate = HistoryGate.state.map(({ navigate }) => navigate);
 export const $location = HistoryGate.state.map(({ location }) => location || null);
+export const $params = HistoryGate.state.map(({ params }) => params || null);
 export const navigateFx = attach({
   source: $navigate,
   mapParams: (pathTo, navigateCallback) => ({ pathTo, navigateCallback }),

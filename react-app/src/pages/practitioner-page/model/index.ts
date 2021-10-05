@@ -1,34 +1,57 @@
-import { forward } from 'effector';
+import { loading, RemoteData } from 'aidbox-react/lib/libs/remoteData';
+import { extractBundleResources } from 'aidbox-react/lib/services/fhir';
+import { mapSuccess } from 'aidbox-react/lib/services/service';
+import { createDomain, forward } from 'effector';
 import { createGate } from 'effector-react';
-import { Patient } from 'shared/src/contrib/aidbox';
+import { Bundle, Patient } from 'shared/src/contrib/aidbox';
 import { authorizedRequest } from '../../../models/auth';
-import { app } from '../../../models/domain';
 
-export const practitionerDomain = app.createDomain('practitioner');
+export const practitionerDomain = createDomain('practitioner');
 
 export const PatientsGate = createGate();
+export const PatientGate = createGate();
 
-export const $patients = practitionerDomain.createStore<Array<Patient> | []>([]);
-export const $currentPatient = practitionerDomain.createStore<Patient | {}>({});
+export const $patientsResult = practitionerDomain.createStore<RemoteData<Patient[]>>(loading);
+export const $currentPatientResult = practitionerDomain.createStore<RemoteData<Patient>>(loading);
 
-export const downloadPatientsFx = practitionerDomain.createEffect<void, any, Error>(() =>
+export const downloadPatientsFx = practitionerDomain.createEffect<
+  any,
+  RemoteData<Bundle<Patient>>,
+  RemoteData<Patient[], Error>
+>(() =>
   authorizedRequest({
     url: '/Patient?_sort=.name.0.family',
     method: 'GET',
   }),
 );
 
-export const setCurrentPatientFx = practitionerDomain.createEffect<Patient, any, Error>(
-  (patient) => patient,
+export const downloadPatientFx = practitionerDomain.createEffect<
+  any,
+  RemoteData<Patient>,
+  RemoteData<Patient, Error>
+>((id) =>
+  authorizedRequest({
+    url: `/Patient/${id}`,
+    method: 'GET',
+  }),
 );
 
-$patients.on(downloadPatientsFx.doneData, (_, { data: { entry } }) => {
-  return entry.map(({ resource }: { resource: Patient }) => resource);
-});
+$patientsResult
+  .on(downloadPatientsFx.doneData, (_, patientsResult) =>
+    mapSuccess(patientsResult, (bundle) => extractBundleResources(bundle).Patient),
+  )
+  .on(downloadPatientsFx.failData, (_, patientsResult) => patientsResult);
 
-$currentPatient.on(setCurrentPatientFx.doneData, (_, patient) => patient);
+$currentPatientResult
+  .on(downloadPatientFx.doneData, (_, patientResult) => patientResult)
+  .on(downloadPatientFx.failData, (_, patientResult) => patientResult);
 
 forward({
   from: PatientsGate.open,
   to: downloadPatientsFx,
+});
+
+forward({
+  from: PatientGate.open,
+  to: downloadPatientFx,
 });
