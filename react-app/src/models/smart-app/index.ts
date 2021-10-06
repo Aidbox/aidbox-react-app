@@ -35,25 +35,35 @@ export const downloadAppsFx = smartAppDomain.createEffect<
   }),
 );
 
-export const getLaunchParamFx = smartAppDomain.createEffect<string, any, RemoteData<any, Error>>(
-  async (launch_uri) => {
+export const getLaunchParamFx = smartAppDomain.createEffect<any, any, RemoteData<any, Error>>(
+  async (data) => {
     const response = await authorizedRequest({
       url: '/rpc',
       method: 'POST',
       data: {
-        method: 'aidbox.smart/get-smart-apps',
+        method: 'aidbox.smart/get-launch-uri',
+        params: {
+          user: { id: '0000016c-6b59-d6fd-0000-000000001162' },
+          client: {
+            id: '922e34e3-dad0-40ea-be5c-eac0f891e435',
+            smart: { launch_uri: 'http://localhost:9000/launch.html' },
+          },
+          iss: 'http://localhost:8888/smart',
+        },
       },
     });
-    return { launch_uri, response };
+
+    return response.data;
   },
 );
 
 export const redirectToAuthorizeFx = smartAppDomain.createEffect<any, any, Error>((data) => {
-  const link = `${data.launch_uri}${data.response}`;
-  window.location.href = link;
+  // const link = `${data.launch_uri}${data.response}`;
+  console.log(data.result.uri, 'data.uri');
+  window.location.href = data.result.uri;
 });
 
-export const getLaunchParam = smartAppDomain.createEvent<string>();
+export const getLaunchParam = smartAppDomain.createEvent<any>();
 
 $smartApps.on(downloadAppsFx.doneData, (_, appsResult) =>
   mapSuccess(appsResult, (data) => getIn(data, ['result', 'smart-apps'], [])),

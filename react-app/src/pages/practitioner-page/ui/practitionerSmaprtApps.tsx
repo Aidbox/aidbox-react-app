@@ -12,7 +12,7 @@ const PractitionerSmartApps = () => {
         smartAppsResult.data.map((smartApp: smartAppModel.SmartApp) => (
           <button
             className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300 mb-4"
-            onClick={() => smartAppModel.getLaunchParam(smartApp.launch_uri)}
+            onClick={() => smartAppModel.getLaunchParam(smartApp)}
           >
             {smartApp.name}
           </button>
