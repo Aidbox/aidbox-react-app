@@ -8,7 +8,7 @@ import Diagnoses from './diagnoses';
 
 const tabs = ['Appointments', 'Encounters', 'Observations', 'Diagnoses'];
 
-const Profile = () => {
+export const PatientProfile = () => {
   const [currentTab, setCurrentTab] = useState('Appointments');
   useGate(PatientProfileGate);
 
@@ -32,5 +32,3 @@ const Profile = () => {
     </div>
   );
 };
-
-export default Profile;

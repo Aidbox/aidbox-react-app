@@ -1,4 +1,3 @@
-import { SmartApps } from './ui/apps';
-const SmartAppsPage = () => <SmartApps />;
-
-export default SmartAppsPage;
+export * from './model';
+export * from './ui/profile';
+export * from './ui/smartApps';

@@ -1,3 +1,3 @@
-import PatientsList from './ui/patients';
-
-export { PatientsList };
+export * from './model';
+export * from './ui/patientProfile';
+export * from './ui/patients';

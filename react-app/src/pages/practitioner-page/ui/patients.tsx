@@ -7,7 +7,7 @@ import * as practitionerModel from '../model';
 import { isFailure, isLoading, isSuccess } from 'aidbox-react/lib/libs/remoteData';
 import Spinner from '../../../components/Spinner';
 
-const Patients = () => {
+export const PractitionerPatients = () => {
   useGate(practitionerModel.PatientsGate);
   const patientsResult = useStore(practitionerModel.$patientsResult);
 
@@ -68,5 +68,3 @@ const Patients = () => {
     </section>
   );
 };
-
-export default Patients;

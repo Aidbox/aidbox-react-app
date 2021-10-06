@@ -1,15 +1,13 @@
 import React from 'react';
 import { useStore, useGate } from 'effector-react';
-
-import { SmartApp } from './app';
-import * as smartAppModel from '../model';
 import Spinner from '../../../components/Spinner';
 import { isFailure, isLoading, isSuccess } from 'aidbox-react/lib/libs/remoteData';
-import { getIn } from '../../../lib/tools';
+import * as smartAppModel from '../../../models/smart-app';
+import { SmartApp } from './smartApp';
 
-export const SmartApps = () => {
+export const PatientSmartApps = () => {
   useGate(smartAppModel.SmartAppGate);
-  const smartAppsResult = useStore(smartAppModel.$apps);
+  const smartAppsResult = useStore(smartAppModel.$smartApps);
 
   return (
     <section className="text-gray-600 body-font">
@@ -34,13 +32,11 @@ export const SmartApps = () => {
         )}
         {isSuccess(smartAppsResult) && (
           <div className="flex flex-wrap -m-4">
-            {getIn(smartAppsResult, ['data', 'result', 'smart-apps'], []).map(
-              (smartApp: smartAppModel.App) => (
-                <React.Fragment key={smartApp.id}>
-                  <SmartApp {...smartApp} />
-                </React.Fragment>
-              ),
-            )}
+            {smartAppsResult.data.map((smartApp: smartAppModel.SmartApp) => (
+              <React.Fragment key={smartApp.id}>
+                <SmartApp {...smartApp} />
+              </React.Fragment>
+            ))}
           </div>
         )}
       </div>

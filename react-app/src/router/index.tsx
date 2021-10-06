@@ -2,17 +2,17 @@ import { Navigate, Outlet, useLocation, useNavigate, useParams, useRoutes } from
 import { useGate, useStore } from 'effector-react';
 import { AdminPatients, AdminPractitioners } from '../pages/admin/index';
 import Layout from '../layouts/apps';
-import SmartApps from '../pages/patient-page';
+import { PatientSmartApps } from '../pages/patient-page';
 import { $token, $user } from '../models/auth';
 import { getIn } from '../lib/tools';
-import Profile from '../pages/patient-page/ui/profile';
+import { PatientProfile } from '../pages/patient-page/';
 import PatientPage from '../pages/admin/ui/patientPage';
 import PractitionerPage from '../pages/admin/ui/practitionerPage';
 import ConsentForm from '../pages/consent-form';
 import { HistoryGate } from '../models/router';
 import { useEffect } from 'react';
-import { PatientsList } from '../pages/practitioner-page';
-import PatientProfile from '../pages/practitioner-page/ui/patientProfile';
+import { PractitionerPatients } from '../pages/practitioner-page/';
+import { PractitionerPatientProfile } from '../pages/practitioner-page/';
 
 /* const Profile = () => {
   return (
@@ -34,8 +34,8 @@ const routesByRole = {
         {
           element: <Layout role="patient" />,
           children: [
-            { path: 'smart-apps', element: <SmartApps /> },
-            { path: 'profile', element: <Profile /> },
+            { path: 'smart-apps', element: <PatientSmartApps /> },
+            { path: 'profile', element: <PatientProfile /> },
           ],
         },
       ],
@@ -67,8 +67,8 @@ const routesByRole = {
         {
           element: <Layout role="practitioner" />,
           children: [
-            { path: 'patients', element: <PatientsList /> },
-            { path: 'patients/:id', element: <PatientProfile /> },
+            { path: 'patients', element: <PractitionerPatients /> },
+            { path: 'patients/:id', element: <PractitionerPatientProfile /> },
           ],
         },
       ],

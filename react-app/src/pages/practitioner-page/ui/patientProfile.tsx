@@ -4,8 +4,9 @@ import { getIn, formatName, formatAddress } from '../../../lib/tools';
 import { useParams } from 'react-router-dom';
 import { isFailure, isLoading, isSuccess } from 'aidbox-react/lib/libs/remoteData';
 import Spinner from '../../../components/Spinner';
+import PractitionerSmartApps from './practitionerSmaprtApps';
 
-const PatientProfile = () => {
+export const PractitionerPatientProfile = () => {
   const { id } = useParams();
   useGate(practitionerModel.PatientGate, id);
   const patientResult = useStore(practitionerModel.$currentPatientResult);
@@ -20,9 +21,9 @@ const PatientProfile = () => {
     <>
       <div className="flex flex-wrap -m-4">{isLoading(patientResult) && <Spinner />}</div>
       {isSuccess(patientResult) && (
-        <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0">
-          <div className="w-full rounded shadow-2xl bg-white opacity-75 mx-6 lg:mx-0">
-            <div className="p-4 md:p-12 text-center lg:text-left">
+        <>
+          <div className="p-4 md:p-12 text-center lg:text-left">
+            <div className="mb-6">
               <h1 className="text-3xl font-bold pt-8 lg:pt-0">{formatName(name)}</h1>
               <div className="mx-auto lg:mx-0 w-4/5 pt-3 border-b-4 border-indigo-500 rounded" />
               <div className="pt-4 text-base flex items-center justify-center lg:justify-start">
@@ -42,8 +43,11 @@ const PatientProfile = () => {
                 <span>{language}</span>
               </div>
             </div>
+            <div className="w-1/5">
+              <PractitionerSmartApps />
+            </div>
           </div>
-        </div>
+        </>
       )}
       {isFailure(patientResult) && (
         <div className="text-red-500 pl-4 font-medium">{patientResult.error}</div>
@@ -51,5 +55,3 @@ const PatientProfile = () => {
     </>
   );
 };
-
-export default PatientProfile;
