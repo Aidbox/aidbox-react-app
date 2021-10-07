@@ -76,7 +76,7 @@ const routesByRole = {
         },
       ],
     },
-    { path: '*', element: <div>Not found</div> },
+    { path: '*', element: <Navigate to="/patients" /> },
   ],
 };
 

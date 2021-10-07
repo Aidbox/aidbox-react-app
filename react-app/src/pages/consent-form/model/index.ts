@@ -22,7 +22,7 @@ export const redirectToAuthorizeFx = grantDomain.createEffect<any, any, Error>((
 sample({
   source: $user,
   clock: accessGrant,
-  fn: (_: any, formParams: any) => formParams,
+  fn: (user: any, formParams: any) => ({ userId: user.data.id, ...formParams }),
   target: accessGrantFx,
 });
 

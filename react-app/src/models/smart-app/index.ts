@@ -57,8 +57,6 @@ export const getLaunchParamFx = smartAppDomain.createEffect<any, any, RemoteData
 );
 
 export const redirectToAuthorizeFx = smartAppDomain.createEffect<any, any, Error>((data) => {
-  // const link = `${data.launch_uri}${data.response}`;
-  console.log(data.result.uri, 'data.uri');
   window.location.href = data.result.uri;
 });
 

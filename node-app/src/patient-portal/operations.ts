@@ -104,9 +104,11 @@ export const authGrant: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['authGrant'],
   handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
+    const user: any = await ctx.api.getResource(`User`, request.resource.userId);
+
     const grant = await ctx.api.createResource(`Grant`, {
       user: {
-        id: request['oauth/user'].id,
+        id: user.id,
         resourceType: 'User',
       },
       client: {
@@ -115,7 +117,7 @@ export const authGrant: TOperation<{ params: { type: string } }> = {
       },
       'requested-scope': request.resource.scope.split(' '),
       'provided-scope': request.resource.scope.split(' '),
-      patient: request['oauth/user'].fhirUser,
+      patient: user.fhirUser,
     });
 
     return { resource: grant };
@@ -131,10 +133,10 @@ export const revokeGrant: TOperation<{ params: { type: string } }> = {
       method: 'DELETE',
       params: {
         '.client.id': request.params.clientId,
-        '.user.id': request['oauth/user'].id,
+        '.user.id': request.resource.userId,
       },
     });
-    console.log(rq);
+
     return { resource };
   },
 };

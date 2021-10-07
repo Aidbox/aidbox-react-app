@@ -10,19 +10,19 @@ services:
   dockerize-app:
     image: jwilder/dockerize
     command: dockerize -wait ${AIDBOX_URL}/app-healthcheck -timeout 300s
-    # depends_on:
-    #   - devbox
-    # links:
-    #   - devbox
+    depends_on:
+      - devbox
+    links:
+      - devbox
 
   app:
     build:
       context: .
       dockerfile: Dockerfile.node-app.dev
-    # depends_on:
-    #   - 'devbox'
-    # links:
-    #   - 'devbox'
+    depends_on:
+      - 'devbox'
+    links:
+      - 'devbox'
     ports:
       - '${APP_PORT}:${APP_PORT}'
     env_file:
