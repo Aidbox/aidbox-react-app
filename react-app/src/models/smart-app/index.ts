@@ -3,7 +3,8 @@ import { mapSuccess } from 'aidbox-react/lib/services/service';
 import { createDomain, forward, sample } from 'effector';
 import { createGate } from 'effector-react';
 import { getIn } from '../../lib/tools';
-import { authorizedRequest } from '../auth';
+import { $user, authorizedRequest } from '../auth';
+import { env } from '../../env';
 
 const smartAppDomain = createDomain('smartAppDomain');
 
@@ -43,12 +44,10 @@ export const getLaunchParamFx = smartAppDomain.createEffect<any, any, RemoteData
       data: {
         method: 'aidbox.smart/get-launch-uri',
         params: {
-          user: { id: '0000016c-6b59-d6fd-0000-000000001162' },
-          client: {
-            id: '922e34e3-dad0-40ea-be5c-eac0f891e435',
-            smart: { launch_uri: 'http://localhost:9000/launch.html' },
-          },
-          iss: 'http://localhost:8888/smart',
+          user: data.user,
+          client: data.client,
+          ctx: { patient: data.patient.id },
+          iss: env.patient_smart_base_url,
         },
       },
     });
@@ -74,9 +73,17 @@ forward({
   to: downloadAppsFx,
 });
 
-forward({
-  from: getLaunchParam,
-  to: getLaunchParamFx,
+sample({
+  clock: getLaunchParam,
+  source: $user,
+  fn: (user, data) => {
+    return {
+      user: { id: user.data.id, resourceType: 'User' },
+      patient: { id: data.patient_id, resourceType: 'Patient' },
+      client: { id: data.client.id, resourceType: 'Client' },
+    };
+  },
+  target: getLaunchParamFx,
 });
 
 forward({

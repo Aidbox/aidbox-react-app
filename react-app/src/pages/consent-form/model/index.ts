@@ -1,5 +1,6 @@
 import { createDomain, forward, sample } from 'effector';
 import { $user, authorizedRequest } from '../../../models/auth';
+import { env } from '../../../env';
 
 export const grantDomain = createDomain('grant');
 export const accessGrant = grantDomain.createEvent();
@@ -15,7 +16,7 @@ export const accessGrantFx = grantDomain.createEffect<any, any, Error>(async (da
 
 export const redirectToAuthorizeFx = grantDomain.createEffect<any, any, Error>((data) => {
   const { search } = window.location;
-  window.location.href = `http://localhost:8888/auth/authorize/${search}`;
+  window.location.href = `${env.aidbox_url}/auth/authorize/${search}`;
 });
 
 sample({

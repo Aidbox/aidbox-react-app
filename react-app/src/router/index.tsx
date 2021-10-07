@@ -13,6 +13,7 @@ import { HistoryGate } from '../models/router';
 import { useEffect } from 'react';
 import { PractitionerPatients } from '../pages/practitioner-page/';
 import { PractitionerPatientProfile } from '../pages/practitioner-page/';
+import { env } from '../env';
 
 /* const Profile = () => {
   return (
@@ -61,6 +62,8 @@ const routesByRole = {
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
+    { path: 'auth/consent', element: <ConsentForm /> },
+
     {
       element: <RouterSpy />,
       children: [
@@ -73,7 +76,7 @@ const routesByRole = {
         },
       ],
     },
-    { path: '*', element: <Navigate to="/patients" /> },
+    { path: '*', element: <div>Not found</div> },
   ],
 };
 
@@ -107,7 +110,8 @@ export const AppRouter = () => {
       const state = btoa(window.location.pathname + window.location.search);
 
       window.location.href =
-        'http://localhost:8888/auth/authorize?redirect_uri=http://localhost:3000/&response_type=code&client_id=ui-portal&state=' +
+        env.aidbox_url +
+        '/auth/authorize?redirect_uri=http://localhost:3000/&response_type=code&client_id=ui-portal&state=' +
         state;
     }
   }, [token]);

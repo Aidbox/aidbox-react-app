@@ -1,5 +1,7 @@
 import { revokeGrant } from '../../../models/auth/index';
 import * as smartAppModel from '../../../models/smart-app';
+import { env } from '../../../env';
+
 export const SmartApp = (app: smartAppModel.SmartApp) => {
   const { description, launch_uri, logo_url, name, id } = app;
   return (
@@ -17,7 +19,7 @@ export const SmartApp = (app: smartAppModel.SmartApp) => {
           </div>
           <div className="flex flex-col col-span-2">
             <a
-              href={`${launch_uri}?iss=http://localhost:8888/smart`}
+              href={`${launch_uri}?iss=${env.patient_smart_base_url}`}
               target="_blank"
               className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300 mb-4"
               rel="noreferrer"

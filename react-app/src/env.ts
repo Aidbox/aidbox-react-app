@@ -1,6 +1,8 @@
 const processEnv = (typeof process && process.env) || {};
 
 export const env = {
+  aidbox_url: 'http://localhost:8765',
+  patient_smart_base_url: 'http://localhost:8765/smart',
   isDev:
     (window as any).REACT_APP_NODE_ENV === 'development' ||
     processEnv.REACT_APP_NODE_ENV === 'development',

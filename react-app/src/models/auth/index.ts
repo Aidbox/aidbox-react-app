@@ -4,6 +4,7 @@ import { isFailure } from 'aidbox-react/lib/libs/remoteData';
 import { persist } from 'effector-storage/local';
 import { setInstanceBaseURL } from 'aidbox-react/lib/services/instance';
 import { navigateTo, HistoryGate } from '../router';
+import { env } from '../../env';
 
 export const authDomain = createDomain('auth');
 
@@ -14,7 +15,7 @@ persist({ store: $token, key: 'token' });
 export const signOut = authDomain.createEvent();
 export const revokeGrant = authDomain.createEvent<string>();
 
-setInstanceBaseURL('http://localhost:8888');
+setInstanceBaseURL(env.aidbox_url);
 type EffectParams = { token: string; params: { headers: Object } };
 
 const backendRequest = createEffect(async ({ token, params = { headers: {} } }: EffectParams) => {

@@ -5,12 +5,18 @@ prepare:
 	cp -n .env.tmpl .env;
 	cp -n .env ./react-app/.env;
 
-up:
-	docker-compose -f docker-compose.yml up -d devbox;
-	docker-compose -f docker-compose.yml up --exit-code-from dockerize-devbox dockerize-devbox || exit 1;
+app-up:
 	docker-compose -f docker-compose.yml up -d app;
 	docker-compose -f docker-compose.yml up --exit-code-from dockerize-app dockerize-app || exit 1;
 	npm run start:react-app;
+
+up:
+	docker-compose -f docker-compose.yml up -d devbox;
+	docker-compose -f docker-compose.yml up --exit-code-from dockerize-devbox dockerize-devbox || exit 1;
+	make app-up
+
+app-logs:
+	docker logs -f aidbox-react-app_app_1
 
 down:
 	docker-compose down;
