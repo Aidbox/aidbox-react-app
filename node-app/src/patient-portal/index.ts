@@ -1,4 +1,12 @@
+import path from 'path';
+
+import dotenv from 'dotenv';
+
 import * as operations from './operations';
+
+dotenv.config({
+  path: path.resolve(__dirname, '..', '..', '..', '.env'),
+});
 
 export const manifest = {
   resources: {
@@ -9,7 +17,7 @@ export const manifest = {
         first_party: true,
         auth: {
           authorization_code: {
-            redirect_uri: 'http://localhost:3000/',
+            redirect_uri: process.env.FRONTEND_URL,
             access_token_expiration: 360,
           },
         },

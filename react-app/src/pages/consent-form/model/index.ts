@@ -16,7 +16,7 @@ export const accessGrantFx = grantDomain.createEffect<any, any, Error>(async (da
 
 export const redirectToAuthorizeFx = grantDomain.createEffect<any, any, Error>((data) => {
   const { search } = window.location;
-  window.location.href = `${env.aidbox_url}/auth/authorize/${search}`;
+  window.location.href = `${env.AIDBOX_URL}/auth/authorize/${search}`;
 });
 
 sample({

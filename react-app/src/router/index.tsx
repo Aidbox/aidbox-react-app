@@ -108,11 +108,8 @@ export const AppRouter = () => {
 
     if (!token && !code) {
       const state = btoa(window.location.pathname + window.location.search);
-
-      window.location.href =
-        env.aidbox_url +
-        '/auth/authorize?redirect_uri=http://localhost:3000/&response_type=code&client_id=ui-portal&state=' +
-        state;
+      console.log(env, 'dfsdfsfs');
+      window.location.href = `${env.AIDBOX_URL}/auth/authorize?redirect_uri=${env.FRONTEND_URL}&response_type=code&client_id=ui-portal&state=${state}`;
     }
   }, [token]);
 

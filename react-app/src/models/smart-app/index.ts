@@ -47,7 +47,7 @@ export const getLaunchParamFx = smartAppDomain.createEffect<any, any, RemoteData
           user: data.user,
           client: data.client,
           ctx: { patient: data.patient.id },
-          iss: env.patient_smart_base_url,
+          iss: env.PATIENT_SMART_BASE_URL,
         },
       },
     });

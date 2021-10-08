@@ -19,7 +19,7 @@ export const SmartApp = (app: smartAppModel.SmartApp) => {
           </div>
           <div className="flex flex-col col-span-2">
             <a
-              href={`${launch_uri}?iss=${env.patient_smart_base_url}`}
+              href={`${launch_uri}?iss=${env.PATIENT_SMART_BASE_URL}`}
               target="_blank"
               className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300 mb-4"
               rel="noreferrer"
