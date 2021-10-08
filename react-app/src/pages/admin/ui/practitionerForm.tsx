@@ -1,12 +1,13 @@
-import { useGate } from 'effector-react';
+import { useGate, useStore } from 'effector-react';
 import { useForm } from 'effector-forms';
 import * as admin from '../model';
 import { useParams } from 'react-router-dom';
+import { isFailure, isSuccess } from 'aidbox-react/lib/libs/remoteData';
 
 const Form = () => {
   useGate(admin.FormGate);
   const { id }: { id: any } = useParams();
-
+  const enrollStatus = useStore(admin.$enrollStatus);
   const { fields } = useForm(admin.form);
 
   const onSubmit = (e: any) => {
@@ -22,6 +23,10 @@ const Form = () => {
             Enroll Practitioners
           </h1>
         </div>
+        {isSuccess(enrollStatus) && <div className="text-green-500 font-medium">Done</div>}
+        {isFailure(enrollStatus) && (
+          <div className="text-red-500 font-medium">{enrollStatus.error}</div>
+        )}
         <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={onSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
