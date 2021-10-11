@@ -11,8 +11,11 @@ import PractitionerPage from '../pages/admin/ui/practitionerPage';
 import ConsentForm from '../pages/consent-form';
 import { HistoryGate } from '../models/router';
 import { useEffect } from 'react';
-import { PractitionerPatients } from '../pages/practitioner-page/';
-import { PractitionerPatientProfile } from '../pages/practitioner-page/';
+import {
+  PractitionerPatients,
+  PractitionerPatientProfile,
+  PractitionerSmartApps,
+} from '../pages/practitioner-page/';
 import { env } from '../env';
 
 /* const Profile = () => {
@@ -72,6 +75,7 @@ const routesByRole = {
           children: [
             { path: 'patients', element: <PractitionerPatients /> },
             { path: 'patients/:id', element: <PractitionerPatientProfile /> },
+            { path: 'smart-apps', element: <PractitionerSmartApps /> },
           ],
         },
       ],

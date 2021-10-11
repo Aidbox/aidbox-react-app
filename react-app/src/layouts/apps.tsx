@@ -40,6 +40,10 @@ const linksByRole = {
       text: 'Patients',
       path: 'patients',
     },
+    {
+      text: 'Smart Apps',
+      path: 'smart-apps',
+    },
   ],
 };
 
