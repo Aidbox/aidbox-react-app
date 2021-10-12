@@ -9,6 +9,7 @@ import { PatientProfile } from '../pages/patient-page/';
 import PatientPage from '../pages/admin/ui/patientPage';
 import PractitionerPage from '../pages/admin/ui/practitionerPage';
 import ConsentForm from '../pages/consent-form';
+import SelectPatient from '../pages/select-patient';
 import { HistoryGate } from '../models/router';
 import { useEffect } from 'react';
 import {
@@ -17,17 +18,6 @@ import {
   PractitionerSmartApps,
 } from '../pages/practitioner-page/';
 import { env } from '../env';
-
-/* const Profile = () => {
-  return (
-    <RoleSwitch>
-      {{
-        [UserRole.Patient]: () => <div>Patient Profile</div>,
-        [UserRole.Practitioner]: () => <div>Practitioner profile</div>,
-      }}
-    </RoleSwitch>
-  );
-}; */
 
 const routesByRole = {
   patient: [
@@ -65,8 +55,8 @@ const routesByRole = {
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
+    { path: 'auth/select-patient', element: <SelectPatient /> },
     { path: 'auth/consent', element: <ConsentForm /> },
-
     {
       element: <RouterSpy />,
       children: [

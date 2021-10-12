@@ -77,7 +77,7 @@ sample({
   fn: (user, data) => {
     return {
       user: { id: user.data.id, resourceType: 'User' },
-      patient: { id: data.patient_id, resourceType: 'Patient' },
+      patient: { id: data.patient.id, resourceType: 'Patient' },
       client: { id: data.client.id, resourceType: 'Client' },
     };
   },
