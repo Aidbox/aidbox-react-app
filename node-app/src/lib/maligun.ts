@@ -1,7 +1,7 @@
 import axios from 'axios';
 import FormData from 'formdata-node';
 
-const apiKey = process.env.MALIGUN_API_KEY || '';
+const apiKey = process.env.MAILGUN_API_KEY || '';
 export const sendMail = (options: any) => {
   const data = jsonToFormData(options);
   if (!data) return;
