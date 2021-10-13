@@ -2,7 +2,7 @@ import * as smartAppModel from '../../../models/smart-app';
 import { env } from '../../../env';
 
 export const SmartApp = (app: smartAppModel.SmartApp) => {
-  const { description, launch_uri, logo_url, name, id } = app;
+  const { description, launch_uri, logo_url, name } = app;
 
   return (
     <div className="p-4  w-full">

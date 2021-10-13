@@ -17,7 +17,10 @@ const PractitionerSmartApps = () => {
           <button
             className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300 mb-4"
             onClick={() =>
-              smartAppModel.getLaunchParam({ patient: { id: patient_id }, client: smartApp })
+              smartAppModel.getLaunchParam({
+                patient: { id: patient_id },
+                client: { id: smartApp.id },
+              })
             }
           >
             {smartApp.name}

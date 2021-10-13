@@ -6,6 +6,7 @@ import * as practitionerModel from '../model';
 import * as smartAppModel from '../../../models/smart-app';
 import { isFailure, isLoading, isSuccess } from 'aidbox-react/lib/libs/remoteData';
 import Spinner from '../../../components/Spinner';
+import { Patient } from 'shared/src/contrib/aidbox';
 
 const PatientGrid = () => {
   useGate(practitionerModel.PatientsGate);
@@ -37,7 +38,7 @@ const PatientGrid = () => {
                     </div>
                   </div>
                   <div className="bg-white">
-                    {patientsResult.data.map((patient) => {
+                    {patientsResult.data.map((patient: Patient) => {
                       const { id } = patient;
                       const name = getIn(patient, ['name', 0]);
 

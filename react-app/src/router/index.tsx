@@ -102,7 +102,7 @@ export const AppRouter = () => {
 
     if (!token && !code) {
       const state = btoa(window.location.pathname + window.location.search);
-      console.log(env, 'dfsdfsfs');
+
       window.location.href = `${env.AIDBOX_URL}/auth/authorize?redirect_uri=${env.FRONTEND_URL}&response_type=code&client_id=ui-portal&state=${state}`;
     }
   }, [token]);

@@ -36,30 +36,50 @@ export const downloadAppsFx = smartAppDomain.createEffect<
   }),
 );
 
-export const getLaunchParamFx = smartAppDomain.createEffect<any, any, RemoteData<any, Error>>(
-  async (data) => {
-    const response = await authorizedRequest({
-      url: '/rpc',
-      method: 'POST',
-      data: {
-        method: 'aidbox.smart/get-launch-uri',
-        params: {
-          user: data.user,
-          client: data.client,
-          ctx: { patient: data.patient.id },
-          iss: env.PATIENT_SMART_BASE_URL,
-        },
-      },
-    });
+export interface LaunchData {
+  user: { id: string; resourceType: string };
+  patient: { id: string; resourceType: string };
+  client: { id: string; resourceType: string };
+}
 
-    return response.data;
+export interface LaunchResponse {
+  result: {
+    iss: string;
+    launch: string;
+    'launch-uri': string;
+    uri: string;
+  };
+}
+
+export const getLaunchParamFx = smartAppDomain.createEffect<
+  LaunchData,
+  LaunchResponse,
+  RemoteData<any, Error>
+>(async (data) => {
+  const response = await authorizedRequest({
+    url: '/rpc',
+    method: 'POST',
+    data: {
+      method: 'aidbox.smart/get-launch-uri',
+      params: {
+        user: data.user,
+        client: data.client,
+        ctx: { patient: data.patient.id },
+        iss: env.PATIENT_SMART_BASE_URL,
+      },
+    },
+  });
+
+  return response.data;
+});
+
+export const redirectToAuthorizeFx = smartAppDomain.createEffect<LaunchResponse, void, Error>(
+  (data) => {
+    window.location.href = data.result.uri;
   },
 );
 
-export const redirectToAuthorizeFx = smartAppDomain.createEffect<any, any, Error>((data) => {
-  window.location.href = data.result.uri;
-});
-
+// check type any
 export const getLaunchParam = smartAppDomain.createEvent<any>();
 
 $smartApps.on(downloadAppsFx.doneData, (_, appsResult) =>
