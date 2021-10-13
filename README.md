@@ -1,16 +1,18 @@
-This is a sample of a frontend application that uses Aidbox as backend.
+# Aidbox React Sample App
 
-# The project includes
+This is a sample frontend application that uses Aidbox as backend.
+
+## The project includes
 
 - SMART On FHIR Patient Portal module
 
-# Development Stack
+## Development Stack
 
 - [TypeScript](https://www.typescriptlang.org/)
 - [React](https://reactjs.org/) - UI framework
 - [Effector](https://effector.dev/) - state management
 
-# Requirements
+## Requirements
 
 - [NodeJS](https://nodejs.org/en/) >=14
 - [Docker](https://www.docker.com/) latest
@@ -18,7 +20,7 @@ This is a sample of a frontend application that uses Aidbox as backend.
 - [Make](https://www.gnu.org/software/make/) latest
 - [yarn](https://yarnpkg.com/) latest
 
-# Installation
+## Installation
 
 1. Prepare environment
 
@@ -42,27 +44,17 @@ This is a sample of a frontend application that uses Aidbox as backend.
 
    If everything works, you should see an Aidbox login page.
 
-   ## Credentials
+   ### Credentials
 
-   ### Portal admin
+   #### Portal admin
 
-   Go to http://localhost:3000/ (you will be redirected to login form) and use the following credentials: portal-admin / password
+   Go to http://localhost:3000/ (you will be redirected to login form) and log in using: portal-admin / password
 
-   ### Aidbox admin
+   #### Aidbox admin
 
-   Go to http://localhost:8888/auth/login and use the following credentials: admin / secret
+   Go to http://localhost:8888/auth/login and log in using: admin / secret
 
 8. You might want to load some data to display on UI. For that, log in as Aidbox admin, then select _REST Console_ in the menu on the left, enter the following snippet and press Ctrl + Enter or "Send" button
-
-After that add missing env variable values for:
-
-```sh
-AIDBOX_LICENSE_ID
-AIDBOX_LICENSE_KEY
-MALIGUN_API_KEY
-```
-
-To load synthea data go to AIDBOX_URL, open REST console and put the following data:
 
 ```yaml
 POST /fhir/$import
@@ -111,3 +103,14 @@ inputs:
 ```
 
 After you have loaded the sample data, you should be able to see patients and practitioners on the Patient Portal running on localhost:3000 when logged in as a Portal admin (don't forget to log out of your Aidbox admin session!).
+
+## Monitoring
+
+To view database logs run:
+```sh
+docker logs aidbox-react-app_devbox-db_1
+```
+
+To view Aidbox logs run:
+```sh
+docker logs aidbox-react-app_devbox_1
