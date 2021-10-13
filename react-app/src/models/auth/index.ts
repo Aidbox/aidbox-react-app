@@ -1,14 +1,15 @@
 import { createDomain, guard, attach, createEffect, combine, forward, sample } from 'effector';
-import { service } from 'aidbox-react/lib/services/service';
-import { isFailure } from 'aidbox-react/lib/libs/remoteData';
+import { mapSuccess, service } from 'aidbox-react/lib/services/service';
+import { isFailure, isSuccess, loading, RemoteData } from 'aidbox-react/lib/libs/remoteData';
 import { persist } from 'effector-storage/local';
 import { setInstanceBaseURL } from 'aidbox-react/lib/services/instance';
 import { navigateTo, HistoryGate } from '../router';
 import { env } from '../../env';
+import { User } from 'shared/src/contrib/aidbox';
 
 export const authDomain = createDomain('auth');
 
-export const $user = authDomain.createStore<any>({ status: 'idle', data: { id: '' } });
+export const $user = authDomain.createStore<any>(loading);
 export const $token = authDomain.createStore<any>(null);
 persist({ store: $token, key: 'token' });
 
@@ -36,19 +37,12 @@ export const authorizedRequest = attach({
   mapParams: (params: any, token) => ({ params, token }),
 });
 
-export const signInFx = authDomain.createEffect<any, any, Error>((params) =>
-  service({
-    url: '/auth/token',
-    method: 'POST',
-    data: { ...params, grant_type: 'password', client_id: 'ui-portal', clientSecret: 'secret' },
-  }),
-);
-
-export const getUserDataFx = authDomain.createEffect(() =>
-  authorizedRequest({
-    method: 'GET',
-    url: '/auth/userinfo',
-  }),
+export const getUserDataFx = authDomain.createEffect<void, RemoteData<User>, RemoteData<Error>>(
+  () =>
+    authorizedRequest({
+      method: 'GET',
+      url: '/auth/userinfo',
+    }),
 );
 
 export const signOutFx = authDomain.createEffect(() =>
@@ -82,8 +76,8 @@ export const revokeGrantFx = authDomain.createEffect((id: any) =>
 
 export const setTokenFx = authDomain.createEffect((token: any) => token);
 
-const $canLoadUser = combine($token, $user, (token, user) => {
-  return token && !user.data.id;
+const $canLoadUser = combine($token, $user, (token, userData) => {
+  return token && !isSuccess(userData);
 });
 
 $canLoadUser.watch((shouldLoad) => shouldLoad && getUserDataFx());
@@ -91,14 +85,8 @@ $canLoadUser.watch((shouldLoad) => shouldLoad && getUserDataFx());
 $token.on(setTokenFx.doneData, (_, token) => token).reset(signOutFx.doneData);
 
 $user
-  .on(getUserDataFx.doneData, (_, result: any) => ({ status: 'done', data: result.data }))
+  .on(getUserDataFx.doneData, (_, result) => mapSuccess(result, (data) => data))
   .reset(signOutFx.doneData);
-
-guard({
-  source: signInFx.doneData,
-  filter: (source) => source.data?.access_token,
-  target: setTokenFx,
-});
 
 forward({
   from: signOut,

@@ -2,8 +2,13 @@ import { createDomain, forward, sample } from 'effector';
 import { $user, authorizedRequest } from '../../../models/auth';
 import { env } from '../../../env';
 
+export interface FormParams {
+  scope: string | null;
+  clientId: string | null;
+}
+
 export const grantDomain = createDomain('grant');
-export const accessGrant = grantDomain.createEvent();
+export const accessGrant = grantDomain.createEvent<FormParams>();
 
 // ask about await
 export const accessGrantFx = grantDomain.createEffect<any, any, Error>(async (data) => {
@@ -14,7 +19,7 @@ export const accessGrantFx = grantDomain.createEffect<any, any, Error>(async (da
   });
 });
 
-export const redirectToAuthorizeFx = grantDomain.createEffect<any, any, Error>((data) => {
+export const redirectToAuthorizeFx = grantDomain.createEffect<void, void, Error>(() => {
   const { search } = window.location;
   window.location.href = `${env.AIDBOX_URL}/auth/authorize/${search}`;
 });
@@ -22,7 +27,7 @@ export const redirectToAuthorizeFx = grantDomain.createEffect<any, any, Error>((
 sample({
   source: $user,
   clock: accessGrant,
-  fn: (user: any, formParams: any) => ({ userId: user.data.id, ...formParams }),
+  fn: (user, formParams: FormParams) => ({ userId: user.data.id, ...formParams }),
   target: accessGrantFx,
 });
 

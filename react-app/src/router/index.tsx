@@ -9,22 +9,15 @@ import { PatientProfile } from '../pages/patient-page/';
 import PatientPage from '../pages/admin/ui/patientPage';
 import PractitionerPage from '../pages/admin/ui/practitionerPage';
 import ConsentForm from '../pages/consent-form';
+import SelectPatient from '../pages/select-patient';
 import { HistoryGate } from '../models/router';
 import { useEffect } from 'react';
-import { PractitionerPatients } from '../pages/practitioner-page/';
-import { PractitionerPatientProfile } from '../pages/practitioner-page/';
+import {
+  PractitionerPatients,
+  PractitionerPatientProfile,
+  PractitionerSmartApps,
+} from '../pages/practitioner-page/';
 import { env } from '../env';
-
-/* const Profile = () => {
-  return (
-    <RoleSwitch>
-      {{
-        [UserRole.Patient]: () => <div>Patient Profile</div>,
-        [UserRole.Practitioner]: () => <div>Practitioner profile</div>,
-      }}
-    </RoleSwitch>
-  );
-}; */
 
 const routesByRole = {
   patient: [
@@ -62,8 +55,8 @@ const routesByRole = {
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
+    { path: 'auth/select-patient', element: <SelectPatient /> },
     { path: 'auth/consent', element: <ConsentForm /> },
-
     {
       element: <RouterSpy />,
       children: [
@@ -72,6 +65,7 @@ const routesByRole = {
           children: [
             { path: 'patients', element: <PractitionerPatients /> },
             { path: 'patients/:id', element: <PractitionerPatientProfile /> },
+            { path: 'smart-apps', element: <PractitionerSmartApps /> },
           ],
         },
       ],
@@ -108,7 +102,7 @@ export const AppRouter = () => {
 
     if (!token && !code) {
       const state = btoa(window.location.pathname + window.location.search);
-      console.log(env, 'dfsdfsfs');
+
       window.location.href = `${env.AIDBOX_URL}/auth/authorize?redirect_uri=${env.FRONTEND_URL}&response_type=code&client_id=ui-portal&state=${state}`;
     }
   }, [token]);

@@ -25,6 +25,7 @@ pgdata
 .env.test.local
 .env.production.local
 .idea
+README.html
 
 
 npm-debug.log*

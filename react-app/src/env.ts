@@ -1,8 +1,8 @@
 const processEnv = (typeof process && process.env) || {};
 
 export const env = {
-  PATIENT_SMART_BASE_URL: 'http://localhost:8888/smart',
-  FRONTEND_URL: 'http://localhost:3000',
+  PATIENT_SMART_BASE_URL: processEnv.REACT_APP_PATIENT_SMART_BASE_URL,
+  FRONTEND_URL: processEnv.REACT_APP_FRONTEND_URL,
   isDev:
     (window as any).REACT_APP_NODE_ENV === 'development' ||
     processEnv.REACT_APP_NODE_ENV === 'development',

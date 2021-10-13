@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router';
-import { accessGrant } from '../model';
+import { accessGrant, FormParams } from '../model';
 
 const Form = () => {
   const location = useLocation();
@@ -14,7 +14,7 @@ const Form = () => {
 
   const scope = searchParams.get('scope');
   const clientId = searchParams.get('client_id');
-  const accessGrantData: any = { scope, clientId };
+  const accessGrantData: FormParams = { scope, clientId };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
