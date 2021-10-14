@@ -1,57 +1,64 @@
 # SMART App launch module
 
-If you are not familiar with the code structure, you can go to [this wiki page](https://github.com/Aidbox/aidbox-react-app/wiki/code-structure) and find out what is going on.
+This page provides general context for SMART Launch and the flows implemented in this module. For code details please see the [Codebase page](https://github.com/Aidbox/aidbox-react-app/wiki/Codebase).
 
-This module is an implementation of [SMART Application Launch Framework Implementation Guide](http://www.hl7.org/fhir/Smart-App-launch/) and implement the following launch scenarious:
-* [EHR patient launch](#ehr-patient)
-* [EHR practitioner launch](#ehr-practitioner)
-* [Standalone practitioner launch](#standalone-practitioner)
+# Overview
 
+The following SMART app launch scenarios are supported at the moment:
 
-# EHR patient
+- [EHR patient launch](#ehr-patient-launch)
+- [EHR practitioner launch](#ehr-practitioner-launch)
+- [Standalone practitioner launch](#standalone-practitioner-launch)
 
-Patient has to be enrolled.
-Patient goes to patient portal, logs in via credentials, picks needed smart application and gives this application access to his own data.
+The front-end application serves as a sample of what a Patient Portal may look like. A Patient Portal is an environment where SMART applications can be accessed and launched by an authenticated user (e.g. EHR).
 
-To make this flow possible you need to do the following steps:
-1. Portal admin logs in to portal.
-2. Portal admin go to patients page.
-3. Portal admin picks a patient.
-4. Poratl amdin enrolls patient with filled email and password (email was sent via mailgun to entered email).
-5. Patient logs in via credentials from the email.
-6. Patient picks appropriate smart app.
-7. Patient has redirected to smart app url and securely grants permission to fetch his data to smart app.
+# EHR patient launch
 
-# EHR practitioner
+The portal administrator picks a patient and enrolls them. Patient logs in to the Patient Portal with provided credentials, selects a SMART application, then gives this application permission to access their data.
 
-Practitioner has to be enrolled.
-Practitioner goes to patient portal, logs in via credentials, picks needed patient and launch app on patient data.
+Step-by-step guide:
 
-To make this flow possible you need to do the following steps:
-1. Portal admin logs in to portal.
-2. Portal admin go to practitioner page.
-3. Portal admin picks a practitioner.
-4. Poratl amdin enrolls practitioner with filled email and password (email was sent via mailgun to entered email).
-5. Practitioner logs in via credentials from the email.
-6. Practitioner picks needed patient.
-7. Practitioner launch smart app on patient data.
-8. Practitioner has redirected to smart app url and securely grants permission to fetch patient data to smart app.
+1. Portal admin logs in to the portal.
+2. Portal admin goes to the Patients page.
+3. Portal admin selects a patient.
+4. Portal admin fills in email and password for the patient and finishes the enrollment.
+5. Patient logs in with credentials provided via email.
+6. Patient goes to the Smart Apps page.
+7. Patient selects a smart app.
+8. Patient is redirected to the smart app launch URL.
+9. Patient securely grants permission for the smart app to fetch their data.
 
-# Standalone practitioner
+# EHR practitioner launch
 
-Practitioner has to be enrolled.
-Practitioner goes to patient portal, logs in via credentials, chooses smart app then chooses patient and then the application retrievs this patient's data
+The portal administrator picks a practitioner and enrolls them. Practitioner logs in to the Patient Portal with provided credentials, selects a patient then selects and launches a SMART application.
 
-To make this flow possible you need to do the following steps:
-1. Portal admin logs in to portal.
-2. Portal admin go to practitioner page.
-3. Portal admin picks a practitioner.
-4. Poratl amdin enrolls practitioner with filled email and password (email was sent via mailgun to entered email).
-5. Practitioner logs in via credentials from the email.
-6. Practitioner goes to smart apps page.
-7. Practitioner run smart app.
-8. Practitioner was redirected to pick patient page.
-9. Practitioner chooses patient.
-10. Practitioner has redirected to smart app url and.
+Step-by-step guide:
+
+1. Portal admin logs in to the portal.
+2. Portal admin goes to the Practitioners page.
+3. Portal admin selects a practitioner.
+4. Portal admin fills in email and password for the practitioner and finishes the enrollment.
+5. Practitioner logs in with credentials provided via email.
+6. Practitioner selects a patient.
+7. Practitioner launches a smart app.
+8. Practitioner is redirected to the smart app launch URL.
+
+# Standalone practitioner launch
+
+The portal administrator picks a practitioner and enrolls them. Practitioner logs in to the Patient Portal with provided credentials, selects and launches a SMART application, then selects a patient whose data needs to be accessed.
+
+Step-by-step guide:
+
+1. Portal admin logs in to the portal.
+2. Portal admin goes to the Practitioners page.
+3. Portal admin selects a practitioner.
+4. Portal admin fills in email and password for the practitioner and finishes the enrollment.
+5. Practitioner logs in with credentials provided via email.
+6. Practitioner goes to the Smart Apps page.
+7. Practitioner launches a smart app.
+8. Practitioner selects a patient.
+9. Practitioner is redirected to the smart app launch URL.
 
 _Currently we assume that all smart apps are trusted clients and do not create grant for them._
+
+For more information on SMART Launch please see the [SMART Application Launch Implementation Guide](http://www.hl7.org/fhir/Smart-App-launch/).
