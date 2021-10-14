@@ -4,7 +4,7 @@ import * as admin from '../model';
 import { useParams } from 'react-router-dom';
 import { isFailure, isSuccess } from 'aidbox-react/lib/libs/remoteData';
 
-const Form = () => {
+export const AdminPatientPage = () => {
   useGate(admin.FormGate);
   const { id }: { id: any } = useParams();
   const enrollStatus = useStore(admin.$enrollStatus);
@@ -68,5 +68,3 @@ const Form = () => {
     </div>
   );
 };
-
-export default Form;

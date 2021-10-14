@@ -1,5 +1,5 @@
 import { Outlet, Link as RouterLink } from 'react-router-dom';
-import { signOut } from '../models/auth';
+import { signOut } from '../auth';
 
 const Link = ({ path, text }: { path: string; text: string }) => {
   return (
@@ -54,7 +54,7 @@ const Layout = ({ role }: { role: 'practitioner' | 'patient' | 'admin' }) => {
         <div className="sidebar-content px-4 py-6">
           <ul className="flex flex-col w-full">
             {linksByRole[role].map((item) => (
-              <Link {...item} />
+              <Link {...item} key={item.path} />
             ))}
           </ul>
         </div>

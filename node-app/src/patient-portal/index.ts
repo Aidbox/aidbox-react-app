@@ -31,6 +31,13 @@ export const manifest = {
           resourceType: 'User',
         },
       },
+      superadmin: {
+        name: 'superadmin',
+        user: {
+          id: 'admin',
+          resourceType: 'User',
+        },
+      },
     },
     User: {
       'portal-admin': { password: 'password' },

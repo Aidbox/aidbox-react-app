@@ -5,7 +5,7 @@ import { sample, forward, createDomain } from 'effector';
 import { createForm } from 'effector-forms';
 import { createGate } from 'effector-react';
 import { Bundle, Patient, Practitioner } from 'shared/src/contrib/aidbox';
-import { authorizedRequest } from '../../../models/auth';
+import { authorizedRequest } from '../../../auth';
 
 export const admin = createDomain('admin');
 

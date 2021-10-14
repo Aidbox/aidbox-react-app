@@ -88,7 +88,7 @@ export const patientInfo: TOperation<{ params: { type: string } }> = {
   path: ['patientInfo'],
   handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
     const params = {
-      patient: request['oauth/user'].fhirUser.id,
+      patient: request.params.patientId,
     };
 
     const { resources: observations } = await ctx.api.findResources(`Observation`, params);

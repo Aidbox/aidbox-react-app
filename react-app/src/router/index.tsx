@@ -1,22 +1,25 @@
 import { Navigate, Outlet, useLocation, useNavigate, useParams, useRoutes } from 'react-router-dom';
 import { useGate, useStore } from 'effector-react';
-import { AdminPatients, AdminPractitioners } from '../pages/admin/index';
+
 import Layout from '../layouts/apps';
-import { PatientSmartApps } from '../pages/patient-page';
-import { $token, $user } from '../models/auth';
-import { getIn } from '../lib/tools';
-import { PatientProfile } from '../pages/patient-page/';
-import PatientPage from '../pages/admin/ui/patientPage';
-import PractitionerPage from '../pages/admin/ui/practitionerPage';
-import ConsentForm from '../pages/consent-form';
-import SelectPatient from '../pages/select-patient';
-import { HistoryGate } from '../models/router';
-import { useEffect } from 'react';
+import {
+  AdminPatientPage,
+  AdminPractitionerPage,
+  AdminPatients,
+  AdminPractitioners,
+} from '../pages/admin/index';
+import { PatientSmartApps, PatientProfile } from '../pages/patient';
+import { ConsentForm, SelectPatientPage } from '../pages/smart';
 import {
   PractitionerPatients,
   PractitionerPatientProfile,
   PractitionerSmartApps,
-} from '../pages/practitioner-page/';
+} from '../pages/practitioner';
+
+import { $token, $user } from '../auth';
+import { getIn } from '../lib/tools';
+import { HistoryGate } from '../history';
+import { useEffect } from 'react';
 import { env } from '../env';
 
 const routesByRole = {
@@ -45,9 +48,9 @@ const routesByRole = {
           element: <Layout role="admin" />,
           children: [
             { path: 'patients', element: <AdminPatients /> },
-            { path: 'patients/:id', element: <PatientPage /> },
+            { path: 'patients/:id', element: <AdminPatientPage /> },
             { path: 'practitioners', element: <AdminPractitioners /> },
-            { path: 'practitioners/:id', element: <PractitionerPage /> },
+            { path: 'practitioners/:id', element: <AdminPractitionerPage /> },
           ],
         },
       ],
@@ -55,7 +58,7 @@ const routesByRole = {
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
-    { path: 'auth/select-patient', element: <SelectPatient /> },
+    { path: 'auth/select-patient', element: <SelectPatientPage /> },
     { path: 'auth/consent', element: <ConsentForm /> },
     {
       element: <RouterSpy />,
@@ -72,9 +75,10 @@ const routesByRole = {
     },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
+  superadmin: [],
 };
 
-type RoutesByRole = 'patient' | 'admin' | 'practitioner';
+type RoutesByRole = 'patient' | 'admin' | 'practitioner' | 'superadmin';
 
 const Router = ({ routes }: any) => {
   const main = useRoutes(routes);
@@ -93,8 +97,13 @@ export function RouterSpy() {
 export const AppRouter = () => {
   const user = useStore($user);
   const token = useStore($token);
+  const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
 
   useEffect(() => {
+    if (role === 'superadmin') {
+      window.location.href = env.AIDBOX_URL;
+    }
+
     const serach = window.location.search;
     const params = new URLSearchParams(serach);
 
@@ -105,9 +114,8 @@ export const AppRouter = () => {
 
       window.location.href = `${env.AIDBOX_URL}/auth/authorize?redirect_uri=${env.FRONTEND_URL}&response_type=code&client_id=ui-portal&state=${state}`;
     }
-  }, [token]);
+  }, [token, role]);
 
-  const role: RoutesByRole = getIn(user, ['data', 'role', 0, 'name']);
   const routes = role && routesByRole[role];
 
   return routes ? <Router routes={routes} /> : <RouterSpy />;
