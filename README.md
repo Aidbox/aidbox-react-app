@@ -4,10 +4,11 @@ This is a sample frontend application that uses Aidbox as backend.
 
 ## The project includes
 
-- SMART On FHIR Patient Portal module
+- [SMART On FHIR Patient Portal module](https://github.com/Aidbox/aidbox-react-app/wiki/smart-app)
 
 ## Development Stack
 
+- [Aidbox](https://docs.aidbox.app/) - FHIR server 
 - [TypeScript](https://www.typescriptlang.org/)
 - [React](https://reactjs.org/) - UI framework
 - [Effector](https://effector.dev/) - state management
