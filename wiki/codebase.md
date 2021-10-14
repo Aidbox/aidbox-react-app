@@ -1,8 +1,11 @@
 # Data flow
 
-Front end client makes a request to `AIDBOX_URL` directly, so you can not change entrypoints if you need specific behaviour, but you can add service which may be written on any language (currently we use [NodeJS server sdk](https://github.com/Aidbox/node-server-sdk/tree/v2)) to extend Aidbox's behaviour.
+In order to access both native and custom Aidbox endpoints, the front-end client makes requests to the `AIDBOX_URL` directly. In case you want to customize Aidbox behaviour, for example add custom operations, you can do it by registering your custom back-end as a service in Aidbox. You are free to use your preferred programming language for your custom back-end. This project has a custom NodeJS back-end and uses the [Aidbox NodeJS Server SDK](https://github.com/Aidbox/node-server-sdk/tree/v2) for an easier integration.
 
-The following env variables let Aidbox server register and use your application service:
+A custom back-end contains a `manifest`. Aidbox uses the manifest to create a service with your back-end, which becomes available on a specified URL, and all requests to your endpoints will be redirected to this URL. For example, in order to call your custom endpoint named `do-something-and-send-email` you will need to make the following request to Aidbox: `http://AIDBOX_URL/do-something-and-send-email`. Aidbox will redirect the request to your back-end app.
+
+NodeJS SDK uses the following env variables to register your back-end application in Aidbox:
+
 ```sh
 APP_ID
 APP_SECRET
@@ -12,7 +15,7 @@ APP_PORT
 
 # Manifest
 
-To register seeds, change schema, add custom operations, etc., you need to create a manifest. For example:
+To create data at start, add custom operations, resources, etc., you need to create a manifest. A manifest example:
 
 ```js
 export const manifest = {
@@ -49,17 +52,16 @@ export const manifest = {
 };
 ```
 
-When application will start manifest will be uploaded to Aidbox server.
+When the application will start, the manifest will be uploaded to the Aidbox server.
 
-You can discover our [current manifest](https://github.com/Aidbox/aidbox-react-app/blob/master/node-app/src/index.ts#L39)
-
+Discover our [sample manifest](https://github.com/Aidbox/aidbox-react-app/blob/master/node-app/src/index.ts#L39).
 
 # Add custom operations
 
 You can add as much custom operations as you want, for example:
 
 ```js
-// operations-file
+// in operations file
 export const op = {
   method: 'POST',
   path: ['do-somehting-and-send-email'],
@@ -80,5 +82,5 @@ const manifest = { ..., operations }
 
 
 ```
-So from client you jsut need to send POST request to `http://AIDBOX_URL/do-something-and-send-email.`. Aidbox will redirect request to app. 
-To make it work for example you may check our `docker-compose` file.
+
+Also, check out our [docker-compose](https://github.com/Aidbox/node-server-sdk/blob/main/docker-compose.yml) file.
