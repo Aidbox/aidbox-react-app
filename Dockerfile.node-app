@@ -1,17 +1,25 @@
-FROM node:14-alpine as builder
+FROM node:16-alpine as builder
+
 WORKDIR /app
-COPY package.json ./
-COPY tsconfig.build.json ./
-COPY src ./src
-RUN ls -a
-RUN npm install
-RUN npm run build
+COPY package.json /app/
+COPY ./node-app/package.json /app/node-app/
+COPY ./shared /app/shared/
+COPY ./node-app/tsconfig.build.json /app/
+
+RUN yarn install
+
+COPY . .
+
+RUN npm run build:node-app
 
 
 FROM node:14-alpine
 WORKDIR /app
-COPY package.json ./
-RUN npm install --only=production
-COPY --from=builder /usr/build .
-COPY resources ./resources
+COPY package.json /app/
+COPY ./node-app/package.json /app/node-app/
+COPY ./shared /app/shared/
+COPY --from=builder /app/node-app/build/src .
+
+RUN yarn install --production
+
 CMD ["node","index.js"]

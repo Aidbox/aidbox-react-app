@@ -44,8 +44,9 @@ const main = async () => {
   const port = +(process.env.APP_PORT || process.env.PORT || 3000);
   try {
     await startApp(app, port);
-  } catch (e) {
+  } catch (e: any) {
     console.dir(e);
+    console.log(e.response.data);
   }
 };
 
