@@ -133,7 +133,7 @@ export const revokeGrant: TOperation<{ params: { type: string } }> = {
       method: 'DELETE',
       params: {
         '.client.id': request.params.clientId,
-        '.user.id': request.resource.userId,
+        '.user.id': request.params.userId,
       },
     });
 

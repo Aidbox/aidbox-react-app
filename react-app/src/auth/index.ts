@@ -64,13 +64,11 @@ export const getTokenFx = authDomain.createEffect((code: any) =>
   }),
 );
 
-export const revokeGrantFx = authDomain.createEffect((id: any) =>
+export const revokeGrantFx = authDomain.createEffect((params: any) =>
   authorizedRequest({
     method: 'DELETE',
     url: '/revokeGrant',
-    params: {
-      clientId: id,
-    },
+    params,
   }),
 );
 
@@ -93,9 +91,11 @@ forward({
   to: signOutFx,
 });
 
-forward({
-  from: revokeGrant,
-  to: revokeGrantFx,
+sample({
+  clock: revokeGrant,
+  source: $user,
+  fn: (user, id) => ({ clientId: id, userId: user.data.id }),
+  target: revokeGrantFx,
 });
 
 sample({

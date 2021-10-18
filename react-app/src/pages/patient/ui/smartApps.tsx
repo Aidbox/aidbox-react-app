@@ -3,6 +3,7 @@ import Spinner from '../../../components/Spinner';
 import { isFailure, isLoading, isSuccess } from 'aidbox-react/lib/libs/remoteData';
 import * as smartAppModel from '../model/smartApp';
 import { env } from '../../../env';
+import { revokeGrant } from '../../../auth';
 
 export const PatientSmartApps = () => {
   useGate(smartAppModel.SmartAppGate);
@@ -32,7 +33,7 @@ export const PatientSmartApps = () => {
         {isSuccess(smartAppsResult) && (
           <div className="flex flex-wrap -m-4">
             {smartAppsResult.data.map((smartApp: smartAppModel.SmartApp) => {
-              const { description, launch_uri, logo_url, name } = smartApp;
+              const { description, launch_uri, logo_url, name, id } = smartApp;
 
               return (
                 <div className="p-4  w-full" key={smartApp.id}>
@@ -56,6 +57,12 @@ export const PatientSmartApps = () => {
                         >
                           Launch App
                         </a>
+                        <button
+                          className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300"
+                          onClick={() => revokeGrant(id)}
+                        >
+                          Revoke Grant
+                        </button>
                       </div>
                     </div>
                   </div>
