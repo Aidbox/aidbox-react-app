@@ -29,7 +29,7 @@ export const manifest = {
         resourceType: 'Client',
         auth: {
           authorization_code: {
-            redirect_uri: 'https://cmpl-growth-chart.aidbox.app',
+            redirect_uri: 'https://cmpl-growth-chart.aidbox.app/',
             refresh_token: true,
             secret_required: true,
             access_token_expiration: 300,
