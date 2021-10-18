@@ -21,7 +21,7 @@ export const ConsentForm = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="rounded-md shadow-sm bg-white p-5">
           <h1 className="mb-5 text-center text-3xl font-extrabold text-gray-900">
-            Grow chart has asked for some of your data.
+            Growth chart has asked for some of your data.
           </h1>
           <ul className="list-disc pl-5 mb-5">
             <li className="mb-1">Information about your doctor/hospital visits</li>
