@@ -22,6 +22,27 @@ export const manifest = {
           },
         },
       },
+      'growth-chart': {
+        trusted: true,
+        type: 'smart',
+        grant_types: ['authorization_code', 'basic'],
+        resourceType: 'Client',
+        auth: {
+          authorization_code: {
+            redirect_uri: 'https://cmpl-growth-chart.aidbox.app',
+            refresh_token: true,
+            secret_required: true,
+            access_token_expiration: 300,
+          },
+        },
+        secret: 'growth-chart',
+        smart: {
+          name: 'Growth Chart',
+          launch_uri: 'https://cmpl-growth-chart.aidbox.app/launch.html',
+          description:
+            'The Growth Chart app was developed from a unique collaboration among SMART, Fjord service design consultancy, Interopion software development group, and clinicians. This App demonstrates a high-performance, concise, minimal-click presentation of a child’s growth over time.',
+        },
+      },
     },
     Role: {
       admin: {
