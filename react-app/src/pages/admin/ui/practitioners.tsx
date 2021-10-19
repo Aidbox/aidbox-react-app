@@ -19,7 +19,7 @@ export const AdminPractitioners = () => {
               <h1 className="sm:text-4xl text-5xl font-medium title-font mb-2 text-gray-900">
                 Practitioners
               </h1>
-              <div className="h-1 w-20 bg-indigo-500 rounded"></div>
+              <div className="h-1 w-20 bg-indigo-600 rounded"></div>
             </div>
           </div>
           <div className="flex flex-col">

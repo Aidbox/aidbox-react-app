@@ -50,7 +50,7 @@ const linksByRole = {
 const Layout = ({ role }: { role: 'practitioner' | 'patient' | 'admin' }) => {
   return (
     <div className="flex flex-row min-h-screen bg-gray-100 text-gray-800">
-      <aside className="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-indigo-500">
+      <aside className="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-indigo-600">
         <div className="sidebar-content px-4 py-6">
           <ul className="flex flex-col w-full">
             {linksByRole[role].map((item) => (
@@ -66,7 +66,7 @@ const Layout = ({ role }: { role: 'practitioner' | 'patient' | 'admin' }) => {
               <button
                 type="button"
                 onClick={() => signOut()}
-                className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
               >
                 Sign Out
               </button>

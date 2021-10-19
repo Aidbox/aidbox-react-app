@@ -17,7 +17,7 @@ export const PatientSmartApps = () => {
             <h1 className="sm:text-4xl text-5xl font-medium title-font mb-2 text-gray-900">
               Smart Apps
             </h1>
-            <div className="h-1 w-20 bg-indigo-500 rounded"></div>
+            <div className="h-1 w-20 bg-indigo-600 rounded"></div>
           </div>
         </div>
         {isFailure(smartAppsResult) && (
@@ -52,13 +52,13 @@ export const PatientSmartApps = () => {
                         <a
                           href={`${launch_uri}?iss=${env.PATIENT_SMART_BASE_URL}`}
                           target="_blank"
-                          className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300 mb-4"
+                          className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300 mb-4"
                           rel="noreferrer"
                         >
                           Launch App
                         </a>
                         <button
-                          className="bg-blue-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300"
+                          className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300"
                           onClick={() => revokeGrant(id)}
                         >
                           Revoke Grant
