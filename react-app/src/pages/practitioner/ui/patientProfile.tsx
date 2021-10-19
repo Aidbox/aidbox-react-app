@@ -25,7 +25,7 @@ export const PractitionerPatientProfile = () => {
           <div className="p-4 md:p-12 text-center lg:text-left">
             <div className="mb-6">
               <h1 className="text-3xl font-bold pt-8 lg:pt-0">{formatName(name)}</h1>
-              <div className="mx-auto lg:mx-0 w-4/5 pt-3 border-b-4 border-indigo-500 rounded" />
+              <div className="mx-auto lg:mx-0 w-4/5 pt-3 border-b-4 border-indigo-600 rounded" />
               <div className="pt-4 text-base flex items-center justify-center lg:justify-start">
                 <span className="font-bold mr-1">Birthdate:</span>
                 <span>{`${birthDate}`}</span>
