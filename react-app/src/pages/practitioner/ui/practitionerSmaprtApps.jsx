@@ -14,7 +14,7 @@ const PractitionerSmartApps = () => {
       {smartAppsResult.status === 'success' &&
         smartAppsResult.data.map((smartApp) => (
           <button
-            className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-blue-300 mb-4"
+            className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300 mb-4"
             key={smartApp.id}
             onClick={() =>
               smartAppModel.getLaunchParam({
