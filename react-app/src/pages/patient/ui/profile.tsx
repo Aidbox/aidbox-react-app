@@ -17,9 +17,12 @@ export const PatientProfile = () => {
       <nav className="flex flex-col sm:flex-row">
         {tabs.map((tab: string) => (
           <button
-            className={cn('text-gray-600 py-4 px-6 block hover:text-blue-600 focus:outline-none', {
-              'text-blue-600 border-b-2 border-blue-600': currentTab === tab,
-            })}
+            className={cn(
+              'text-gray-600 py-4 px-6 block hover:text-indigo-600 focus:outline-none',
+              {
+                'text-indigo-600 border-b-2 border-indigo-600': currentTab === tab,
+              },
+            )}
             onClick={() => setCurrentTab(tab)}
           >
             {tab}
