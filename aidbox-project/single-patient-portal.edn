@@ -7,9 +7,8 @@
  isEnrolled
  {:zen/tags #{zen/schema zenbox/base-schema}
   :type zen/map
-  :zenbox/type "Attribute"
-  :keys {:isEnrolled {:type zen/map
-                      :confirms #{hl7-fhir-r4-core.boolean/schema}}}}
+  :zenbox/type "Patient"
+  :keys {:isEnrolled {:confirms #{hl7-fhir-r4-core.boolean/schema}}}}
 
  root-api
  {:zen/tags #{zenbox/api}
