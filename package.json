@@ -8,18 +8,22 @@
     "test": "lerna run test --concurrency=1 --stream --",
     "test:react-app": "lerna run test --stream --scope react-app --",
     "test:node-app": "lerna run test --stream --scope node-app --",
+    "test:scheduling-node-app": "lerna run test --stream --scope scheduling-node-app --",
     "start": "lerna run --parallel --stream start",
     "start:react-app": "lerna run start --stream --scope react-app",
     "start:node-app": "lerna run start --stream --scope node-app",
+    "start:scheduling-node-app": "lerna run start --stream --scope scheduling-node-app",
     "build": "lerna run --parallel build",
     "build:react-app": "lerna run build --scope react-app",
     "build:node-app": "lerna run build --scope node-app",
+    "build:scheduling-node-app": "lerna run build --scope scheduling-node-app",
     "typecheck": "lerna run --parallel typecheck",
     "prepare": "husky install"
   },
   "workspaces": {
     "packages": [
       "node-app",
+      "scheduling-node-app",
       "react-app",
       "shared"
     ]

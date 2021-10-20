@@ -1,0 +1,21 @@
+FROM node:14-alpine
+WORKDIR /app
+
+RUN mkdir -p /app/react-app
+RUN mkdir -p /app/shared
+RUN mkdir -p /app/node-app
+RUN mkdir -p /app/scheduling-node-app
+
+ADD lerna.json lerna.json
+ADD package.json package.json
+ADD react-app/package.json react-app/package.json
+ADD node-app/package.json node-app/package.json
+ADD scheduling-node-app/package.json scheduling-node-app/package.json
+ADD shared/package.json shared/package.json
+
+RUN npm install
+
+ADD . /app
+EXPOSE 8091
+
+CMD ["npm", "run", "start:scheduling-node-app"]

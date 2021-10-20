@@ -7,6 +7,13 @@ services:
       - devbox
     links:
       - devbox
+  dockerize-scheduling-app:
+    image: jwilder/dockerize
+    command: dockerize -wait ${AIDBOX_URL}/scheduling-app-healthcheck -timeout 300s
+    depends_on:
+      - devbox
+    links:
+      - devbox
   dockerize-app:
     image: jwilder/dockerize
     command: dockerize -wait ${AIDBOX_URL}/app-healthcheck -timeout 300s
@@ -14,7 +21,27 @@ services:
       - devbox
     links:
       - devbox
-
+  scheduling-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.scheduling-node-app.dev
+    depends_on:
+      - 'devbox'
+    links:
+      - 'devbox'
+    ports:
+      - '8091:8091'
+    env_file:
+      - .env
+    environment:
+      APP_ID: scheduling
+      APP_SECRET: secret
+      APP_URL: http://scheduling-app:8091/
+      APP:PORT: 8091
+    volumes:
+      - .:/app
+    # Colored logs
+    tty: true
   app:
     build:
       context: .
@@ -27,11 +54,15 @@ services:
       - '${APP_PORT}:${APP_PORT}'
     env_file:
       - .env
+    environment:
+      APP_ID: patient-portal
+      APP_SECRET: secret
+      APP_URL: http://app:8090/
+      APP:PORT: 8090
     volumes:
       - .:/app
     # Colored logs
     tty: true
-
   devbox:
     image: '${AIDBOX_IMAGE}'
     depends_on:

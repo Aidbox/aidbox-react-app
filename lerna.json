@@ -1,6 +1,7 @@
 {
     "packages": [
         "node-app",
+        "scheduling-node-app",
         "react-app",
         "shared"
     ],

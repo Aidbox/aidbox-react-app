@@ -1,0 +1,25 @@
+FROM node:16-alpine as builder
+
+WORKDIR /app
+COPY package.json /app/
+COPY ./scheduling-node-app/package.json /app/scheduling-node-app/
+COPY ./shared /app/shared/
+COPY ./scheduling-node-app/tsconfig.build.json /app/
+
+RUN yarn install
+
+COPY . .
+
+RUN npm run build:scheduling-node-app
+
+
+FROM node:14-alpine
+WORKDIR /app
+COPY package.json /app/
+COPY ./scheduling-node-app/package.json /app/scheduling-node-app/
+COPY ./shared /app/shared/
+COPY --from=builder /app/scheduling-node-app/build/src .
+
+RUN yarn install --production
+
+CMD ["node","index.js"]
