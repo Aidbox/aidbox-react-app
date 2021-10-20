@@ -1,0 +1,10 @@
+{ns patient-isEnrolled
+ import
+ #{zenbox
+   hl7-fhir-r4-core.boolean}
+ schema
+ {:zen/tags #{zen/schema zenbox/base-schema}
+  :type zen/map
+  :zenbox/type "Attribute"
+  :keys {:isEnrolled {:type zen/map
+                      :confirms #{hl7-fhir-r4-core.boolean/schema}}}}}
