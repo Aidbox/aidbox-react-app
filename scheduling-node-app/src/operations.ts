@@ -178,7 +178,7 @@ export async function doAppointmentFind(
 // TODO: discuss and decide how to handle it
 type PrefetchedSlot = Slot;
 
-async function doSlotsPrefetch(
+export async function doSlotsPrefetch(
   actorId: string,
   start: string,
   end: string,
