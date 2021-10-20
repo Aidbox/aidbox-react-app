@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { days, DaySchedule, DaySchedules, ScheduleBreak } from '../../utils/available-time';
+import { days, DaySchedule, DaySchedules, ScheduleBreak } from './available-time';
 
 export function useUsualSchedule(initialSchedulesByDay: DaySchedules) {
   const [schedulesByDay, setSchedulesByDay] = React.useState<DaySchedules>(initialSchedulesByDay);

@@ -1,0 +1,19 @@
+{
+  "name": "aidbox-scheduling-client",
+  "version": "0.0.1",
+  "dependencies": {
+    "shared": "0.0.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc",
+    "prepare": "npm run build"
+  },
+  "files": [
+      "lib/**/*",
+      "src/**/*"
+  ],
+  "devDependencies": {
+    "typescript": "^4.1.2"
+  }
+}

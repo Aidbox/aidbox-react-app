@@ -1,8 +1,9 @@
 {
     "packages": [
         "node-app",
-        "scheduling-node-app",
         "react-app",
+        "scheduling-node-app",
+        "scheduling-react-app",
         "shared"
     ],
     "npmClient": "npm",
