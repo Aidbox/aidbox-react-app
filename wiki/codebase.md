@@ -84,3 +84,38 @@ const manifest = { ..., operations }
 ```
 
 Also, check out our [docker-compose](https://github.com/Aidbox/node-server-sdk/blob/main/docker-compose.yml) file.
+
+# Remote Data
+
+We would like to show different approaches with typed http requests and not typed.
+Currently it's shown in the folders:
+
+- `src/pages/practitioner`
+- `src/pages/patient`
+
+As you may see there are files with not only `*.ts/*.tsx` extensions but also with `*.js/*.jsx` extensions.
+It's up to you which one to choose.
+
+Files with `*.tsx/*.ts` extension are using [Aidbox React](https://github.com/beda-software/aidbox-react) library
+
+In case your store will contain data given by http request initial store data should be declared like this:
+
+```ts
+$store = createStore<RemoteData<StoreType>>(loading);
+```
+
+In case you need a collection, for exapmle Patients, your response has to be typed like the following:
+
+```ts
+  RemoteData<Bundle<Patient>>;
+```
+
+In case you need to map success data just use the following:
+
+```ts
+  mapSuccess(result, f),
+```
+
+where result is given by [http client](https://github.com/beda-software/aidbox-react#serviceaxiosconfig) and `f` is high-order function which will take mapped data.
+
+More detailed info you may read [here](https://github.com/beda-software/aidbox-react)
