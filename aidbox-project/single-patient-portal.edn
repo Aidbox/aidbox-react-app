@@ -1,5 +1,17 @@
+{ns sample.patient
+ import
+ #{hl7-fhir-r4-core.boolean
+   hl7-fhir-us-core.us-core-patient},
+  schema
+  {:confirms #{hl7-fhir-us-core.us-core-patient},
+   :keys {:isEnrolled {:confirms #{hl7-fhir-r4-core.boolean}}}}}
+
 {ns single-patient-portal
- import #{zenbox}
+ import #{zenbox
+          aidbox.auth
+          hl7-fhir-r4-core
+          hl7-fhir-us-core
+          sample.patient}
 
  root-api
  {:zen/tags #{zenbox/api}
