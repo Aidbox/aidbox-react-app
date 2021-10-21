@@ -56,7 +56,11 @@ export const SmartAppForm = () => {
                 <div>
                   <label className="app_vendor_apps_view-220-19">Application Name</label>
                   <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.appName.value} />
+                    <input
+                      type="text"
+                      value={fields.appName.value}
+                      onChange={(e) => fields.appName.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
@@ -74,13 +78,21 @@ export const SmartAppForm = () => {
                 <div>
                   <label className="app_vendor_apps_view-220-19">Redirect URL</label>
                   <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.redirectUri.value} />
+                    <input
+                      type="text"
+                      value={fields.redirectUri.value}
+                      onChange={(e) => fields.redirectUri.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="app_vendor_apps_view-220-19">Launch URL</label>
                   <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.launchUri.value} />
+                    <input
+                      type="text"
+                      value={fields.launchUri.value}
+                      onChange={(e) => fields.launchUri.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
@@ -92,7 +104,11 @@ export const SmartAppForm = () => {
                 <div>
                   <label className="app_vendor_apps_view-220-19">Organization/Company Name</label>
                   <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.orgName.value} />
+                    <input
+                      type="text"
+                      value={fields.orgName.value}
+                      onChange={(e) => fields.orgName.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
@@ -100,25 +116,41 @@ export const SmartAppForm = () => {
                     Organization/Company Website URL
                   </label>
                   <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.orgUrl.value} />
+                    <input
+                      type="text"
+                      value={fields.orgUrl.value}
+                      onChange={(e) => fields.orgUrl.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="app_vendor_apps_view-220-19">Privacy Policy URL</label>
                   <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.privacyUrl.value} />
+                    <input
+                      type="text"
+                      value={fields.privacyUrl.value}
+                      onChange={(e) => fields.privacyUrl.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="app_vendor_apps_view-220-19">Terms of Service URL</label>
                   <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.tosUrl.value} />
+                    <input
+                      type="text"
+                      value={fields.tosUrl.value}
+                      onChange={(e) => fields.tosUrl.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="app_vendor_apps_view-220-19">Description</label>
                   <div className="anti_textarea-11-7 app_vendor_apps_view-221-19">
-                    <textarea type="text" value={fields.desc.value} />
+                    <textarea
+                      type="text"
+                      value={fields.desc.value}
+                      onChange={(e) => fields.desc.onChange(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
