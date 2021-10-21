@@ -32,101 +32,115 @@ export const SmartAppForm = () => {
             </h1>
             <div className="h-1 w-20 bg-indigo-600 rounded"></div>
           </div>
-          <div
-            className="py-10"
-            /* className="h-auto py-20 px-10 mb-5 w-2/3 bg-white flex flex-col space-y-5 hover:rotate-1 transition-transform" */
-          >
+          <div className="h-auto p-10 mb-5 w-2/3 bg-white flex flex-col space-y-5 hover:rotate-1 transition-transform">
             <div>
-              <div>Client ID:</div>
-              <input type="text" disabled={true} value={fields.id.value} />
+              <span className="font-bold pr-2">Client ID</span>
+              <input
+                className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                type="text"
+                disabled={true}
+                value={fields.id.value}
+              />
             </div>
             <div>
-              <div>Secret:</div>
-              <input type="text" disabled={true} value={fields.secret.value} />
+              <span className="font-bold pr-2">Secret</span>
+              <input
+                className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                type="text"
+                disabled={true}
+                value={fields.secret.value}
+              />
             </div>
           </div>
-          <div
-          /* className="h-auto py-20 px-10 w-2/3 bg-white flex flex-col space-y-5 hover:rotate-1 transition-transform" */
-          >
-            <div className="anti_card-14-21">
-              <div className="anti_card-23-24">Edit Application</div>
-            </div>
+          <div className="h-auto p-10 w-2/3 bg-white flex flex-col space-y-5 hover:rotate-1 transition-transform">
+            <h2 className="text-3xl font-medium title-font mb-2 text-gray-900">Edit Application</h2>
             <div>
-              <div className="app_vendor_apps_view-223-20">
+              <div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Application Name</label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.appName.value} />
-                  </div>
+                  <label className="font-medium title-font">Application Name</label>
+                  <input
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    type="text"
+                    value={fields.appName.value}
+                    onChange={(e) => fields.appName.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Client OAuth Type</label>
-                  <div className="anti_alt-select-55-7 app_vendor_apps_view-221-19">
-                    <div className="anti_alt-select-119-7 app_vendor_apps_view-231-49">
-                      Authorization Code + Secret
-                    </div>
-                    <input type="text" value={fields.oauthType.value} />
-                    <div className="anti_alt-select-85-7">
-                      <i className="far fa-chevron-down anti_alt-select-543-49" />
-                    </div>
-                  </div>
+                  <label className="font-medium title-font">Redirect URL</label>
+                  <input
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    type="text"
+                    value={fields.redirectUri.value}
+                    onChange={(e) => fields.redirectUri.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Redirect URL</label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.redirectUri.value} />
-                  </div>
+                  <label className="font-medium title-font">Launch URL</label>
+                  <input
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    type="text"
+                    value={fields.launchUri.value}
+                    onChange={(e) => fields.launchUri.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Launch URL</label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.launchUri.value} />
-                  </div>
+                  <label className="font-medium title-font">Logo URL</label>
+                  <input
+                    type="text"
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    value={fields.logoUrl.value}
+                    onChange={(e) => fields.logoUrl.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Logo URL</label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.logoUrl.value} />
-                  </div>
+                  <label className="font-medium title-font">Organization/Company Name</label>
+                  <input
+                    type="text"
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    value={fields.orgName.value}
+                    onChange={(e) => fields.orgName.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Organization/Company Name</label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.orgName.value} />
-                  </div>
+                  <label className="font-medium title-font">Organization/Company Website URL</label>
+                  <input
+                    type="text"
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    value={fields.orgUrl.value}
+                    onChange={(e) => fields.orgUrl.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">
-                    Organization/Company Website URL
-                  </label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.orgUrl.value} />
-                  </div>
+                  <label className="font-medium title-font">Privacy Policy URL</label>
+                  <input
+                    type="text"
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    value={fields.privacyUrl.value}
+                    onChange={(e) => fields.privacyUrl.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Privacy Policy URL</label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.privacyUrl.value} />
-                  </div>
+                  <label className="font-medium title-font">Terms of Service URL</label>
+                  <input
+                    type="text"
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    value={fields.tosUrl.value}
+                    onChange={(e) => fields.tosUrl.onChange(e.target.value)}
+                  />
                 </div>
                 <div>
-                  <label className="app_vendor_apps_view-220-19">Terms of Service URL</label>
-                  <div className="anti_input-12-7 app_vendor_apps_view-221-19">
-                    <input type="text" value={fields.tosUrl.value} />
-                  </div>
-                </div>
-                <div>
-                  <label className="app_vendor_apps_view-220-19">Description</label>
-                  <div className="anti_textarea-11-7 app_vendor_apps_view-221-19">
-                    <textarea type="text" value={fields.desc.value} />
-                  </div>
+                  <label className="font-medium title-font">Description</label>
+                  <textarea
+                    type="text"
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    value={fields.desc.value}
+                    onChange={(e) => fields.desc.onChange(e.target.value)}
+                  />
                 </div>
               </div>
-              <div className="app_vendor_apps_view-268-20">
-                <button className="anti_button-10-3 hp-primary-btn app_vendor_apps_view-269-38">
-                  Save
-                </button>
-              </div>
+              <button className="flex justify-center mt-5 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                Save
+              </button>
             </div>
           </div>
         </>
