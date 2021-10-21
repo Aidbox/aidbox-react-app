@@ -1,9 +1,9 @@
 import { useStore, useGate } from 'effector-react';
+import { Link } from 'react-router-dom';
 import Spinner from '../../../components/Spinner';
-import { env } from '../../../env';
 import * as smartAppModel from '../model/smartApp.js';
 
-export const PractitionerSmartApps = () => {
+export const VendorSmartApps = () => {
   useGate(smartAppModel.SmartAppGate);
   const smartAppsResult = useStore(smartAppModel.$smartApps);
 
@@ -31,7 +31,7 @@ export const PractitionerSmartApps = () => {
         {smartAppsResult.status === 'success' && (
           <div className="flex flex-wrap -m-4">
             {smartAppsResult.data.map((smartApp) => {
-              const { description, launch_uri, logo_url, name } = smartApp;
+              const { id, secret, name, launch_uri, logo_url } = smartApp;
 
               return (
                 <div className="p-4  w-full" key={smartApp.id}>
@@ -43,18 +43,38 @@ export const PractitionerSmartApps = () => {
                       <div className="flex flex-col col-span-8">
                         <div className="flex flex-col gap-4">
                           <h1 className="capitalize text-4xl font-extrabold">{name}</h1>
-                          <p className="text-lg text-gray-500">{description}</p>
+                          <div>
+                            <div>
+                              <span className="font-bold pr-2">Client ID:</span>
+                              <span>{id}</span>
+                            </div>
+                            <div>
+                              <span className="font-bold pr-2">Secret:</span>
+                              <span>{secret}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="flex flex-col col-span-2">
-                        <a
+                        {/* <a
                           href={`${launch_uri}?iss=${env.PATIENT_SMART_BASE_URL}`}
                           target="_blank"
                           className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300 mb-4"
                           rel="noreferrer"
                         >
                           Launch App
-                        </a>
+                        </a> */}
+                        {/* <button
+                          className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300"
+                          onClick={() => revokeGrant(id)}
+                        >
+                          Revoke Grant
+                        </button> */}
+                        <Link to={`/smart-apps/${id}`}>
+                          <div className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300 mb-4">
+                            Edit App
+                          </div>
+                        </Link>
                       </div>
                     </div>
                   </div>

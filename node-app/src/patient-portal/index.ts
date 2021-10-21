@@ -80,20 +80,20 @@ export const manifest = {
   },
   operations,
   entities: {
-    Patient: {
-      attrs: {
-        isEnrolled: {
-          type: 'boolean',
-        },
-      },
-    },
-    Practitioner: {
-      attrs: {
-        isEnrolled: {
-          type: 'boolean',
-        },
-      },
-    },
+    // Patient: {
+    //   attrs: {
+    //     isEnrolled: {
+    //       type: 'boolean',
+    //     },
+    //   },
+    // },
+    // Practitioner: {
+    //   attrs: {
+    //     isEnrolled: {
+    //       type: 'boolean',
+    //     },
+    //   },
+    // },
     AidboxConfig: {
       attrs: {
         auth: {

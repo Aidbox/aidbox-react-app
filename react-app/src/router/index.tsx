@@ -21,6 +21,7 @@ import { getIn } from '../lib/tools';
 import { HistoryGate } from '../history';
 import { useEffect } from 'react';
 import { env } from '../env';
+import { SmartAppForm, VendorSmartApps } from '../pages/vendor';
 
 const routesByRole = {
   patient: [
@@ -75,10 +76,25 @@ const routesByRole = {
     },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
+  vendor: [
+    {
+      element: <RouterSpy />,
+      children: [
+        {
+          element: <Layout role="vendor" />,
+          children: [
+            { path: 'smart-apps', element: <VendorSmartApps /> },
+            { path: 'smart-apps/:id', element: <SmartAppForm /> },
+          ],
+        },
+      ],
+    },
+    { path: '*', element: <Navigate to="/smart-apps" /> },
+  ],
   superadmin: [],
 };
 
-type RoutesByRole = 'patient' | 'admin' | 'practitioner' | 'superadmin';
+type RoutesByRole = 'patient' | 'admin' | 'practitioner' | 'superadmin' | 'vendor';
 
 const Router = ({ routes }: any) => {
   const main = useRoutes(routes);
