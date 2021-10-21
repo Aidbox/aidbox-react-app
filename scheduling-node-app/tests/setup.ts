@@ -5,7 +5,7 @@ import { ensure, withRootAccess } from 'aidbox-react/lib/utils/tests';
 let txId: string;
 
 beforeAll(async () => {
-  setInstanceBaseURL('http://localhost:8989');
+  setInstanceBaseURL('http://localhost:8888');
 
   await withRootAccess(async () => {
     const result = ensure(
@@ -27,8 +27,6 @@ $$ LANGUAGE plpgsql;`,
         },
       }),
     );
-
-    console.log(result);
   });
 });
 

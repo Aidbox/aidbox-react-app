@@ -6,6 +6,7 @@ import {
   makeReference,
   extractBundleResources,
   getFHIRResources,
+  getReference,
 } from 'aidbox-react/lib/services/fhir';
 import {
   formatFHIRDateTime,
@@ -20,12 +21,13 @@ import {
   Bundle,
   dateTime,
   HealthcareService,
+  OperationOutcome,
   Period,
   PractitionerRole,
   Slot,
 } from 'shared/src/contrib/aidbox';
 
-import { generateSlots, generateSlotTemplate, getTimePeriods } from './utils/utils';
+import { camelizeParamsNames, generateSlots, generateSlotTemplate, getTimePeriods } from './utils';
 
 // Prepare for new aidbox-react
 // It wraps current aidbox-react services and returns pure Promise
@@ -48,32 +50,77 @@ export const appointmentBook: TManifestOperation<{ resource: Appointment }> = {
   },
 };
 
-interface AppointmentFindParams {
+type TManifestOperationParams = Partial<Record<string, string>>;
+
+interface AppointmentFindParams extends TManifestOperationParams {
   start: dateTime;
   end: dateTime;
   specialty?: string;
-  'visit-type'?: string;
+  visitType?: string;
   practitioner?: string;
   organization?: string;
+  locationReference?: string;
+}
+
+function operationOutcome(code: string, diagnostics: string) {
+  return {
+    resourceType: 'OperationOutcome',
+    issue: [{ code: 'error', diagnostics: diagnostics }],
+  } as OperationOutcome;
 }
 
 export const appointmentFind: TManifestOperation<{ params: AppointmentFindParams }> = {
   method: 'GET',
   path: ['Appointment', '$find'],
-  handlerFn: async ({ params }, _) => {
-    return { resource: { resourceType: 'Bundle' } };
+  handlerFn: async ({ params: paramsRaw }, _) => {
+    const params = camelizeParamsNames(paramsRaw);
+    try {
+      return {
+        resource: await doAppointmentFind(params),
+      };
+    } catch (err) {
+      return {
+        resource: err,
+      };
+    }
   },
 };
 
-export async function doAppointmentFind(
-  actorId: string,
-  visitType: string,
-  start: string,
-  end: string,
-): Promise<Bundle<Appointment>> {
-  const practitionerRole = await removeRD(
-    getFHIRResource<PractitionerRole>(makeReference('PractitionerRole', actorId)),
-  );
+export async function doAppointmentFind({
+  start,
+  end,
+  practitioner,
+  visitType,
+  specialty,
+  locationReference,
+}: AppointmentFindParams): Promise<Bundle<Appointment>> {
+  const practitionerRoles = await removeRD(
+    getAllFHIRResources<PractitionerRole>('PractitionerRole', {
+      practitioner,
+      specialty,
+      locationReference,
+    }),
+  )
+    .then(extractBundleResources)
+    .then((resourcesMap) => resourcesMap.PractitionerRole);
+
+  if (practitionerRoles.length === 0) {
+    throw operationOutcome(
+      'practitionerRoleNotFound',
+      'PractitionerRole with specified specialty and location is not found',
+    );
+  }
+
+  // TODO: adjust the code to accept multiple practitioner roles, locations and specialty and merge resulting availability times
+  if (practitionerRoles.length > 1) {
+    throw operationOutcome(
+      'multiplePractitionerRoles',
+      'Multiple PractitionerRole resources found, please specify either location or specialty',
+    );
+  }
+
+  const practitionerRole = practitionerRoles[0]!;
+
   const existingAppointments = await removeRD(
     // TODO: re-write and re-think for date and for dateTime start/end
     getAllFHIRResources<Appointment>('Appointment', {
@@ -81,7 +128,8 @@ export async function doAppointmentFind(
         `ge${formatFHIRDateTime(parseFHIRDate(start).startOf('day'))}`,
         `le${formatFHIRDateTime(parseFHIRDate(end).endOf('day'))}`,
       ],
-      actor: actorId,
+      actor: practitionerRole.id,
+      specialty,
       'service-type': visitType,
       'status:not': ['entered-in-error', 'cancelled', 'proposed', 'waitlist', 'pending'],
     }),
@@ -101,7 +149,6 @@ export async function doAppointmentFind(
       slotDuration,
     ).map((period) => generateSlotTemplate(period.start, period.end));
   });
-  console.log(existingSlots);
 
   // TODO: optimize O(M*N) using hashmap in memory
   const slots = allSlots
@@ -115,7 +162,7 @@ export async function doAppointmentFind(
 
   const serviceDuration = await removeRD(
     getFHIRResources<HealthcareService>('HealthcareService', {
-      '_has:PractitionerRole:service:id': actorId,
+      '_has:PractitionerRole:service:id': practitionerRole.id,
       active: true,
       'service-type': visitType,
     }),
@@ -124,7 +171,10 @@ export async function doAppointmentFind(
     .then((resourcesMap) => (resourcesMap.HealthcareService[0] as any)?.duration);
 
   if (!serviceDuration) {
-    throw new Error(`Service duration is not specified for visit type ${visitType}`);
+    throw operationOutcome(
+      'missingHealthcarServiceDuration',
+      `Service duration is not specified for visit type ${visitType}`,
+    );
   }
 
   const longPeriods: Period[] = [];
@@ -160,6 +210,11 @@ export async function doAppointmentFind(
 
   const appointments = longPeriods.map((period) => ({
     resourceType: 'Appointment',
+    specialty,
+    participant: [
+      { actor: getReference(practitionerRole) },
+      // TODO: add location if passed
+    ],
     start: period.start,
     end: period.end,
   }));

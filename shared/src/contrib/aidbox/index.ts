@@ -446,6 +446,8 @@ export interface AidboxConfig {
 
 export interface AidboxConfigAuth {
   baseUrl?: string;
+  /** NOTE: from extension */
+  'grant-page-url'?: string;
   keys?: AidboxConfigAuthKeys;
 }
 
@@ -2749,18 +2751,17 @@ export interface Client {
   /** Allowed Origins are URLs that will be allowed to make requests from JavaScript to Server (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if you need to. You can use wildcards at the subdomain level (e.g.: https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
   allowed_origins?: uri[];
   auth?: ClientAuth;
-  /** NOTE: from extension */
-  data?: any;
   description?: string;
   first_party?: boolean;
-  grant_types?:
+  grant_types?: Array<
     | 'basic'
     | 'authorization_code'
     | 'code'
     | 'password'
     | 'client_credentials'
     | 'implicit'
-    | 'refresh_token'[];
+    | 'refresh_token'
+  >;
   scopes?: ClientScopes[];
   secret?: string;
   smart?: ClientSmart;
@@ -2813,64 +2814,7 @@ export interface ClientScopes {
 }
 
 export interface ClientSmart {
-  /** NOTE: from extension */
-  description?: string;
-  /** NOTE: from extension */
-  dev_team_contacts?: string;
-  /** NOTE: from extension */
-  image_url?: url;
   launch_uri?: string;
-  /** NOTE: from extension */
-  launch_url?: url;
-  /** NOTE: from extension */
-  logo_url?: url;
-  /** NOTE: from extension */
-  name?: string;
-  /** NOTE: from extension */
-  org_url?: url;
-  /** NOTE: from extension */
-  organization?: ClientSmartOrganization;
-  /** NOTE: from extension */
-  policy_url?: url;
-  /** NOTE: from extension */
-  private_scopes_required?: boolean;
-  /** NOTE: from extension */
-  request?: ClientSmartRequest;
-  /** NOTE: from extension */
-  short_description?: string;
-  /** NOTE: from extension */
-  support_email?: string;
-  /** NOTE: from extension */
-  support_phone_number?: string;
-  /** NOTE: from extension */
-  tos_url?: url;
-  /** NOTE: from extension */
-  vendor?: ClientSmartVendor;
-}
-
-export interface ClientSmartOrganization {
-  /** NOTE: from extension */
-  name?: string;
-  /** NOTE: from extension */
-  url?: url;
-}
-
-export interface ClientSmartRequest {
-  /** NOTE: from extension */
-  date?: dateTime;
-  /** NOTE: from extension */
-  dirty?: boolean;
-  /** NOTE: from extension */
-  rejection_reason?: string;
-  /** NOTE: from extension */
-  status?: 'pending' | 'approved' | 'rejected';
-}
-
-export interface ClientSmartVendor {
-  /** NOTE: from extension */
-  id?: string;
-  /** NOTE: from extension */
-  resourceType?: string;
 }
 
 /** A clinical assessment performed when planning treatments and management strategies for a patient */
@@ -8290,6 +8234,8 @@ export interface HealthcareService {
   contained?: Resource[];
   /** Location(s) service is intended for/available to */
   coverageArea?: Array<AidboxReference<Location>>;
+  /** Length of service in minutes */
+  duration?: decimal;
   /** Specific eligibility requirements required to use the service */
   eligibility?: HealthcareServiceEligibility[];
   /** Technical endpoints providing access to electronic services operated for the healthcare service */
@@ -13188,6 +13134,8 @@ export interface Patient {
   identifier?: Identifier[];
   /** A set of rules under which this content was created */
   implicitRules?: uri;
+  /** NOTE: from extension */
+  isEnrolled?: boolean;
   /** Language of the resource content */
   language?: code;
   /** Link to another patient resource that concerns the same actual person */
@@ -13802,6 +13750,8 @@ export interface Practitioner {
   identifier?: Identifier[];
   /** A set of rules under which this content was created */
   implicitRules?: uri;
+  /** NOTE: from extension */
+  isEnrolled?: boolean;
   /** Language of the resource content */
   language?: code;
   /** Extensions that cannot be ignored */

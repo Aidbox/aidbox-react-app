@@ -9,6 +9,7 @@ import {
   TOperationRequestType,
 } from '@aidbox/node-server-sdk';
 import { TManifestProps } from '@aidbox/node-server-sdk/build/src/manifest';
+import { axiosInstance } from 'aidbox-react/lib/services/instance';
 import dotenv from 'dotenv';
 
 import { appointmentFind, appointmentBook } from './operations';
@@ -61,9 +62,12 @@ const main = async () => {
   const app = createApp({ ctx, helpers: {} });
 
   // Start app
-  const port = +(process.env.SCHEDULING_APP_PORT || process.env.PORT || 3000);
+  const port = +(process.env.APP_PORT || process.env.PORT || 3000);
+
   try {
     await startApp(app, port);
+    axiosInstance.defaults.auth = ctx.client.defaults.auth;
+    axiosInstance.defaults.baseURL = ctx.client.defaults.baseURL;
   } catch (e: any) {
     console.dir(e);
     console.log(e.response.data);

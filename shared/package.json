@@ -3,5 +3,9 @@
     "version": "0.0.1",
     "scripts": {
         "typecheck": "tsc"
+    },
+    "devDependencies": {
+        "@types/faker": "^5.5.9",
+        "faker": "^5.5.3"
     }
 }

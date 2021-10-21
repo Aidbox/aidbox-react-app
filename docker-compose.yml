@@ -29,15 +29,13 @@ services:
       - 'devbox'
     links:
       - 'devbox'
-    ports:
-      - '8091:8091'
     env_file:
       - .env
     environment:
       APP_ID: scheduling
       APP_SECRET: secret
       APP_URL: http://scheduling-app:8091/
-      APP:PORT: 8091
+      APP_PORT: 8091
     volumes:
       - .:/app
     # Colored logs
@@ -50,15 +48,13 @@ services:
       - 'devbox'
     links:
       - 'devbox'
-    ports:
-      - '${APP_PORT}:${APP_PORT}'
     env_file:
       - .env
     environment:
       APP_ID: patient-portal
       APP_SECRET: secret
       APP_URL: http://app:8090/
-      APP:PORT: 8090
+      APP_PORT: 8090
     volumes:
       - .:/app
     # Colored logs

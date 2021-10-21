@@ -10,10 +10,17 @@ app-up:
 	docker-compose -f docker-compose.yml up --exit-code-from dockerize-app dockerize-app || exit 1;
 	npm run start:react-app;
 
-up:
+scheduling-app-up:
+	docker-compose -f docker-compose.yml up -d scheduling-app;
+	docker-compose -f docker-compose.yml up --exit-code-from dockerize-scheduling-app dockerize-scheduling-app || exit 1;
+
+devbox-up:
 	docker-compose -f docker-compose.yml up -d devbox;
 	docker-compose -f docker-compose.yml up --exit-code-from dockerize-devbox dockerize-devbox || exit 1;
-	make app-up
+
+up:
+	make devbox-up;
+	make app-up;
 
 app-logs:
 	docker logs -f aidbox-react-app_app_1

@@ -99,3 +99,29 @@ export function getTimePeriods(
 
   return timePeriods;
 }
+
+function camelize(str: string): string {
+  // Lower cases the string
+  return (
+    str
+      // Replaces any - or _ characters with a space
+      .replace(/[-_]+/g, ' ')
+      // Removes any non alphanumeric characters
+      .replace(/[^\w\s]/g, '')
+      // Uppercases the first character in each group immediately following a space
+      // (delimited by spaces)
+      .replace(/ (.)/g, function ($1) {
+        return $1.toUpperCase();
+      })
+      // Removes spaces
+      .replace(/ /g, '')
+  );
+}
+
+export function camelizeParamsNames<T extends Partial<Record<string, string>>>(params: T): T {
+  return Object.fromEntries(
+    Object.entries(params).map(([key, value]) => {
+      return [camelize(key), value];
+    }),
+  ) as T;
+}
