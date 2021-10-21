@@ -1,16 +1,71 @@
 import { createDomain, forward, sample } from 'effector';
 import { createGate } from 'effector-react';
 import { $user, authorizedRequest } from '../../../auth';
+import { getIn } from '../../../lib/tools';
+import { createForm } from 'effector-forms';
 import { env } from '../../../env';
 
 const smartAppDomain = createDomain('smartAppDomain');
 
+export const FormGate = createGate();
 export const $smartApps = smartAppDomain.createStore({ status: 'loading' });
 export const $smartApp = smartAppDomain.createStore({ status: 'loading' });
 $smartApp.watch(console.log);
 
 export const SmartAppGate = createGate();
 export const SmartAppFormGate = createGate();
+
+export const form = createForm({
+  fields: {
+    id: {
+      init: '',
+    },
+    secret: {
+      init: '',
+    },
+    appName: {
+      init: '',
+    },
+    oauthType: {
+      init: 'secret',
+    },
+    redirectUri: {
+      init: '',
+    },
+    launchUri: {
+      init: '',
+    },
+    logoUrl: {
+      init: '',
+    },
+    orgName: {
+      init: '',
+    },
+    orgUrl: {
+      init: '',
+    },
+    privacyUrl: {
+      init: '',
+    },
+    tosUrl: {
+      init: '',
+    },
+    desc: {
+      init: '',
+    },
+  },
+});
+
+export const setFormFx = smartAppDomain.createEffect(({ data }) => {
+  const oauthType = getIn(data, ['auth', 'authorization_code', 'pkce']) ? 'pkce' : 'secret';
+  form.fields.id.onChange(data.id);
+  form.fields.secret.onChange(data.secret);
+  form.fields.appName.onChange(getIn(data, ['smart', 'name'], ''));
+  form.fields.oauthType.onChange(oauthType);
+  form.fields.redirectUri.onChange(getIn(data, ['auth', 'authorization_code', 'redirect_uri'], ''));
+  form.fields.launchUri.onChange(getIn(data, ['smart', 'launch_uri'], ''));
+  form.fields.desc.onChange(getIn(data, ['smart', 'description'], ''));
+});
 
 export const downloadAppsFx = smartAppDomain.createEffect(() =>
   authorizedRequest({
@@ -111,4 +166,9 @@ forward({
 forward({
   from: SmartAppFormGate.open,
   to: downloadAppFx,
+});
+
+forward({
+  from: downloadAppFx.doneData,
+  to: setFormFx,
 });
