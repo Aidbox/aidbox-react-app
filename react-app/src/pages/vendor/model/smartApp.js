@@ -10,7 +10,6 @@ const smartAppDomain = createDomain('smartAppDomain');
 export const FormGate = createGate();
 export const $smartApps = smartAppDomain.createStore({ status: 'loading' });
 export const $smartApp = smartAppDomain.createStore({ status: 'loading' });
-$smartApp.watch(console.log);
 
 export const SmartAppGate = createGate();
 export const SmartAppFormGate = createGate();

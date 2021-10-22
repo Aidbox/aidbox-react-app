@@ -21,7 +21,7 @@ import { getIn } from '../lib/tools';
 import { HistoryGate } from '../history';
 import { useEffect } from 'react';
 import { env } from '../env';
-import { SmartAppForm, VendorSmartApps } from '../pages/vendor';
+import { SmartAppForm, VendorSmartApps, WelcomePage } from '../pages/vendor';
 
 const routesByRole = {
   patient: [
@@ -94,6 +94,11 @@ const routesByRole = {
   superadmin: [],
 };
 
+const welcomeRoutes = [
+  { path: '*', element: <Navigate to="/welcome" /> },
+  { path: 'welcome', element: <WelcomePage /> },
+];
+
 type RoutesByRole = 'patient' | 'admin' | 'practitioner' | 'superadmin' | 'vendor';
 
 const Router = ({ routes }: any) => {
@@ -119,20 +124,16 @@ export const AppRouter = () => {
     if (role === 'superadmin') {
       window.location.href = env.AIDBOX_URL;
     }
-
-    const serach = window.location.search;
-    const params = new URLSearchParams(serach);
-
-    const code = params.get('code');
-
-    if (!token && !code) {
-      const state = btoa(window.location.pathname + window.location.search);
-
-      window.location.href = `${env.AIDBOX_URL}/auth/authorize?redirect_uri=${env.FRONTEND_URL}&response_type=code&client_id=ui-portal&state=${state}`;
-    }
   }, [token, role]);
 
-  const routes = role && routesByRole[role];
+  const serach = window.location.search;
+  const params = new URLSearchParams(serach);
+  const code = params.get('code');
 
+  if (!token && !code) {
+    return <Router routes={welcomeRoutes} />;
+  }
+
+  const routes = role && routesByRole[role];
   return routes ? <Router routes={routes} /> : <RouterSpy />;
 };
