@@ -4,12 +4,13 @@ import { $user, authorizedRequest } from '../../../auth';
 import { getIn } from '../../../lib/tools';
 import { createForm } from 'effector-forms';
 import { env } from '../../../env';
+import { isFailure } from 'aidbox-react/lib/libs/remoteData';
 
 const smartAppDomain = createDomain('smartAppDomain');
 
-export const FormGate = createGate();
 export const $smartApps = smartAppDomain.createStore({ status: 'loading' });
 export const $smartApp = smartAppDomain.createStore({ status: 'loading' });
+export const $updateStatus = smartAppDomain.createStore({ status: '' });
 
 export const SmartAppGate = createGate();
 export const SmartAppFormGate = createGate();
@@ -55,6 +56,8 @@ export const form = createForm({
   },
 });
 
+export const submitForm = smartAppDomain.createEvent();
+
 export const setFormFx = smartAppDomain.createEffect(({ data }) => {
   const oauthType = getIn(data, ['auth', 'authorization_code', 'pkce']) ? 'pkce' : 'secret';
   form.fields.id.onChange(data.id);
@@ -98,6 +101,14 @@ export const getLaunchParamFx = smartAppDomain.createEffect(async (data) => {
   return response.data;
 });
 
+export const updateAppFx = smartAppDomain.createEffect((params) =>
+  authorizedRequest({
+    url: '/updateApp',
+    method: 'POST',
+    data: params,
+  }),
+);
+
 export const redirectToAuthorizeFx = smartAppDomain.createEffect((data) => {
   window.location.href = data.result.uri;
 });
@@ -139,6 +150,14 @@ $smartApp
     status: 'loading',
   }));
 
+$updateStatus
+  .on(updateAppFx.doneData, (_, appsResult) => ({ status: 'success' }))
+  .on(updateAppFx.failData, (_, appsResult) => ({
+    status: 'failure',
+    error: appsResult.error,
+  }))
+  .reset(SmartAppFormGate.close);
+
 forward({
   from: SmartAppGate.open,
   to: downloadAppsFx,
@@ -170,4 +189,10 @@ forward({
 forward({
   from: downloadAppFx.doneData,
   to: setFormFx,
+});
+
+sample({
+  source: form.$values,
+  clock: submitForm,
+  target: updateAppFx,
 });

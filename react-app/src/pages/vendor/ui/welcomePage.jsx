@@ -1,4 +1,5 @@
 import { redirectToLogin } from '../model/enrollment';
+import { Link } from 'react-router-dom';
 
 export const WelcomePage = () => {
   return (
@@ -22,9 +23,12 @@ export const WelcomePage = () => {
         >
           Log in
         </button>
-        <button className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+        <Link
+          to={`/signup`}
+          className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+        >
           Sign up
-        </button>
+        </Link>
       </div>
     </div>
   );

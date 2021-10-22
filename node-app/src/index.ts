@@ -36,7 +36,7 @@ const main = async () => {
   });
 
   // Init app
-  const manifest = mergeDeep(patient_portal, scheduling, common, { manifest: { apiVersion: 3 } });
+  const manifest = mergeDeep(patient_portal, scheduling, common, { manifest: { apiVersion: 4 } });
   const ctx = createCtx(manifest);
   const app = createApp({ ctx, helpers: {} });
 

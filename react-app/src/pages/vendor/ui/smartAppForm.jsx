@@ -6,11 +6,16 @@ import Spinner from '../../../components/Spinner';
 import * as vendor from '../model/smartApp.js';
 
 export const SmartAppForm = () => {
-  useGate(vendor.FormGate);
   const { id } = useParams();
   useGate(vendor.SmartAppFormGate, id);
   const smartAppResult = useStore(vendor.$smartApp);
+  const updateStatus = useStore(vendor.$updateStatus);
   const { fields } = useForm(vendor.form);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    vendor.submitForm();
+  };
 
   return (
     <div className="container px-5 py-24 mx-auto">
@@ -25,7 +30,7 @@ export const SmartAppForm = () => {
         </div>
       )}
       {smartAppResult.status === 'success' && (
-        <>
+        <form method="POST" onSubmit={onSubmit}>
           <div className="w-full mb-6">
             <h1 className="sm:text-4xl text-5xl font-medium title-font mb-2 text-gray-900">
               {getIn(smartAppResult.data, ['smart', 'name'], smartAppResult.data.id)}
@@ -138,12 +143,27 @@ export const SmartAppForm = () => {
                   />
                 </div>
               </div>
-              <button className="flex justify-center mt-5 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
-                Save
-              </button>
+              <div className="flex space-x-2 items-baseline">
+                <button
+                  type="submit"
+                  className="flex justify-center mt-5 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                >
+                  Save
+                </button>
+                {updateStatus.status === 'failure' && (
+                  <div className="flex flex-wrap justify-start pb-5 -m-4 w-full">
+                    <div className="text-red-500 pl-4 font-medium">{updateStatus.error}</div>
+                  </div>
+                )}
+                {updateStatus.status === 'success' && (
+                  <div className="flex flex-wrap justify-start pb-5 -m-4 w-full">
+                    <div className="text-green-500 pl-4 font-medium">Successfully updated</div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </>
+        </form>
       )}
     </div>
   );

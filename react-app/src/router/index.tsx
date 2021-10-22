@@ -21,7 +21,7 @@ import { getIn } from '../lib/tools';
 import { HistoryGate } from '../history';
 import { useEffect } from 'react';
 import { env } from '../env';
-import { SmartAppForm, VendorSmartApps, WelcomePage } from '../pages/vendor';
+import { SignupForm, SmartAppForm, VendorSmartApps, WelcomePage } from '../pages/vendor';
 
 const routesByRole = {
   patient: [
@@ -97,6 +97,7 @@ const routesByRole = {
 const welcomeRoutes = [
   { path: '*', element: <Navigate to="/welcome" /> },
   { path: 'welcome', element: <WelcomePage /> },
+  { path: 'signup', element: <SignupForm /> },
 ];
 
 type RoutesByRole = 'patient' | 'admin' | 'practitioner' | 'superadmin' | 'vendor';

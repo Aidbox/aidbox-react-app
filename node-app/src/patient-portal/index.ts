@@ -70,6 +70,10 @@ export const manifest = {
         engine: 'allow',
         link: [{ id: 'ui-portal', resourceType: 'Client' }],
       },
+      'allow-public-operations': {
+        engine: 'allow',
+        link: [{ id: 'enrollVendor', resourceType: 'Operation' }],
+      },
       'allow-single-patient-smart-on-fhir': {
         engine: 'matcho',
         matcho: {
@@ -80,20 +84,20 @@ export const manifest = {
   },
   operations,
   entities: {
-    // Patient: {
-    //   attrs: {
-    //     isEnrolled: {
-    //       type: 'boolean',
-    //     },
-    //   },
-    // },
-    // Practitioner: {
-    //   attrs: {
-    //     isEnrolled: {
-    //       type: 'boolean',
-    //     },
-    //   },
-    // },
+    Patient: {
+      attrs: {
+        isEnrolled: {
+          type: 'boolean',
+        },
+      },
+    },
+    Practitioner: {
+      attrs: {
+        isEnrolled: {
+          type: 'boolean',
+        },
+      },
+    },
     AidboxConfig: {
       attrs: {
         auth: {

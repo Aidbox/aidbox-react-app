@@ -140,3 +140,62 @@ export const revokeGrant: TOperation<{ params: { type: string } }> = {
     return { resource };
   },
 };
+
+export const enrollVendor: TOperation<{ params: { type: string } }> = {
+  method: 'POST',
+  path: ['enrollVendor'],
+  handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
+    const { firstName, lastName, email, password, orgName } = resource;
+
+    const user: any = await ctx.api.createResource('User', {
+      email,
+      password,
+      name: {
+        givenName: firstName,
+        familyName: lastName,
+      },
+    });
+
+    const role = await ctx.api.createResource('Role', {
+      name: 'vendor',
+      user: {
+        id: user.id,
+        resourceType: 'User',
+      },
+    });
+
+    sendMail({
+      from: 'PlanAPI Team <mailgun@planapi.aidbox.io>',
+      to: email,
+      subject: 'Sandbox Enrollment',
+      html: `<html><p>Hello.</p> <p>You now can login to Sandbox with the following creds: email: <b>${email}</b>, password: <b>${password}</b></p></html>`,
+    });
+
+    return { resource: { user, role } };
+  },
+};
+
+export const updateApp: TOperation<{ params: { type: string } }> = {
+  method: 'POST',
+  path: ['updateApp'],
+  handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
+    const { id, appName, redirectUri, launchUri, desc } = resource;
+
+    const data = {
+      auth: {
+        authorization_code: {
+          redirect_uri: redirectUri,
+        },
+      },
+      smart: {
+        name: appName,
+        launch_uri: launchUri,
+        description: desc,
+      },
+    };
+
+    const app: any = await ctx.api.patchResource('Client', id, data);
+
+    return app;
+  },
+};
