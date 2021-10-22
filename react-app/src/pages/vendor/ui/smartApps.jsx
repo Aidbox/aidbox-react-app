@@ -10,13 +10,18 @@ export const VendorSmartApps = () => {
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
-        <div className="flex flex-wrap w-full mb-8">
-          <div className="w-full mb-6 lg:mb-0">
+        <div className="flex flex-wrap w-full mb-8 justify-between">
+          <div className="mb-6 lg:mb-0">
             <h1 className="sm:text-4xl text-5xl font-medium title-font mb-2 text-gray-900">
               Smart Apps
             </h1>
             <div className="h-1 w-20 bg-indigo-600 rounded"></div>
           </div>
+          <button onClick={() => smartAppModel.createApp()}>
+            <div className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300 mb-4">
+              Create a New App
+            </div>
+          </button>
         </div>
         {smartAppsResult.status === 'failure' && (
           <div className="flex flex-wrap -m-4">
@@ -31,7 +36,7 @@ export const VendorSmartApps = () => {
         {smartAppsResult.status === 'success' && (
           <div className="flex flex-wrap -m-4">
             {smartAppsResult.data.map((smartApp) => {
-              const { id, secret, name, launch_uri, logo_url } = smartApp;
+              const { id, secret, name, logo_url } = smartApp;
 
               return (
                 <div className="p-4  w-full" key={smartApp.id}>

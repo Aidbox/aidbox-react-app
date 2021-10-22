@@ -152,7 +152,7 @@ export const SmartAppForm = () => {
                 </button>
                 {updateStatus.status === 'failure' && (
                   <div className="flex flex-wrap justify-start pb-5 -m-4 w-full">
-                    <div className="text-red-500 pl-4 font-medium">{updateStatus.error}</div>
+                    <div className="text-red-500 pl-4 font-medium">Something went wrong</div>
                   </div>
                 )}
                 {updateStatus.status === 'success' && (

@@ -2,7 +2,6 @@ import { createDomain, forward, sample } from 'effector';
 import { createGate } from 'effector-react';
 import { createForm } from 'effector-forms';
 import { env } from '../../../env';
-import { authorizedRequest } from '../../../auth';
 import { service } from 'aidbox-react/lib/services/service';
 import { isFailure } from 'aidbox-react/lib/libs/remoteData';
 

@@ -4,7 +4,6 @@ import { $user, authorizedRequest } from '../../../auth';
 import { getIn } from '../../../lib/tools';
 import { createForm } from 'effector-forms';
 import { env } from '../../../env';
-import { isFailure } from 'aidbox-react/lib/libs/remoteData';
 
 const smartAppDomain = createDomain('smartAppDomain');
 
@@ -58,6 +57,12 @@ export const form = createForm({
 
 export const submitForm = smartAppDomain.createEvent();
 
+export const createApp = smartAppDomain.createEvent();
+
+export const createAppFx = smartAppDomain.createEffect(() =>
+  authorizedRequest({ url: '/createApp', method: 'POST' }),
+);
+
 export const setFormFx = smartAppDomain.createEffect(({ data }) => {
   const oauthType = getIn(data, ['auth', 'authorization_code', 'pkce']) ? 'pkce' : 'secret';
   form.fields.id.onChange(data.id);
@@ -108,6 +113,10 @@ export const updateAppFx = smartAppDomain.createEffect((params) =>
     data: params,
   }),
 );
+
+export const redirectToAppFx = smartAppDomain.createEffect(({ data }) => {
+  window.location.href = `/smart-apps/${data.id}`;
+});
 
 export const redirectToAuthorizeFx = smartAppDomain.createEffect((data) => {
   window.location.href = data.result.uri;
@@ -195,4 +204,14 @@ sample({
   source: form.$values,
   clock: submitForm,
   target: updateAppFx,
+});
+
+forward({
+  from: createApp,
+  to: createAppFx,
+});
+
+forward({
+  from: createAppFx.doneData,
+  to: redirectToAppFx,
 });

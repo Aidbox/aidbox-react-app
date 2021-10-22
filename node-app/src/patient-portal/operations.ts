@@ -1,4 +1,5 @@
 import { TCtx } from '@aidbox/node-server-sdk';
+import { v4 as uuid } from 'uuid';
 
 import { TOperation } from '../helpers';
 import { sendMail } from '../lib/maligun';
@@ -175,6 +176,41 @@ export const enrollVendor: TOperation<{ params: { type: string } }> = {
   },
 };
 
+export const createApp: TOperation<{ params: { type: string } }> = {
+  method: 'POST',
+  path: ['createApp'],
+  handlerFn: async (_: any, { ctx }: { ctx: TCtx }) => {
+
+    const data = {
+      trusted: true,
+      type: "smart",
+      grant_types: [
+        "authorization_code",
+        "basic"
+      ],
+      resourceType: "Client",
+      auth: {
+        authorization_code: {
+          redirect_uri: 'https://my.app',
+          refresh_token: true,
+          secret_required: true,
+          access_token_expiration: 300
+        }
+      },
+      secret: uuid(),
+      smart: {
+        name: "New Smart App",
+        launch_uri: "https://my.app/launch",
+        description: "My New Smart App"
+      }
+    }
+
+    const app: any = await ctx.api.createResource('Client', data);
+
+    return { resource: app };
+  },
+};
+
 export const updateApp: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['updateApp'],
@@ -196,6 +232,6 @@ export const updateApp: TOperation<{ params: { type: string } }> = {
 
     const app: any = await ctx.api.patchResource('Client', id, data);
 
-    return app;
+    return { resource: app };
   },
 };
