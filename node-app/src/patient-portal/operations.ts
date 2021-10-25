@@ -180,30 +180,26 @@ export const createApp: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['createApp'],
   handlerFn: async (_: any, { ctx }: { ctx: TCtx }) => {
-
     const data = {
       trusted: true,
-      type: "smart",
-      grant_types: [
-        "authorization_code",
-        "basic"
-      ],
-      resourceType: "Client",
+      type: 'smart',
+      grant_types: ['authorization_code', 'basic'],
+      resourceType: 'Client',
       auth: {
         authorization_code: {
           redirect_uri: 'https://my.app',
           refresh_token: true,
           secret_required: true,
-          access_token_expiration: 300
-        }
+          access_token_expiration: 300,
+        },
       },
       secret: uuid(),
       smart: {
-        name: "New Smart App",
-        launch_uri: "https://my.app/launch",
-        description: "My New Smart App"
-      }
-    }
+        name: 'New Smart App',
+        launch_uri: 'https://my.app/launch',
+        description: 'My New Smart App',
+      },
+    };
 
     const app: any = await ctx.api.createResource('Client', data);
 
@@ -215,12 +211,15 @@ export const updateApp: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['updateApp'],
   handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
-    const { id, appName, redirectUri, launchUri, desc } = resource;
+    const { id, appName, redirectUri, launchUri, desc, oauthType } = resource;
+    const pkce = oauthType === 'pkce';
+    const oauthTypeMap = pkce ? { pkce: true } : { secret_required: true };
 
     const data = {
       auth: {
         authorization_code: {
           redirect_uri: redirectUri,
+          ...oauthTypeMap,
         },
       },
       smart: {

@@ -71,6 +71,17 @@ export const SmartAppForm = () => {
                   />
                 </div>
                 <div>
+                  <label className="font-medium title-font">Client OAuth Type</label>
+                  <select
+                    class="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-t-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    value={fields.oauthType.value}
+                    onChange={(e) => fields.oauthType.onChange(e.target.value)}
+                  >
+                    <option value="secret">Authorization Code + Secret</option>
+                    <option value="pkce">Authorization Code + PKCE</option>
+                  </select>
+                </div>
+                <div>
                   <label className="font-medium title-font">Redirect URL</label>
                   <input
                     className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
