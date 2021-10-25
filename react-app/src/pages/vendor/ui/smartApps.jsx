@@ -1,10 +1,12 @@
 import { useStore, useGate } from 'effector-react';
 import { Link } from 'react-router-dom';
+import { $user } from '../../../auth';
 import Spinner from '../../../components/Spinner';
 import * as smartAppModel from '../model/smartApp.js';
 
 export const VendorSmartApps = () => {
-  useGate(smartAppModel.SmartAppGate);
+  const userInfo = useStore($user);
+  useGate(smartAppModel.SmartAppGate, userInfo.data.id);
   const smartAppsResult = useStore(smartAppModel.$smartApps);
 
   return (
@@ -17,10 +19,11 @@ export const VendorSmartApps = () => {
             </h1>
             <div className="h-1 w-20 bg-indigo-600 rounded"></div>
           </div>
-          <button onClick={() => smartAppModel.createApp()}>
-            <div className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300 mb-4">
-              Create a New App
-            </div>
+          <button
+            onClick={() => smartAppModel.createApp(userInfo.data.id)}
+            className="bg-indigo-600 px-5 py-3 text-white rounded-lg text-center hover:bg-indigo-300 mb-4"
+          >
+            Create a New App
           </button>
         </div>
         {smartAppsResult.status === 'failure' && (
@@ -80,6 +83,12 @@ export const VendorSmartApps = () => {
                             Edit App
                           </div>
                         </Link>
+                        <button
+                          className="bg-white px-5 py-3 text-gray-400 border-2 border-gray-400 rounded-lg w-full text-center hover:bg-red-600 hover:text-white hover:border-transparent"
+                          onClick={() => smartAppModel.removeApp(id)}
+                        >
+                          Remove App
+                        </button>
                       </div>
                     </div>
                   </div>

@@ -179,7 +179,7 @@ export const enrollVendor: TOperation<{ params: { type: string } }> = {
 export const createApp: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['createApp'],
-  handlerFn: async (_: any, { ctx }: { ctx: TCtx }) => {
+  handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
     const data = {
       trusted: true,
       type: 'smart',
@@ -198,6 +198,7 @@ export const createApp: TOperation<{ params: { type: string } }> = {
         name: 'New Smart App',
         launch_uri: 'https://my.app/launch',
         description: 'My New Smart App',
+        vendor: { id: request.resource.id, resourceType: 'User' },
       },
     };
 
@@ -211,7 +212,20 @@ export const updateApp: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['updateApp'],
   handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
-    const { id, appName, redirectUri, launchUri, desc, oauthType } = resource;
+    const {
+      id,
+      appName,
+      redirectUri,
+      launchUri,
+      logoUrl,
+      orgName,
+      privacyUrl,
+      orgUrl,
+      tosUrl,
+      desc,
+      oauthType,
+    } = resource;
+
     const pkce = oauthType === 'pkce';
     const oauthTypeMap = pkce ? { pkce: true } : { secret_required: true };
 
@@ -226,11 +240,28 @@ export const updateApp: TOperation<{ params: { type: string } }> = {
         name: appName,
         launch_uri: launchUri,
         description: desc,
+        logo_url: logoUrl,
+        organization: { name: orgName, url: orgUrl },
+        tos_url: tosUrl,
+        privacy_url: privacyUrl,
       },
     };
 
     const app: any = await ctx.api.patchResource('Client', id, data);
 
     return { resource: app };
+  },
+};
+
+export const removeApp: TOperation<{ params: { type: string } }> = {
+  method: 'DELETE',
+  path: ['removeApp'],
+  handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
+    const { data: resource, request: rq } = await ctx.client.request({
+      url: `/Client/${request.resource.id}`,
+      method: 'DELETE',
+    });
+
+    return { resource };
   },
 };

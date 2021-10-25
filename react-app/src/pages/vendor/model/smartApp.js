@@ -56,11 +56,11 @@ export const form = createForm({
 });
 
 export const submitForm = smartAppDomain.createEvent();
-
 export const createApp = smartAppDomain.createEvent();
+export const removeApp = smartAppDomain.createEvent();
 
-export const createAppFx = smartAppDomain.createEffect(() =>
-  authorizedRequest({ url: '/createApp', method: 'POST' }),
+export const createAppFx = smartAppDomain.createEffect((id) =>
+  authorizedRequest({ url: '/createApp', method: 'POST', data: { id } }),
 );
 
 export const setFormFx = smartAppDomain.createEffect(({ data }) => {
@@ -71,12 +71,17 @@ export const setFormFx = smartAppDomain.createEffect(({ data }) => {
   form.fields.oauthType.onChange(oauthType);
   form.fields.redirectUri.onChange(getIn(data, ['auth', 'authorization_code', 'redirect_uri'], ''));
   form.fields.launchUri.onChange(getIn(data, ['smart', 'launch_uri'], ''));
+  form.fields.logoUrl.onChange(getIn(data, ['smart', 'logo_url'], ''));
+  form.fields.orgName.onChange(getIn(data, ['smart', 'organization', 'name'], ''));
+  form.fields.orgUrl.onChange(getIn(data, ['smart', 'organization', 'url'], ''));
+  form.fields.privacyUrl.onChange(getIn(data, ['smart', 'privacy_url'], ''));
+  form.fields.tosUrl.onChange(getIn(data, ['smart', 'tos_url'], ''));
   form.fields.desc.onChange(getIn(data, ['smart', 'description'], ''));
 });
 
-export const downloadAppsFx = smartAppDomain.createEffect(() =>
+export const downloadAppsFx = smartAppDomain.createEffect((id) =>
   authorizedRequest({
-    url: '/Client?.type=smart',
+    url: `/Client?.smart.vendor.id=${id}`,
     method: 'GET',
   }),
 );
@@ -111,6 +116,14 @@ export const updateAppFx = smartAppDomain.createEffect((params) =>
     url: '/updateApp',
     method: 'POST',
     data: params,
+  }),
+);
+
+export const removeAppFx = smartAppDomain.createEffect((id) =>
+  authorizedRequest({
+    url: '/removeApp',
+    method: 'DELETE',
+    data: { id },
   }),
 );
 
@@ -214,4 +227,14 @@ forward({
 forward({
   from: createAppFx.doneData,
   to: redirectToAppFx,
+});
+
+forward({
+  from: removeApp,
+  to: removeAppFx,
+});
+
+forward({
+  from: removeAppFx.doneData,
+  to: downloadAppsFx,
 });
