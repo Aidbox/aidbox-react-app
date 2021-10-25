@@ -98,6 +98,19 @@ export const manifest = {
         },
       },
     },
+    Client: {
+      attrs: {
+        smart: {
+          attrs: {
+            privacy_url: { type: 'string' },
+            tos_url: { type: 'string' },
+            logo_url: { type: 'string' },
+            vendor: { attrs: { id: { type: 'string' }, resourceType: { type: 'string' } } },
+            organization: { attrs: { name: { type: 'string' }, url: { type: 'string' } } },
+          },
+        },
+      },
+    },
     AidboxConfig: {
       attrs: {
         auth: {
