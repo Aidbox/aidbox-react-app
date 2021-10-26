@@ -234,7 +234,9 @@ forward({
   to: removeAppFx,
 });
 
-forward({
-  from: removeAppFx.doneData,
-  to: downloadAppsFx,
+sample({
+  source: $user,
+  clock: removeAppFx.doneData,
+  fn: (user, _) => user.data.id,
+  target: downloadAppsFx,
 });
