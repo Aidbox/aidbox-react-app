@@ -2,6 +2,7 @@ import { useStore, useGate } from 'effector-react';
 import { Link } from 'react-router-dom';
 import { $user } from '../../../auth';
 import Spinner from '../../../components/Spinner';
+import { env } from '../../../env';
 import * as smartAppModel from '../model/smartApp.js';
 
 export const VendorSmartApps = () => {
@@ -50,7 +51,7 @@ export const VendorSmartApps = () => {
         {smartAppsResult.status === 'success' && (
           <div className="flex flex-wrap -m-4">
             {smartAppsResult.data.map((smartApp) => {
-              const { id, secret, name, logo_url } = smartApp;
+              const { id, secret, name, launch_uri, logo_url } = smartApp;
 
               return (
                 <>
@@ -141,7 +142,15 @@ export const VendorSmartApps = () => {
                         </h2>
                       </div>
                       <div className="mt-10 text-center space-x-4 md:block w-full">
-                        <button className="bg-indigo-600 px-5 py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300">
+                        <button
+                          className="bg-indigo-600 px-5 py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300"
+                          onClick={() =>
+                            smartAppModel.getLaunchParam({
+                              patient: { id: 'vendor-test-patient' },
+                              client: { id: '2a1fd8dc-962c-4f34-bb1c-2d0f121ab523' },
+                            })
+                          }
+                        >
                           Patient
                         </button>
                         <button className="bg-indigo-600 px-5 py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300">

@@ -286,3 +286,8 @@ forward({
   from: initializeData,
   to: initializeDataFx,
 });
+
+forward({
+  from: initializeDataFx.doneData,
+  to: getUserDataFx,
+});

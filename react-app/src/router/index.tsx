@@ -77,6 +77,7 @@ const routesByRole = {
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   vendor: [
+    { path: 'auth/consent', element: <ConsentForm /> },
     {
       element: <RouterSpy />,
       children: [
