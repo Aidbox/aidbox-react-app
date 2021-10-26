@@ -1,4 +1,9 @@
-import { TManifestOperation } from '@aidbox/node-server-sdk';
+import { TDispatchProps, TManifestOperation } from '@aidbox/node-server-sdk';
+import { TDispatchOutput } from '@aidbox/node-server-sdk/build/src/dispatch';
+import {
+  TOperationRequest,
+  TOperationRequestType,
+} from '@aidbox/node-server-sdk/build/src/message';
 import { isSuccess, RemoteDataResult } from 'aidbox-react/lib/libs/remoteData';
 import {
   getFHIRResource,
@@ -7,6 +12,7 @@ import {
   extractBundleResources,
   getFHIRResources,
   getReference,
+  saveFHIRResource,
 } from 'aidbox-react/lib/services/fhir';
 import {
   formatFHIRDateTime,
@@ -40,15 +46,89 @@ async function removeRD<S = any, F = any>(promise: Promise<RemoteDataResult<S, F
   throw result.error;
 }
 
+function operationOutcome(code: string, diagnostics: string) {
+  return {
+    resourceType: 'OperationOutcome',
+    issue: [{ code: 'error', diagnostics: diagnostics }],
+  } as OperationOutcome;
+}
+
+function safeHandlerFactory<T extends TOperationRequestType = any, U = any>(
+  fn: (request: TOperationRequest<T>, props: TDispatchProps<U>) => Promise<TDispatchOutput>,
+) {
+  return async (request: TOperationRequest<T>, props: TDispatchProps<U>) => {
+    try {
+      return fn({ ...request, params: camelizeParamsNames(request.params) }, props);
+    } catch (err) {
+      return {
+        resource: err,
+      };
+    }
+  };
+}
+
 export const appointmentBook: TManifestOperation<{ resource: Appointment }> = {
   method: 'POST',
   path: ['Appointment', '$book'],
-  handlerFn: async ({ resource }, _) => {
-    const appointment = resource!;
+  handlerFn: safeHandlerFactory(async ({ resource }, _) => {
+    if (!resource) {
+      throw operationOutcome('badRequest', 'Appointment must be passed');
+    }
 
-    return { resource: appointment };
-  },
+    return doAppointmentSave(resource);
+  }),
 };
+
+async function doAppointmentSave(appointment: Appointment) {
+  // TODO: validate?
+
+  const practitionerRoleRef = appointment.participant!.find(
+    ({ actor }) => actor!.resourceType === 'PractitionerRole',
+  )!.actor!;
+  const visitType = appointment?.serviceType?.[0]?.coding?.[0]?.code;
+
+  // TODO: use healthcare service from actors
+  const healthcareService = await removeRD(
+    getFHIRResources<HealthcareService>('HealthcareService', {
+      active: true,
+      'service-type': visitType,
+      '_has:PractitionerRole:service:id': practitionerRoleRef.id,
+    }),
+  )
+    .then(extractBundleResources)
+    .then((resourcesMap) => resourcesMap.HealthcareService[0]);
+
+  if (!healthcareService) {
+    throw operationOutcome(
+      'missingHealthcareService',
+      `Service must be set for visit type ${visitType}`,
+    );
+  }
+  if (!healthcareService.duration) {
+    throw operationOutcome(
+      'missingHealthcareServiceDuration',
+      `Service duration is not specified for visit type ${visitType}`,
+    );
+  }
+
+  const updatedAppointment: Appointment = {
+    ...appointment,
+    status: 'booked',
+    serviceCategory: healthcareService.category,
+    serviceType: healthcareService.type,
+    specialty: healthcareService.specialty,
+    end: formatFHIRDateTime(
+      parseFHIRDateTime(appointment.start!).add(healthcareService.duration!, 'minutes'),
+    ),
+    participant: [
+      ...appointment.participant!,
+      { actor: getReference(healthcareService), status: 'accepted' },
+    ],
+  };
+  const savedAppointment = await removeRD(saveFHIRResource<Appointment>(updatedAppointment));
+
+  return { resource: savedAppointment };
+}
 
 type TManifestOperationParams = Partial<Record<string, string>>;
 
@@ -62,28 +142,14 @@ interface AppointmentFindParams extends TManifestOperationParams {
   locationReference?: string;
 }
 
-function operationOutcome(code: string, diagnostics: string) {
-  return {
-    resourceType: 'OperationOutcome',
-    issue: [{ code: 'error', diagnostics: diagnostics }],
-  } as OperationOutcome;
-}
-
 export const appointmentFind: TManifestOperation<{ params: AppointmentFindParams }> = {
   method: 'GET',
   path: ['Appointment', '$find'],
-  handlerFn: async ({ params: paramsRaw }, _) => {
-    const params = camelizeParamsNames(paramsRaw);
-    try {
-      return {
-        resource: await doAppointmentFind(params),
-      };
-    } catch (err) {
-      return {
-        resource: err,
-      };
-    }
-  },
+  handlerFn: safeHandlerFactory(async ({ params }, _) => {
+    return {
+      resource: await doAppointmentFind(params),
+    };
+  }),
 };
 
 export async function doAppointmentFind({
@@ -172,7 +238,7 @@ export async function doAppointmentFind({
 
   if (!serviceDuration) {
     throw operationOutcome(
-      'missingHealthcarServiceDuration',
+      'missingHealthcareServiceDuration',
       `Service duration is not specified for visit type ${visitType}`,
     );
   }

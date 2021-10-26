@@ -35,7 +35,6 @@ test:
 	npm run test;
 
 generate-aidbox-ts:
-	make up;
 	docker-compose -f docker-compose.yml -f docker-compose.aidbox-ts.yml run --rm aidbox-ts-generator;
 	yarn run prettier --write shared/src/contrib/aidbox/index.ts;
 
