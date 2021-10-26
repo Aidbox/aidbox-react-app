@@ -265,3 +265,143 @@ export const removeApp: TOperation<{ params: { type: string } }> = {
     return { resource };
   },
 };
+
+export const initializeData: TOperation<{ params: { type: string } }> = {
+  method: 'POST',
+  path: ['initializeData'],
+  handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
+    const patientData = {
+      address: [
+        {
+          city: 'NEW YORK',
+          line: ['NEW YORK, NY, NEW YORK, 10001, 0 NORTH 0TH ST 0'],
+          state: 'NY',
+          country: 'NEW YORK',
+          postalCode: '10001',
+        },
+      ],
+      name: [
+        {
+          given: ['JOHN'],
+          family: 'DOE',
+        },
+      ],
+      birthDate: '1990-11-11',
+      resourceType: 'Patient',
+      active: true,
+      communication: [
+        {
+          id: '349de81c-d305-4216-ad5e-a944b12077c7',
+          language: {
+            text: 'English',
+          },
+          preferred: true,
+        },
+        {
+          id: '728ed87d-c21e-4256-9e27-0b106d60eb87',
+          language: {
+            text: 'Spanish',
+          },
+          preferred: false,
+        },
+      ],
+      id: 'vendor-test-patient',
+      identifier: [
+        {
+          type: {
+            coding: [
+              {
+                code: 'um',
+                system: 'http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBIdentifierType',
+                display: 'UNIQUE_MEMBER_ID',
+              },
+            ],
+          },
+          value: '123451234512345',
+          system: 'https://www.org.org/',
+        },
+        {
+          type: {
+            coding: [
+              {
+                code: 'PLAN_ID',
+                display: 'Plan identifier',
+              },
+            ],
+          },
+          value: '111111111',
+        },
+        {
+          type: {
+            coding: [
+              {
+                code: 'MR',
+                system: 'http://terminology.hl7.org/CodeSystem/v2-0203',
+                display: 'MEDICAL_RECORD_NUMBER',
+              },
+            ],
+          },
+          value: '123456789A',
+          system: 'https://www.org.org/',
+        },
+        {
+          type: {
+            coding: [
+              {
+                code: 'MB',
+                system: 'http://terminology.hl7.org/CodeSystem/v2-0203',
+                display: 'MEMBER_ID',
+              },
+            ],
+          },
+          value: '10',
+          system: 'https://www.org.org/',
+        },
+        {
+          type: {
+            coding: [
+              {
+                code: 'SS',
+                system: 'http://terminology.hl7.org/CodeSystem/v2-0203',
+                display: 'SOCIAL_SECURITY_NUMBER',
+              },
+            ],
+          },
+          value: '1234567-89',
+          system: 'https://www.org.org/',
+        },
+      ],
+      telecom: [
+        {
+          value: '5555223344',
+          system: 'phone',
+        },
+        {
+          value: 'user-test@mail.com',
+          system: 'email',
+        },
+      ],
+      gender: 'male',
+    };
+
+    const patient: any = await ctx.api.createResource('Patient', patientData);
+
+    const roleData = {
+      name: 'patient',
+      user: {
+        id: request.resource.id,
+        resourceType: 'User',
+      },
+      links: {
+        patient: {
+          resourceType: 'Patient',
+          id: patient.id,
+        },
+      },
+    };
+
+    const role: any = await ctx.api.createResource('Role', roleData);
+
+    return { resource: patient, role };
+  },
+};

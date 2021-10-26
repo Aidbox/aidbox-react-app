@@ -1,6 +1,6 @@
 import { createDomain, forward, sample } from 'effector';
 import { createGate } from 'effector-react';
-import { $user, authorizedRequest } from '../../../auth';
+import { $user, authorizedRequest, getUserDataFx } from '../../../auth';
 import { getIn } from '../../../lib/tools';
 import { createForm } from 'effector-forms';
 import { env } from '../../../env';
@@ -10,6 +10,9 @@ const smartAppDomain = createDomain('smartAppDomain');
 export const $smartApps = smartAppDomain.createStore({ status: 'loading' });
 export const $smartApp = smartAppDomain.createStore({ status: 'loading' });
 export const $updateStatus = smartAppDomain.createStore({ status: '' });
+export const $dataInitialized = smartAppDomain.createStore(false);
+
+$dataInitialized.watch(console.log);
 
 export const SmartAppGate = createGate();
 export const SmartAppFormGate = createGate();
@@ -58,10 +61,23 @@ export const form = createForm({
 export const submitForm = smartAppDomain.createEvent();
 export const createApp = smartAppDomain.createEvent();
 export const removeApp = smartAppDomain.createEvent();
+export const openModal = smartAppDomain.createEvent();
+export const closeModal = smartAppDomain.createEvent();
+export const initializeData = smartAppDomain.createEvent();
 
 export const createAppFx = smartAppDomain.createEffect((id) =>
   authorizedRequest({ url: '/createApp', method: 'POST', data: { id } }),
 );
+
+export const openModalFx = smartAppDomain.createEffect(() => {
+  const modal = document.getElementById('my-modal');
+  modal.style.display = 'block';
+});
+
+export const closeModalFx = smartAppDomain.createEffect(() => {
+  const modal = document.getElementById('my-modal');
+  modal.style.display = 'none';
+});
 
 export const setFormFx = smartAppDomain.createEffect(({ data }) => {
   const oauthType = getIn(data, ['auth', 'authorization_code', 'pkce']) ? 'pkce' : 'secret';
@@ -127,6 +143,14 @@ export const removeAppFx = smartAppDomain.createEffect((id) =>
   }),
 );
 
+export const initializeDataFx = smartAppDomain.createEffect((id) =>
+  authorizedRequest({
+    url: '/initializeData',
+    method: 'POST',
+    data: { id },
+  }),
+);
+
 export const redirectToAppFx = smartAppDomain.createEffect(({ data }) => {
   window.location.href = `/smart-apps/${data.id}`;
 });
@@ -146,9 +170,9 @@ $smartApps
         resource: {
           id,
           secret,
-          smart: { name, launch_uri },
+          smart: { name, launch_uri, logo_url },
         },
-      }) => ({ id, secret, name, launch_uri }),
+      }) => ({ id, secret, name, launch_uri, logo_url }),
     ),
   }))
   .on(downloadAppsFx.failData, (_, appsResult) => ({
@@ -179,6 +203,13 @@ $updateStatus
     error: appsResult.error,
   }))
   .reset(SmartAppFormGate.close);
+
+$dataInitialized.on(
+  getUserDataFx.doneData,
+  (_, userResult) =>
+    userResult.data.role.filter((item) => item.name === 'patient' || item.name === 'practitioner')
+      .length !== 0,
+);
 
 forward({
   from: SmartAppGate.open,
@@ -239,4 +270,19 @@ sample({
   clock: removeAppFx.doneData,
   fn: (user, _) => user.data.id,
   target: downloadAppsFx,
+});
+
+forward({
+  from: openModal,
+  to: openModalFx,
+});
+
+forward({
+  from: closeModal,
+  to: closeModalFx,
+});
+
+forward({
+  from: initializeData,
+  to: initializeDataFx,
 });

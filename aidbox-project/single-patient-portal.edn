@@ -14,7 +14,7 @@
 
  grant-lookup-method
  {:zen/tags #{aidbox.auth/grant-lookup}
-  :method aidbox.auth/single-patient-grant-lookup
+  :method aidbox.auth/provider-grant-lookup
   :config {:grant-page-url "http://localhost:3000/auth/consent"
            :patient-select-url "http://localhost:3000/auth/select-patient"}
   }
@@ -22,7 +22,7 @@
  smart-api
  {:zen/tags #{zenbox/api}
 
-  :middlewares [:smart.fhir/single-patient-auth-middleware]
+  ;; :middlewares [:smart.fhir/single-patient-auth-middleware]
 
   ".well-known" {"smart-configuration" {:GET {:action :smart.fhir/smart-configuration
                                               :public true}}}
