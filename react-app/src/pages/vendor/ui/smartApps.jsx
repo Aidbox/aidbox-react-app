@@ -4,6 +4,7 @@ import { $user } from '../../../auth';
 import Spinner from '../../../components/Spinner';
 import { env } from '../../../env';
 import { getIn } from '../../../lib/tools';
+import cn from 'classnames';
 import * as smartAppModel from '../model/smartApp.js';
 
 export const VendorSmartApps = () => {
@@ -13,6 +14,7 @@ export const VendorSmartApps = () => {
   const smartAppsResult = useStore(smartAppModel.$smartApps);
   const patientRole = userInfo.data.role.find((item) => item.name === 'patient');
   const patientId = getIn(patientRole, ['links', 'patient', 'id']);
+  const grantExists = useStore(smartAppModel.$grantExists);
 
   return (
     <section className="text-gray-600 body-font">
@@ -80,20 +82,6 @@ export const VendorSmartApps = () => {
                           </div>
                         </div>
                         <div className="flex flex-col col-span-2">
-                          {/* <a
-                          href={`${launch_uri}?iss=${env.PATIENT_SMART_BASE_URL}`}
-                          target="_blank"
-                          className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300 mb-4"
-                          rel="noreferrer"
-                        >
-                          Launch App
-                        </a> */}
-                          {/* <button
-                          className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300"
-                          onClick={() => revokeGrant(id)}
-                        >
-                          Revoke Grant
-                        </button> */}
                           <Link to={`/smart-apps/${id}`}>
                             <div className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300">
                               Edit App
@@ -121,7 +109,7 @@ export const VendorSmartApps = () => {
                     className="fixed hidden inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
                     id={id}
                   >
-                    <div className="relative top-1/3 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <div className="relative top-1/4 mx-auto p-5 pb-8 border w-1/2 shadow-lg rounded-md bg-white">
                       <div className="flex justify-end">
                         <svg
                           className="w-6 h-6 cursor-pointer"
@@ -139,34 +127,96 @@ export const VendorSmartApps = () => {
                           />
                         </svg>
                       </div>
-                      <div className="text-center px-7 flex-auto justify-center">
-                        <h2 className="text-xl font-bold p-4">
-                          Choose who you want to run the application for:
-                        </h2>
-                      </div>
-                      <div className="mt-10 text-center space-x-4 md:block w-full">
-                        <button
-                          className="bg-indigo-600 px-auto py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300"
-                          onClick={() =>
-                            smartAppModel.getLaunchParam({
-                              patient: { id: patientId },
-                              client: { id },
-                            })
-                          }
-                        >
-                          Patient
-                        </button>
-                        <button
-                          className="bg-indigo-600 px-auto py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300"
-                          onClick={() =>
-                            smartAppModel.getLaunchParam({
-                              patient: { id: patientId },
-                              client: { id },
-                            })
-                          }
-                        >
-                          Practitioner
-                        </button>
+
+                      <h2 className="text-2xl font-bold p-4">Select a launch scenario:</h2>
+                      <div>
+                        <div className="grid grid-cols-10 gap-8 border-2 rounded-t-lg w-full h-28 py-2 px-4">
+                          <div className="col-span-8 flex flex-col justify-center">
+                            <h3 className="text-lg font-bold">EHR Patient Launch</h3>
+                            <div>
+                              Assume the role of a Patient and launch the app with your patient
+                              context.
+                            </div>
+                          </div>
+
+                          <div className="col-span-2 flex flex-col justify-center space-y-2">
+                            <button
+                              className={cn(
+                                {
+                                  'bg-indigo-600 w-full py-3 text-white rounded-lg text-center hover:bg-indigo-300':
+                                    !grantExists,
+                                },
+                                {
+                                  'bg-indigo-600 w-full py-2 text-white rounded-lg text-center hover:bg-indigo-300':
+                                    grantExists,
+                                },
+                              )}
+                              onClick={() =>
+                                smartAppModel.getLaunchParam({
+                                  patient: { id: patientId },
+                                  client: { id },
+                                })
+                              }
+                            >
+                              Launch
+                            </button>
+
+                            {grantExists && (
+                              <button
+                                className="bg-indigo-600 px-5 py-2 text-white rounded-lg w-full text-center  hover:bg-indigo-300"
+                                onClick={() => smartAppModel.revokeGrant(id)}
+                              >
+                                Revoke Grant
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-10 gap-8 border-2 border-t-0 w-full h-28 py-2 px-4">
+                          <div className="col-span-8 flex flex-col justify-center">
+                            <h3 className="text-lg font-bold">EHR Practitioner Launch</h3>
+                            <div className="">
+                              Assume the role of a Practitioner and launch the app with a patient
+                              context.
+                            </div>
+                          </div>
+
+                          <div className="col-span-2 flex items-center">
+                            <button
+                              className="bg-indigo-600 w-full py-3 text-white rounded-lg text-center hover:bg-indigo-300"
+                              onClick={() =>
+                                smartAppModel.getLaunchParam({
+                                  patient: { id: patientId },
+                                  client: { id },
+                                })
+                              }
+                            >
+                              Launch
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-10 gap-8 border-2 border-t-0 rounded-b-lg w-full h-28 py-2 px-4">
+                          <div className="col-span-8 flex flex-col justify-center">
+                            <h3 className="text-lg font-bold">Standalone Practitioner Launch </h3>
+                            <div className="">
+                              Assume the role of a Practitioner and launch the app without a patient
+                              context. You will be prompted to select a patient.
+                            </div>
+                          </div>
+
+                          <div className="col-span-2 flex items-center">
+                            <a
+                              className="bg-indigo-600 w-full py-3 text-white rounded-lg text-center hover:bg-indigo-300"
+                              href={`${launch_uri}?iss=${env.PATIENT_SMART_BASE_URL}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => smartAppModel.closeModal(id)}
+                            >
+                              Launch
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

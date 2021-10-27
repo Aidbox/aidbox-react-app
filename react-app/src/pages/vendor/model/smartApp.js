@@ -1,6 +1,7 @@
 import { createDomain, forward, sample } from 'effector';
 import { createGate } from 'effector-react';
 import { $user, authorizedRequest, getUserDataFx } from '../../../auth';
+import { accessGrantFx } from '../../smart/model/consent-form';
 import { getIn } from '../../../lib/tools';
 import { createForm } from 'effector-forms';
 import { env } from '../../../env';
@@ -11,8 +12,9 @@ export const $smartApps = smartAppDomain.createStore({ status: 'loading' });
 export const $smartApp = smartAppDomain.createStore({ status: 'loading' });
 export const $updateStatus = smartAppDomain.createStore({ status: '' });
 export const $dataInitialized = smartAppDomain.createStore(false);
+export const $grantExists = smartAppDomain.createStore(false);
 
-$dataInitialized.watch(console.log);
+$grantExists.watch(console.log);
 
 export const SmartAppGate = createGate();
 export const SmartAppFormGate = createGate();
@@ -164,6 +166,23 @@ export const redirectToAuthorizeFx = smartAppDomain.createEffect((data) => {
 // check type any
 export const getLaunchParam = smartAppDomain.createEvent();
 
+export const revokeGrant = smartAppDomain.createEvent();
+
+export const revokeGrantFx = smartAppDomain.createEffect((params) =>
+  authorizedRequest({
+    method: 'DELETE',
+    url: '/revokeGrant',
+    params,
+  }),
+);
+
+export const getGrantFx = smartAppDomain.createEffect((id) =>
+  authorizedRequest({
+    method: 'GET',
+    url: `/Grant?.user.id=${id}`,
+  }),
+);
+
 $smartApps
   .on(downloadAppsFx.doneData, (_, appsResult) => ({
     status: 'success',
@@ -212,6 +231,8 @@ $dataInitialized.on(
     userResult.data.role.filter((item) => item.name === 'patient' || item.name === 'practitioner')
       .length !== 0,
 );
+
+$grantExists.on(getGrantFx.doneData, (_, result) => result.data.entry.length !== 0);
 
 forward({
   from: SmartAppGate.open,
@@ -292,4 +313,18 @@ forward({
 forward({
   from: initializeDataFx.doneData,
   to: getUserDataFx,
+});
+
+sample({
+  clock: [getUserDataFx.doneData, revokeGrantFx.doneData, accessGrantFx.doneData],
+  source: $user,
+  fn: (user) => user.data.id,
+  target: getGrantFx,
+});
+
+sample({
+  clock: revokeGrant,
+  source: $user,
+  fn: (user, id) => ({ clientId: id, userId: user.data.id }),
+  target: revokeGrantFx,
 });
