@@ -305,7 +305,6 @@ export const initializeData: TOperation<{ params: { type: string } }> = {
           preferred: false,
         },
       ],
-      id: 'vendor-test-patient',
       identifier: [
         {
           type: {
@@ -427,7 +426,6 @@ export const initializeData: TOperation<{ params: { type: string } }> = {
           system: 'http://hl7.org/fhir/sid/us-npi',
         },
       ],
-      id: 'vendor-test-practitioner',
       resourceType: 'Practitioner',
     };
 
@@ -448,6 +446,13 @@ export const initializeData: TOperation<{ params: { type: string } }> = {
     };
 
     const practitionerRole: any = await ctx.api.createResource('Role', rolePractitionerData);
+
+    await ctx.api.patchResource('User', request.resource.id, {
+      fhirUser: {
+        id: patient.id,
+        resourceType: 'Patient',
+      },
+    });
 
     return {
       resource: {
