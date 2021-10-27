@@ -386,7 +386,7 @@ export const initializeData: TOperation<{ params: { type: string } }> = {
 
     const patient: any = await ctx.api.createResource('Patient', patientData);
 
-    const roleData = {
+    const rolePatientData = {
       name: 'patient',
       user: {
         id: request.resource.id,
@@ -400,8 +400,62 @@ export const initializeData: TOperation<{ params: { type: string } }> = {
       },
     };
 
-    const role: any = await ctx.api.createResource('Role', roleData);
+    const patientRole: any = await ctx.api.createResource('Role', rolePatientData);
 
-    return { resource: patient, role };
+    const practitionerData = {
+      name: [
+        {
+          given: ['JOHN'],
+          family: 'DOE',
+          prefix: ['Dr.'],
+        },
+      ],
+      active: true,
+      gender: 'male',
+      address: [
+        {
+          city: 'LEOMINSTER',
+          line: ['60 HOSPITAL ROAD'],
+          state: 'MA',
+          country: 'US',
+          postalCode: '01453',
+        },
+      ],
+      identifier: [
+        {
+          value: '0',
+          system: 'http://hl7.org/fhir/sid/us-npi',
+        },
+      ],
+      id: 'vendor-test-practitioner',
+      resourceType: 'Practitioner',
+    };
+
+    const practitioner: any = await ctx.api.createResource('Practitioner', practitionerData);
+
+    const rolePractitionerData = {
+      name: 'practitioner',
+      user: {
+        id: request.resource.id,
+        resourceType: 'User',
+      },
+      links: {
+        practitioner: {
+          resourceType: 'Practitioner',
+          id: practitioner.id,
+        },
+      },
+    };
+
+    const practitionerRole: any = await ctx.api.createResource('Role', rolePractitionerData);
+
+    return {
+      resource: {
+        patient: patient.id,
+        patientRole: patientRole.id,
+        practitioner: practitioner.id,
+        practitionerRole: practitionerRole.id,
+      },
+    };
   },
 };

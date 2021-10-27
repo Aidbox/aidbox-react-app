@@ -23,7 +23,7 @@
  smart-api
  {:zen/tags #{zenbox/api}
 
-  ;; :middlewares [:smart.fhir/single-patient-auth-middleware]
+  :middlewares [:smart.fhir/single-patient-auth-middleware]
 
   ".well-known" {"smart-configuration" {:GET {:action :smart.fhir/smart-configuration
                                               :public true}}}

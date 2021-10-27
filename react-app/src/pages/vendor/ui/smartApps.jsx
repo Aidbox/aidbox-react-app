@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { $user } from '../../../auth';
 import Spinner from '../../../components/Spinner';
 import { env } from '../../../env';
+import { getIn } from '../../../lib/tools';
 import * as smartAppModel from '../model/smartApp.js';
 
 export const VendorSmartApps = () => {
@@ -10,6 +11,8 @@ export const VendorSmartApps = () => {
   const dataInitialized = useStore(smartAppModel.$dataInitialized);
   useGate(smartAppModel.SmartAppGate, userInfo.data.id);
   const smartAppsResult = useStore(smartAppModel.$smartApps);
+  const patientRole = userInfo.data.role.find((item) => item.name === 'patient');
+  const patientId = getIn(patientRole, ['links', 'patient', 'id']);
 
   return (
     <section className="text-gray-600 body-font">
@@ -55,7 +58,7 @@ export const VendorSmartApps = () => {
 
               return (
                 <>
-                  <div className="p-4  w-full" key={smartApp.id}>
+                  <div className="p-4  w-full" key={id}>
                     <div className="flex items-center p-10 w-full h-full bg-white">
                       <div className="grid grid-cols-12 gap-8 w-full">
                         <div className="flex flex-col justify-start col-span-2">
@@ -105,7 +108,7 @@ export const VendorSmartApps = () => {
                           {dataInitialized && (
                             <button
                               className="bg-indigo-600 px-5 py-3 text-white rounded-lg w-full text-center hover:bg-indigo-300"
-                              onClick={() => smartAppModel.openModal()}
+                              onClick={() => smartAppModel.openModal(id)}
                             >
                               Launch App
                             </button>
@@ -116,7 +119,7 @@ export const VendorSmartApps = () => {
                   </div>
                   <div
                     className="fixed hidden inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
-                    id="my-modal"
+                    id={id}
                   >
                     <div className="relative top-1/3 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                       <div className="flex justify-end">
@@ -126,7 +129,7 @@ export const VendorSmartApps = () => {
                           stroke="currentColor"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
-                          onClick={() => smartAppModel.closeModal()}
+                          onClick={() => smartAppModel.closeModal(id)}
                         >
                           <path
                             strokeLinecap="round"
@@ -138,22 +141,30 @@ export const VendorSmartApps = () => {
                       </div>
                       <div className="text-center px-7 flex-auto justify-center">
                         <h2 className="text-xl font-bold p-4">
-                          Choose who you want to run the application for?
+                          Choose who you want to run the application for:
                         </h2>
                       </div>
                       <div className="mt-10 text-center space-x-4 md:block w-full">
                         <button
-                          className="bg-indigo-600 px-5 py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300"
+                          className="bg-indigo-600 px-auto py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300"
                           onClick={() =>
                             smartAppModel.getLaunchParam({
-                              patient: { id: 'vendor-test-patient' },
-                              client: { id: '2a1fd8dc-962c-4f34-bb1c-2d0f121ab523' },
+                              patient: { id: patientId },
+                              client: { id },
                             })
                           }
                         >
                           Patient
                         </button>
-                        <button className="bg-indigo-600 px-5 py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300">
+                        <button
+                          className="bg-indigo-600 px-auto py-3 w-1/3 text-white rounded-lg text-center hover:bg-indigo-300"
+                          onClick={() =>
+                            smartAppModel.getLaunchParam({
+                              patient: { id: patientId },
+                              client: { id },
+                            })
+                          }
+                        >
                           Practitioner
                         </button>
                       </div>

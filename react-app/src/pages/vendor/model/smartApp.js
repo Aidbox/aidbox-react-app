@@ -69,13 +69,13 @@ export const createAppFx = smartAppDomain.createEffect((id) =>
   authorizedRequest({ url: '/createApp', method: 'POST', data: { id } }),
 );
 
-export const openModalFx = smartAppDomain.createEffect(() => {
-  const modal = document.getElementById('my-modal');
+export const openModalFx = smartAppDomain.createEffect((id) => {
+  const modal = document.getElementById(id);
   modal.style.display = 'block';
 });
 
-export const closeModalFx = smartAppDomain.createEffect(() => {
-  const modal = document.getElementById('my-modal');
+export const closeModalFx = smartAppDomain.createEffect((id) => {
+  const modal = document.getElementById(id);
   modal.style.display = 'none';
 });
 
@@ -124,6 +124,8 @@ export const getLaunchParamFx = smartAppDomain.createEffect(async (data) => {
     },
   });
 
+  closeModalFx(data.client.id);
+
   return response.data;
 });
 
@@ -156,7 +158,7 @@ export const redirectToAppFx = smartAppDomain.createEffect(({ data }) => {
 });
 
 export const redirectToAuthorizeFx = smartAppDomain.createEffect((data) => {
-  window.location.href = data.result.uri;
+  window.open(data.result.uri, '_blank');
 });
 
 // check type any
