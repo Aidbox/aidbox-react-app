@@ -78,9 +78,18 @@ export const VendorSmartApps = () => {
                                     type="text"
                                     disabled={true}
                                     value={id}
-                                    id={id}
+                                    id={id + '-id'}
                                   />
-                                  <div className="w-6 cursor-pointer">
+                                  <div
+                                    className="w-6 cursor-pointer tooltip"
+                                    onClick={() => smartAppModel.copy(id + '-id')}
+                                    onMouseLeave={() =>
+                                      smartAppModel.copyMouseOut(id + '-id-tooltip')
+                                    }
+                                  >
+                                    <span className="tooltiptext" id={id + '-id-tooltip'}>
+                                      Copy to clipboard
+                                    </span>
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       viewBox="0 0 24 24"
@@ -89,7 +98,7 @@ export const VendorSmartApps = () => {
                                       stroke-width="2"
                                       stroke-linecap="round"
                                       stroke-linejoin="round"
-                                      class="feather feather-copy"
+                                      className="feather feather-copy"
                                     >
                                       <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -105,12 +114,18 @@ export const VendorSmartApps = () => {
                                     type="text"
                                     disabled={true}
                                     value={secret}
-                                    id={secret}
+                                    id={id + '-secret'}
                                   />
                                   <div
-                                    className="w-6 cursor-pointer"
-                                    onClick={() => smartAppModel.copy('secret')}
+                                    className="w-6 cursor-pointer tooltip"
+                                    onClick={() => smartAppModel.copy(id + '-secret')}
+                                    onMouseLeave={() =>
+                                      smartAppModel.copyMouseOut(id + '-secret-tooltip')
+                                    }
                                   >
+                                    <span className="tooltiptext" id={id + '-secret-tooltip'}>
+                                      Copy to clipboard
+                                    </span>
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       viewBox="0 0 24 24"
@@ -119,7 +134,7 @@ export const VendorSmartApps = () => {
                                       stroke-width="2"
                                       stroke-linecap="round"
                                       stroke-linejoin="round"
-                                      class="feather feather-copy"
+                                      className="feather feather-copy"
                                     >
                                       <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>

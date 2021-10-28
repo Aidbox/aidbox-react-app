@@ -64,6 +64,7 @@ export const openModal = smartAppDomain.createEvent();
 export const closeModal = smartAppDomain.createEvent();
 export const initializeData = smartAppDomain.createEvent();
 export const copy = smartAppDomain.createEvent();
+export const copyMouseOut = smartAppDomain.createEvent();
 
 export const createAppFx = smartAppDomain.createEffect((id) =>
   authorizedRequest({ url: '/createApp', method: 'POST', data: { id } }),
@@ -180,6 +181,23 @@ export const getGrantFx = smartAppDomain.createEffect(({ userId, clientId }) =>
     url: `/Grant?.user.id=${userId}&.client.id=${clientId}`,
   }),
 );
+
+export const copyFx = smartAppDomain.createEffect((id) => {
+  var copyText = document.getElementById(id);
+
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  navigator.clipboard.writeText(copyText.value);
+
+  var tooltip = document.getElementById(`${id}-tooltip`);
+  tooltip.innerHTML = 'Copied!';
+});
+
+export const copyMouseOutFx = smartAppDomain.createEffect((id) => {
+  var tooltip = document.getElementById(id);
+  tooltip.innerHTML = 'Copy to clipboard';
+});
 
 $smartApps
   .on(downloadAppsFx.doneData, (_, appsResult) => ({
@@ -313,10 +331,15 @@ forward({
   to: getUserDataFx,
 });
 
-// forward({
-//   from: copy,
-//   to: copyFx,
-// });
+forward({
+  from: copy,
+  to: copyFx,
+});
+
+forward({
+  from: copyMouseOut,
+  to: copyMouseOutFx,
+});
 
 sample({
   clock: openModal,
