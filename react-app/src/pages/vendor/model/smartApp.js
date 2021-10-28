@@ -1,7 +1,6 @@
 import { createDomain, forward, sample } from 'effector';
 import { createGate } from 'effector-react';
 import { $user, authorizedRequest, getUserDataFx } from '../../../auth';
-import { accessGrantFx } from '../../smart/model/consent-form';
 import { getIn } from '../../../lib/tools';
 import { createForm } from 'effector-forms';
 import { env } from '../../../env';
@@ -64,6 +63,7 @@ export const removeApp = smartAppDomain.createEvent();
 export const openModal = smartAppDomain.createEvent();
 export const closeModal = smartAppDomain.createEvent();
 export const initializeData = smartAppDomain.createEvent();
+export const copy = smartAppDomain.createEvent();
 
 export const createAppFx = smartAppDomain.createEffect((id) =>
   authorizedRequest({ url: '/createApp', method: 'POST', data: { id } }),
@@ -312,6 +312,11 @@ forward({
   from: initializeDataFx.doneData,
   to: getUserDataFx,
 });
+
+// forward({
+//   from: copy,
+//   to: copyFx,
+// });
 
 sample({
   clock: openModal,

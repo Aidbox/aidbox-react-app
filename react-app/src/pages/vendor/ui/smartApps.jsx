@@ -61,8 +61,8 @@ export const VendorSmartApps = () => {
               return (
                 <>
                   <div className="p-4  w-full" key={id}>
-                    <div className="flex items-center p-10 w-full h-full bg-white">
-                      <div className="grid grid-cols-12 gap-8 w-full">
+                    <div className="flex items-center px-10 py-6 w-full h-full bg-white">
+                      <div className="grid grid-cols-12 gap-8 w-full items-center">
                         <div className="flex flex-col justify-start col-span-2">
                           <img className="w-4/5 h-4/5 object-contain" src={logo_url} alt="" />
                         </div>
@@ -71,12 +71,61 @@ export const VendorSmartApps = () => {
                             <h1 className="capitalize text-4xl font-extrabold">{name}</h1>
                             <div>
                               <div>
-                                <span className="font-bold pr-2">Client ID:</span>
-                                <span>{id}</span>
+                                <span className="font-bold pr-2">Client ID</span>
+                                <div className="flex items-center space-x-2">
+                                  <input
+                                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-1 pl-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                                    type="text"
+                                    disabled={true}
+                                    value={id}
+                                    id={id}
+                                  />
+                                  <div className="w-6 cursor-pointer">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="feather feather-copy"
+                                    >
+                                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                  </div>
+                                </div>
                               </div>
                               <div>
-                                <span className="font-bold pr-2">Secret:</span>
-                                <span>{secret}</span>
+                                <span className="font-bold pr-2">Secret</span>
+                                <div className="flex items-center space-x-2">
+                                  <input
+                                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-1 pl-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                                    type="text"
+                                    disabled={true}
+                                    value={secret}
+                                    id={secret}
+                                  />
+                                  <div
+                                    className="w-6 cursor-pointer"
+                                    onClick={() => smartAppModel.copy('secret')}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="feather feather-copy"
+                                    >
+                                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

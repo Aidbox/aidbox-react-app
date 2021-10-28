@@ -260,12 +260,17 @@ export const removeApp: TOperation<{ params: { type: string } }> = {
   method: 'DELETE',
   path: ['removeApp'],
   handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
-    const { data: resource, request: rq } = await ctx.client.request({
+    const { data: app } = await ctx.client.request({
       url: `/Client/${request.resource.id}`,
       method: 'DELETE',
     });
 
-    return { resource };
+    const { data: grant } = await ctx.client.request({
+      url: `/Grant?.client.id=${request.resource.id}`,
+      method: 'DELETE',
+    });
+
+    return { resource: { app, grant } };
   },
 };
 
