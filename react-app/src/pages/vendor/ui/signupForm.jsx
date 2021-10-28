@@ -57,13 +57,13 @@ export const SignupForm = () => {
             />
           </div>
           <div>
-            <label className="font-medium title-font">Organization Name</label>
+            <label className="font-medium title-font">Company</label>
             <input
               required
               type="text"
               className="block mt-2 mb-2 w-full bg-gray-100 p-2 rounded-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
-              value={fields.orgName.value}
-              onChange={(e) => fields.orgName.onChange(e.target.value)}
+              value={fields.company.value}
+              onChange={(e) => fields.company.onChange(e.target.value)}
             />
           </div>
           <div>

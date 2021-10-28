@@ -146,7 +146,7 @@ export const enrollVendor: TOperation<{ params: { type: string } }> = {
   method: 'POST',
   path: ['enrollVendor'],
   handlerFn: async ({ resource }: any, { ctx }: { ctx: TCtx }) => {
-    const { firstName, lastName, email, password, orgName } = resource;
+    const { firstName, lastName, email, password, company } = resource;
 
     const user: any = await ctx.api.createResource('User', {
       email,
@@ -154,6 +154,9 @@ export const enrollVendor: TOperation<{ params: { type: string } }> = {
       name: {
         givenName: firstName,
         familyName: lastName,
+      },
+      data: {
+        company,
       },
     });
 

@@ -22,7 +22,7 @@ export const form = createForm({
     email: {
       init: '',
     },
-    orgName: {
+    company: {
       init: '',
     },
     password: {

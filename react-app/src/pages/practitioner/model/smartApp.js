@@ -39,7 +39,7 @@ export const getLaunchParamFx = smartAppDomain.createEffect(async (data) => {
 });
 
 export const redirectToAuthorizeFx = smartAppDomain.createEffect((data) => {
-  window.location.href = data.result.uri;
+  window.open(data.result.uri, '_blank');
 });
 
 // check type any

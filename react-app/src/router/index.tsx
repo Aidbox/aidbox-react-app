@@ -56,6 +56,7 @@ const routesByRole = {
         },
       ],
     },
+    { path: '/', element: <Navigate to="/patients" /> },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
@@ -74,6 +75,7 @@ const routesByRole = {
         },
       ],
     },
+    { path: '/', element: <Navigate to="/patients" /> },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   vendor: [
@@ -91,6 +93,7 @@ const routesByRole = {
         },
       ],
     },
+    { path: '/', element: <Navigate to="/smart-apps" /> },
     { path: '*', element: <Navigate to="/smart-apps" /> },
   ],
   superadmin: [],

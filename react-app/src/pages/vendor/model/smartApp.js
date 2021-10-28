@@ -14,8 +14,6 @@ export const $updateStatus = smartAppDomain.createStore({ status: '' });
 export const $dataInitialized = smartAppDomain.createStore(false);
 export const $grantExists = smartAppDomain.createStore(false);
 
-$grantExists.watch(console.log);
-
 export const SmartAppGate = createGate();
 export const SmartAppFormGate = createGate();
 

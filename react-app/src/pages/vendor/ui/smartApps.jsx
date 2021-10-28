@@ -127,7 +127,6 @@ export const VendorSmartApps = () => {
                           />
                         </svg>
                       </div>
-
                       <h2 className="text-2xl font-bold p-4">Select a launch scenario:</h2>
                       <div>
                         <div className="grid grid-cols-10 gap-8 border-2 rounded-t-lg w-full h-28 py-2 px-4">
@@ -138,7 +137,6 @@ export const VendorSmartApps = () => {
                               context.
                             </div>
                           </div>
-
                           <div className="col-span-2 flex flex-col justify-center space-y-2">
                             <button
                               className={cn(
@@ -160,7 +158,6 @@ export const VendorSmartApps = () => {
                             >
                               Launch
                             </button>
-
                             {grantExists && (
                               <button
                                 className="bg-indigo-600 px-5 py-2 text-white rounded-lg w-full text-center  hover:bg-indigo-300"
@@ -171,7 +168,6 @@ export const VendorSmartApps = () => {
                             )}
                           </div>
                         </div>
-
                         <div className="grid grid-cols-10 gap-8 border-2 border-t-0 w-full h-28 py-2 px-4">
                           <div className="col-span-8 flex flex-col justify-center">
                             <h3 className="text-lg font-bold">EHR Practitioner Launch</h3>
@@ -180,7 +176,6 @@ export const VendorSmartApps = () => {
                               context.
                             </div>
                           </div>
-
                           <div className="col-span-2 flex items-center">
                             <button
                               className="bg-indigo-600 w-full py-3 text-white rounded-lg text-center hover:bg-indigo-300"
@@ -195,7 +190,6 @@ export const VendorSmartApps = () => {
                             </button>
                           </div>
                         </div>
-
                         <div className="grid grid-cols-10 gap-8 border-2 border-t-0 rounded-b-lg w-full h-28 py-2 px-4">
                           <div className="col-span-8 flex flex-col justify-center">
                             <h3 className="text-lg font-bold">Standalone Practitioner Launch </h3>
@@ -204,7 +198,6 @@ export const VendorSmartApps = () => {
                               context. You will be prompted to select a patient.
                             </div>
                           </div>
-
                           <div className="col-span-2 flex items-center">
                             <a
                               className="bg-indigo-600 w-full py-3 text-white rounded-lg text-center hover:bg-indigo-300"
