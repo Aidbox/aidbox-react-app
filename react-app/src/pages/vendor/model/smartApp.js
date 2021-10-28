@@ -174,10 +174,10 @@ export const revokeGrantFx = smartAppDomain.createEffect((params) =>
   }),
 );
 
-export const getGrantFx = smartAppDomain.createEffect((id) =>
+export const getGrantFx = smartAppDomain.createEffect(({ userId, clientId }) =>
   authorizedRequest({
     method: 'GET',
-    url: `/Grant?.user.id=${id}`,
+    url: `/Grant?.user.id=${userId}&.client.id=${clientId}`,
   }),
 );
 
@@ -314,9 +314,16 @@ forward({
 });
 
 sample({
-  clock: [getUserDataFx.doneData, revokeGrantFx.doneData, accessGrantFx.doneData],
+  clock: openModal,
   source: $user,
-  fn: (user) => user.data.id,
+  fn: (user, clientId) => ({ userId: user.data.id, clientId }),
+  target: getGrantFx,
+});
+
+sample({
+  clock: revokeGrantFx.doneData,
+  source: $user,
+  fn: (user, { data }) => ({ userId: user.data.id, clientId: data.client.id }),
   target: getGrantFx,
 });
 

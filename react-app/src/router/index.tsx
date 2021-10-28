@@ -25,6 +25,7 @@ import { SignupForm, SmartAppForm, VendorSmartApps, WelcomePage } from '../pages
 
 const routesByRole = {
   patient: [
+    { path: '/', element: <Navigate to="/smart-apps" /> },
     { path: 'auth/consent', element: <ConsentForm /> },
     {
       element: <RouterSpy />,
@@ -38,10 +39,10 @@ const routesByRole = {
         },
       ],
     },
-    { path: '/', element: <Navigate to="/smart-apps" /> },
     { path: '*', element: <Navigate to="/smart-apps" /> },
   ],
   admin: [
+    { path: '/', element: <Navigate to="/patients" /> },
     {
       element: <RouterSpy />,
       children: [
@@ -56,10 +57,10 @@ const routesByRole = {
         },
       ],
     },
-    { path: '/', element: <Navigate to="/patients" /> },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   practitioner: [
+    { path: '/', element: <Navigate to="/patients" /> },
     { path: 'auth/select-patient', element: <SelectPatientPage /> },
     { path: 'auth/consent', element: <ConsentForm /> },
     {
@@ -75,10 +76,10 @@ const routesByRole = {
         },
       ],
     },
-    { path: '/', element: <Navigate to="/patients" /> },
     { path: '*', element: <Navigate to="/patients" /> },
   ],
   vendor: [
+    { path: '/', element: <Navigate to="/smart-apps" /> },
     { path: 'auth/select-patient', element: <SelectPatientPage /> },
     { path: 'auth/consent', element: <ConsentForm /> },
     {
@@ -93,7 +94,6 @@ const routesByRole = {
         },
       ],
     },
-    { path: '/', element: <Navigate to="/smart-apps" /> },
     { path: '*', element: <Navigate to="/smart-apps" /> },
   ],
   superadmin: [],

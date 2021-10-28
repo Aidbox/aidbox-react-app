@@ -75,7 +75,7 @@ export const SmartAppForm = () => {
                   <label className="font-medium title-font">Client OAuth Type</label>
                   <select
                     required
-                    class="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-t-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
+                    className="block mt-2 mb-2 w-1/2 bg-gray-100 p-2 rounded-t-lg border-2 border-indigo-500 shadow-md focus:outline-none focus:border-indigo-600"
                     value={fields.oauthType.value}
                     onChange={(e) => fields.oauthType.onChange(e.target.value)}
                   >

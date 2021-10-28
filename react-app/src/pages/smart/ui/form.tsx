@@ -1,5 +1,6 @@
+import { useGate } from 'effector-react';
 import { useLocation } from 'react-router';
-import { accessGrant, FormParams } from '../model/consent-form';
+import { accessGrant, FormParams, FormGate } from '../model/consent-form';
 
 export const ConsentForm = () => {
   const location = useLocation();
@@ -15,6 +16,7 @@ export const ConsentForm = () => {
   const scope = searchParams.get('scope');
   const clientId = searchParams.get('client_id');
   const accessGrantData: FormParams = { scope, clientId };
+  useGate(FormGate, clientId);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
