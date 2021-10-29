@@ -18,8 +18,11 @@ WORKDIR /app
 COPY package.json /app/
 COPY ./node-app/package.json /app/node-app/
 COPY ./shared /app/shared/
-COPY --from=builder /app/node-app/build/src .
+COPY --from=builder /app/node-app/build/src /app
 
 RUN yarn install --production
+RUN apk update && apk add bash
+
+RUN cp /app/node_modules/node-app/node_modules/uuid /app/node_modules/ -r
 
 CMD ["node","index.js"]
