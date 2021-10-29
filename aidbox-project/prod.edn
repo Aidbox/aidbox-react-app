@@ -4,10 +4,16 @@
           hl7-fhir-r4-core
           hl7-fhir-us-core}
 
- isEnrolled
+ isEnrolled-patient
  {:zen/tags #{zen/schema zenbox/base-schema}
   :type zen/map
   :zenbox/type "Patient"
+  :keys {:isEnrolled {:confirms #{hl7-fhir-r4-core.boolean/schema}}}}
+
+ isEnrolled-practitioner
+ {:zen/tags #{zen/schema zenbox/base-schema}
+  :type zen/map
+  :zenbox/type "Practitioner"
   :keys {:isEnrolled {:confirms #{hl7-fhir-r4-core.boolean/schema}}}}
 
  root-api
