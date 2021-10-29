@@ -279,6 +279,9 @@ export const initializeData: TOperation<{ params: { type: string } }> = {
   path: ['initializeData'],
   handlerFn: async (request: any, { ctx }: { ctx: TCtx }) => {
     const patientData = {
+      meta: {
+        profile: ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient'],
+      },
       address: [
         {
           city: 'NEW YORK',
@@ -410,6 +413,9 @@ export const initializeData: TOperation<{ params: { type: string } }> = {
     const patientRole: any = await ctx.api.createResource('Role', rolePatientData);
 
     const practitionerData = {
+      meta: {
+        profile: ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner'],
+      },
       name: [
         {
           given: ['JOHN'],

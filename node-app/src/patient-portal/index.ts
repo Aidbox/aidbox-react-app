@@ -64,7 +64,6 @@ export const manifest = {
       'portal-admin': { password: 'password' },
       portal: { password: 'password' },
     },
-    Patient: { 'pt-100': { gender: 'male' } },
     AccessPolicy: {
       'allow-portal-client-all': {
         engine: 'allow',
