@@ -8,7 +8,7 @@ import cn from 'classnames';
 import * as smartAppModel from '../model/smartApp.js';
 
 export const VendorSmartApps = () => {
-  const userInfo = useStore($user);
+  var userInfo = useStore($user);
   const dataInitialized = useStore(smartAppModel.$dataInitialized);
   useGate(smartAppModel.SmartAppGate, userInfo.data.id);
   const smartAppsResult = useStore(smartAppModel.$smartApps);

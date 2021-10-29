@@ -202,15 +202,17 @@ export const copyMouseOutFx = smartAppDomain.createEffect((id) => {
 $smartApps
   .on(downloadAppsFx.doneData, (_, appsResult) => ({
     status: 'success',
-    data: appsResult.data.entry.map(
-      ({
-        resource: {
-          id,
-          secret,
-          smart: { name, launch_uri, logo_url },
-        },
-      }) => ({ id, secret, name, launch_uri, logo_url }),
-    ),
+    data: !appsResult.data.entry
+      ? []
+      : appsResult.data.entry.map(
+          ({
+            resource: {
+              id,
+              secret,
+              smart: { name, launch_uri, logo_url },
+            },
+          }) => ({ id, secret, name, launch_uri, logo_url }),
+        ),
   }))
   .on(downloadAppsFx.failData, (_, appsResult) => ({
     status: 'failure',
@@ -248,7 +250,7 @@ $dataInitialized.on(
       .length !== 0,
 );
 
-$grantExists.on(getGrantFx.doneData, (_, result) => result.data.entry.length !== 0);
+$grantExists.on(getGrantFx.doneData, (_, result) => result.data.total !== 0);
 
 forward({
   from: SmartAppGate.open,
