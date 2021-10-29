@@ -1,8 +1,8 @@
 {
   "name": "aidbox-scheduling-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
-    "shared": "0.0.1"
+    "tslib": "^2.3.1"
   },
   "scripts": {
     "build": "tsc",
@@ -14,6 +14,7 @@
       "src/**/*"
   ],
   "devDependencies": {
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "shared": "0.0.1"
   }
 }

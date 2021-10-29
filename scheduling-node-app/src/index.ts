@@ -31,7 +31,7 @@ export const manifest: TManifestProps = {
     HealthcareService: {
       attrs: {
         duration: {
-          type: 'decimal',
+          type: 'integer',
           description: 'Length of service in minutes',
           extensionUrl: 'urn:extensions:healthcare-service-duration',
         },
