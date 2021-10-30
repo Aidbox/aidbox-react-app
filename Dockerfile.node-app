@@ -23,6 +23,7 @@ COPY --from=builder /app/node-app/build/src /app
 RUN yarn install --production
 RUN apk update && apk add bash
 
+#For some reason uuid is missing on top level in prod
 RUN cp /app/node_modules/node-app/node_modules/uuid /app/node_modules/ -r
 
 CMD ["node","index.js"]
