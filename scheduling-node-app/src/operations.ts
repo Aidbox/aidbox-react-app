@@ -28,6 +28,7 @@ import {
   dateTime,
   HealthcareService,
   OperationOutcome,
+  Patient,
   Period,
   PractitionerRole,
   Slot,
@@ -67,7 +68,7 @@ function safeHandlerFactory<T extends TOperationRequestType = any, U = any>(
   };
 }
 
-export const appointmentBook: TManifestOperation<{ resource: Appointment }> = {
+export const appointmentBook: TManifestOperation<{ resource: Bundle<Appointment | Patient> }> = {
   method: 'POST',
   path: ['Appointment', '$book'],
   handlerFn: safeHandlerFactory(async ({ resource }, _) => {
@@ -79,8 +80,19 @@ export const appointmentBook: TManifestOperation<{ resource: Appointment }> = {
   }),
 };
 
-async function doAppointmentSave(appointment: Appointment) {
+function doPatientSave(patient: Patient | undefined) {
+  if (patient) {
+    return removeRD(saveFHIRResource<Patient>(patient));
+  }
+
+  return undefined;
+}
+
+async function doAppointmentSave(resource: Bundle<Appointment | Patient>) {
   // TODO: validate?
+  const appointment = extractBundleResources(resource).Appointment[0];
+  // TODO: Save patient and appointment in transaction bundle
+  const patient = await doPatientSave(extractBundleResources(resource).Patient?.[0]);
 
   const practitionerRoleRef = appointment.participant!.find(
     ({ actor }) => actor!.resourceType === 'PractitionerRole',
@@ -122,6 +134,14 @@ async function doAppointmentSave(appointment: Appointment) {
     ),
     participant: [
       ...appointment.participant!,
+      ...(patient
+        ? [
+            {
+              actor: getReference(patient),
+              status: 'accepted',
+            },
+          ]
+        : []),
       { actor: getReference(healthcareService), status: 'accepted' },
     ],
   };
