@@ -31,8 +31,8 @@ This is a sample frontend application that uses Aidbox as backend.
    make prepare
    ```
 
-2. Acquire devbox license (https://license-ui.aidbox.app/)
-3. Fill _AIDBOX_LICENSE_ID_ and _AIDBOX_LICENSE_KEY_ with the acquired credentials in _./.env_
+2. Acquire aidbox license (https://aidbox.app)
+3. Fill AIDBOX_LICENSE with the acquired credentials in _./.env_
 4. Acquire a Mailgun API Key (https://documentation.mailgun.com/en/latest/api-intro.html#authentication)
 5. Fill _MAILGUN_API_KEY_ with your key in _./.env_
 6. Start the application
